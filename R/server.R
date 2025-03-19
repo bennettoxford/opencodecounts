@@ -342,7 +342,7 @@ app_server <- function(input, output, session) {
       unique_codes <- length(unique(filtered_data()$code))
       
       # When there are 500 or less selected codes, impute 0 usage 
-      # if there are annual usage gaps
+      # in the annual usage gaps
       if (unique_codes <= 500) {
         df_plot <- complete_usage_gaps_with_zeros(filtered_data())
       } else {
