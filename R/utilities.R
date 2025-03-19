@@ -24,6 +24,7 @@ complete_usage_gaps_with_zeros <- function(data){
         to = max(start_date, na.rm = TRUE), 
         by = "year")
     )|>
+    fill(description, .direction = "down")|>
     ungroup()
   
   data_without_gaps

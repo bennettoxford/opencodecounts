@@ -341,7 +341,7 @@ app_server <- function(input, output, session) {
     withProgress(message = "Plotting data ...", {
       unique_codes <- length(unique(filtered_data()$code))
 
-      if (rv_search_method() != "none") {
+      if (unique_codes <= 500) {
         df_plot <- complete_usage_gaps_with_zeros(filtered_data())
       } else {
         df_plot <- filtered_data()
