@@ -19,7 +19,7 @@ The original data is available from NHS Digital at:
 
 - [SNOMED Code Usage in Primary
   Care](https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care)
-- [ICD-10 and OPCS-4 Code Usage in Secondary
+- [ICD-10 and OPCS-4 Code Usage in Inpatient Secondary
   Care](https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity)
 
 ## Installation
@@ -73,11 +73,12 @@ snomed_usage
 #> # ℹ 1 more variable: active_at_end <lgl>
 ```
 
-### Dataset: ICD-10 Code Usage in Secondary Care in England
+### Dataset: ICD-10 Code Usage in Inpatient Secondary Care in England
 
 This is the total annual count of the Finished Consultant Episodes (FCE)
 listing each 4-character ICD-10 code either in primary or secondary
-diagnosis position in the Hospital Episode Statistics in England.
+diagnosis position in the Admitted Patient Care of the Hospital Episode 
+Statistics in England.
 
 This is only a selection of the full dataset published by NHS Digital,
 for the data pre-processing see `/data-raw/icd10_usage.R`.

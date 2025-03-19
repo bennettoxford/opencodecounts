@@ -143,15 +143,15 @@ icd10_usage <- icd10_usage |>
 sum(is.na(icd10_usage$usage)) == 0
 
 # Check codes with missing description
-icd10_usage |> 
-  filter(is.na(description)) |> 
-  select(icd10_code, description, usage) |> 
-  distinct() |> 
+icd10_usage |>
+  filter(is.na(description)) |>
+  select(icd10_code, description, usage) |>
+  distinct() |>
   print(n = 39)
 # A tibble: 38 × 3
 
 # Remove "codes" with missing description
-icd10_usage <- icd10_usage |> 
+icd10_usage <- icd10_usage |>
   filter(!is.na(description))
 
 # Check encoding problems before fix

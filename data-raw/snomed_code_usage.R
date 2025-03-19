@@ -85,9 +85,9 @@ snomed_usage <- snomed_usage |>
 sum(is.na(snomed_usage$usage)) == 0
 
 # Check codes with missing description
-snomed_usage |> 
-  filter(is.na(description)) |> 
-  select(snomed_code, description, usage) |> 
+snomed_usage |>
+  filter(is.na(description)) |>
+  select(snomed_code, description, usage) |>
   distinct()
 # A tibble: 0 × 3
 

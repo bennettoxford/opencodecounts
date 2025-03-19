@@ -13,7 +13,7 @@
 app_ui <- function(request) {
   page_sidebar(
     theme = bs_theme(version = 5, bootswatch = "lumen"),
-    title = "opencodes: Explore clinical code usage in England",
+    title = NULL,
     sidebar = sidebar(
       width = "23%",
 

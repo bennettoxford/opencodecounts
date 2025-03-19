@@ -1,5 +1,5 @@
 ---
-title: "OpenCodes App: Explore clinical code usage in England"
+title: "Shiny App"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{app}

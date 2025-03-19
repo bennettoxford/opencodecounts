@@ -1,4 +1,4 @@
-#' Run [Code Usage Explorer](https://milanwiedemann.shinyapps.io/opencodes/) Shiny App
+#' Run `opencodes` [Shiny App](https://milanwiedemann.shinyapps.io/opencodes/) locally
 #'
 #' @export
 run_app <- function() {

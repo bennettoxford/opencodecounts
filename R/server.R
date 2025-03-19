@@ -54,15 +54,15 @@ app_server <- function(input, output, session) {
       "date_range",
       label = tooltip(
         span("Date range", bs_icon("info-circle")),
-        "Slide to filter data by selecting from available start and end dates.",
+        "Filter available data by selecting start and end year.",
         options = list(customClass = "left-align-tooltip")
       ),
       min = min(available_start_dates),
       max = max(available_end_dates),
       value = range(available_start_dates, available_end_dates),
       step = 365,
-      timeFormat = "%Y-%m",
-      ticks = TRUE
+      timeFormat = "%Y",
+      ticks = FALSE
     )
   })
 
@@ -159,6 +159,15 @@ app_server <- function(input, output, session) {
 
   # Set filtering method to search when search inputs change
   observe({
+    # If a codelist is loaded AND the user is not entering a new search, do nothing
+    if (rv_search_method() == "codelist" &&
+      (is.null(input$code_specific_search) || length(input$code_specific_search) == 0) &&
+      (is.null(input$code_pattern_search) || input$code_pattern_search == "") &&
+      (is.null(input$description_search) || input$description_search == "")) {
+      return()
+    }
+
+    # If any search input is used, switch to "search"
     if (!is.null(input$code_specific_search) && length(input$code_specific_search) > 0 ||
       !is.null(input$code_pattern_search) && input$code_pattern_search != "" ||
       !is.null(input$description_search) && input$description_search != "") {
@@ -166,8 +175,7 @@ app_server <- function(input, output, session) {
     } else {
       rv_search_method("none")
     }
-  }) |>
-    bindEvent(input$code_specific_search, input$code_pattern_search, input$description_search)
+  }) |> bindEvent(input$code_specific_search, input$code_pattern_search, input$description_search)
 
   # Filtered usage data
   filtered_data <- reactive({
@@ -177,7 +185,7 @@ app_server <- function(input, output, session) {
       data <- selected_data()
 
       data <- data |>
-        filter(start_date >= input$date_range[1] & start_date <= input$date_range[2])
+        filter(start_date >= input$date_range[1] & end_date <= input$date_range[2])
 
       # Apply filters based on the current filtering method
       if (rv_search_method() == "search") {

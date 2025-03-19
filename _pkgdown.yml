@@ -14,3 +14,18 @@ reference:
 - title: Shiny App
   contents:
   - run_app
+
+navbar:
+  structure:
+    left:
+    - home
+    - reference
+    - launch_shiny
+    right:
+    - search
+    - github
+
+  components:
+    launch_shiny:
+      text: "Launch Shiny App"
+      href: articles/app.html

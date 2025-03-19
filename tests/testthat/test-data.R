@@ -164,4 +164,3 @@ test_that("Test OPCS-4 missing description", {
   test_sum_missing_description <- sum(is.na(opcs4_usage$description))
   expect_equal(test_sum_missing_description, 0)
 })
-
