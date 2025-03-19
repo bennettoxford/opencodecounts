@@ -1,0 +1,80 @@
+---
+title: "Example Analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+if(!require(opencodes)) remotes::install_github("bennettoxford/opencodes")
+library(opencodes)
+library(tidyverse)
+```
+
+```{r}
+# Import the codelist
+pregnancy_codelist <- get_codelist("opensafely/pregnancy-icd10-aurum/5a7d8d12/")
+```
+
+```{r}
+# Filter ICD-10 code usage for those codes contained in the
+# pregnancy codelist between 2014 and 2024
+pregnancy_data <- icd10_usage |>
+  filter(icd10_code %in% pregnancy_codelist$code) |>
+  filter(year(start_date) >= 2014 & year(start_date) < 2024)
+
+# Calculate proportional usage for each code 
+# and select five most frequently used codes
+top5_pregnancy_codes <- pregnancy_data |> 
+  group_by(icd10_code, description) |>
+  summarise(usage = sum(usage), .groups = "drop") |>
+  mutate(prop_usage = usage/ sum(usage)) |>
+  slice_max(prop_usage, n = 5) |>
+  pull(icd10_code)
+```
+
+```{r}
+# Visaulise time trends for the five selected codes
+pregnancy_data |>
+  filter(icd10_code %in% top5_pregnancy_codes) |>
+  ggplot(aes(x = year(end_date), y = usage, group = icd10_code, color = description)) +
+  geom_line(size = 0.8) +
+  geom_point(size = 3) +
+  ggrepel::geom_label_repel(
+    data = pregnancy_data |>
+      filter(icd10_code %in% top5_pregnancy_codes) |>
+      filter(end_date == max(end_date)),
+    aes(x = year(end_date),
+        y = usage,
+        color = description,
+        label = paste(icd10_code)),
+    size = 2.8,
+    box.padding = 0.2,
+    label.padding = 0.15,
+    nudge_y = 3,
+    direction ="y") +
+#     lineheight = 0.7,
+#     hjust = 1,
+#     segment.color = 'dark grey',
+#     direction = "y",
+#     nudge_x = 3,
+#     nudge_y = 3) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_continuous(breaks = seq(min(year(pregnancy_data$end_date)), max(year(pregnancy_data$end_date)), by = 1)) +
+  labs(x = "", y = "Usage count", color = "ICD-10 code") +
+  theme_grey() +
+  theme(legend.position = "none")
+
+```
+
+
+
