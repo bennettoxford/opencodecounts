@@ -143,11 +143,11 @@ test_that("Test a circumflex lower singlelow 9 quotation mark encoding problems"
 
 test_that("Dont replace anything are no gaps", {
   df_test <- tibble::tribble(
-    ~start_date, ~end_date, ~code, ~usage,
-    "2023-08-01", "2024-07-31", "100", 100,
-    "2022-08-01", "2023-07-31", "100", 200,
-    "2023-08-01", "2024-07-31", "200", 100,
-    "2022-08-01", "2023-07-31", "200", 200
+    ~start_date, ~end_date, ~code, ~usage, ~description,
+    "2023-08-01", "2024-07-31", "100", 100, "Code 100 description",
+    "2022-08-01", "2023-07-31", "100", 200, "Code 100 description",
+    "2023-08-01", "2024-07-31", "200", 100, "Code 200 description",
+    "2022-08-01", "2023-07-31", "200", 200, "Code 200 description"
   ) |>
     dplyr::mutate(
       dplyr::across(c(start_date, end_date), as.Date)
@@ -157,11 +157,11 @@ test_that("Dont replace anything are no gaps", {
   df_completed <- complete_usage_gaps_with_zeros(df_test)
 
   df_expected <- tibble::tribble(
-    ~code, ~end_date, ~start_date, ~usage,
-    "100", "2023-07-31", "2022-08-01", 200,
-    "100", "2024-07-31", "2023-08-01", 100,
-    "200", "2023-07-31", "2022-08-01", 200,
-    "200", "2024-07-31", "2023-08-01", 100
+    ~code, ~end_date, ~start_date, ~usage, ~description,
+    "100", "2023-07-31", "2022-08-01", 200, "Code 100 description",
+    "100", "2024-07-31", "2023-08-01", 100, "Code 100 description",
+    "200", "2023-07-31", "2022-08-01", 200, "Code 200 description",
+    "200", "2024-07-31", "2023-08-01", 100, "Code 200 description"
   ) |>
     dplyr::mutate(
       dplyr::across(c(start_date, end_date), as.Date)
@@ -172,9 +172,9 @@ test_that("Dont replace anything are no gaps", {
 
 test_that("Replace one gap in one code with zero", {
   df_test <- tibble::tribble(
-    ~start_date, ~end_date, ~code, ~usage,
-    "2023-08-01", "2024-07-31", "100", 100,
-    "2021-08-01", "2022-07-31", "100", 300
+    ~start_date, ~end_date, ~code, ~usage, ~description,
+    "2023-08-01", "2024-07-31", "100", 100, "Code 100 description",
+    "2021-08-01", "2022-07-31", "100", 300, "Code 100 description"
   ) |>
     dplyr::mutate(
       dplyr::across(c(start_date, end_date), as.Date)
@@ -183,10 +183,10 @@ test_that("Replace one gap in one code with zero", {
   df_completed <- complete_usage_gaps_with_zeros(df_test)
 
   df_expected <- tibble::tribble(
-    ~code, ~end_date, ~start_date, ~usage,
-    "100", "2022-07-31", "2021-08-01", 300,
-    "100", "2023-07-31", "2022-08-01", 0,
-    "100", "2024-07-31", "2023-08-01", 100
+    ~code, ~end_date, ~start_date, ~usage, ~description,
+    "100", "2022-07-31", "2021-08-01", 300, "Code 100 description",
+    "100", "2023-07-31", "2022-08-01", 0, "Code 100 description",
+    "100", "2024-07-31", "2023-08-01", 100, "Code 100 description"
   ) |>
     dplyr::mutate(
       dplyr::across(c(start_date, end_date), as.Date)
@@ -198,10 +198,10 @@ test_that("Replace one gap in one code with zero", {
 
 test_that("Replace two gap in one code with zeros", {
   df_test <- tibble::tribble(
-    ~start_date, ~end_date, ~code, ~usage,
-    "2023-08-01", "2024-07-31", "100", 100,
-    "2020-08-01", "2021-07-31", "100", 200,
-    "2016-08-01", "2017-07-31", "100", 300
+    ~start_date, ~end_date, ~code, ~usage, ~description,
+    "2023-08-01", "2024-07-31", "100", 100, "Code 100 description",
+    "2020-08-01", "2021-07-31", "100", 200, "Code 100 description",
+    "2016-08-01", "2017-07-31", "100", 300, "Code 100 description"
   ) |>
     dplyr::mutate(
       dplyr::across(c(start_date, end_date), as.Date)
@@ -210,15 +210,15 @@ test_that("Replace two gap in one code with zeros", {
   df_completed <- complete_usage_gaps_with_zeros(df_test)
 
   df_expected <- tibble::tribble(
-    ~code, ~end_date, ~start_date, ~usage,
-    "100", "2017-07-31", "2016-08-01", 300,
-    "100", "2018-07-31", "2017-08-01", 0,
-    "100", "2019-07-31", "2018-08-01", 0,
-    "100", "2020-07-31", "2019-08-01", 0,
-    "100", "2021-07-31", "2020-08-01", 200,
-    "100", "2022-07-31", "2021-08-01", 0,
-    "100", "2023-07-31", "2022-08-01", 0,
-    "100", "2024-07-31", "2023-08-01", 100
+    ~code, ~end_date, ~start_date, ~usage, ~description,
+    "100", "2017-07-31", "2016-08-01", 300, "Code 100 description",
+    "100", "2018-07-31", "2017-08-01", 0, "Code 100 description",
+    "100", "2019-07-31", "2018-08-01", 0, "Code 100 description",
+    "100", "2020-07-31", "2019-08-01", 0, "Code 100 description",
+    "100", "2021-07-31", "2020-08-01", 200, "Code 100 description",
+    "100", "2022-07-31", "2021-08-01", 0, "Code 100 description",
+    "100", "2023-07-31", "2022-08-01", 0, "Code 100 description",
+    "100", "2024-07-31", "2023-08-01", 100, "Code 100 description"
   ) |>
     dplyr::mutate(
       dplyr::across(c(start_date, end_date), as.Date)
@@ -229,11 +229,11 @@ test_that("Replace two gap in one code with zeros", {
 
 test_that("Replace two gaps in two codes with zeros", {
   df_test <- tibble::tribble(
-    ~start_date, ~end_date, ~code, ~usage,
-    "2023-08-01", "2024-07-31", "100", 100,
-    "2021-08-01", "2022-07-31", "100", 200,
-    "2023-08-01", "2024-07-31", "200", 100,
-    "2021-08-01", "2022-07-31", "200", 200
+    ~start_date, ~end_date, ~code, ~usage, ~description,
+    "2023-08-01", "2024-07-31", "100", 100, "Code 100 description",
+    "2021-08-01", "2022-07-31", "100", 200, "Code 100 description",
+    "2023-08-01", "2024-07-31", "200", 100, "Code 200 description",
+    "2021-08-01", "2022-07-31", "200", 200, "Code 200 description",
   ) |>
     dplyr::mutate(
       dplyr::across(c(start_date, end_date), as.Date)
@@ -242,13 +242,13 @@ test_that("Replace two gaps in two codes with zeros", {
   df_completed <- complete_usage_gaps_with_zeros(df_test)
 
   df_expected <- tibble::tribble(
-    ~code, ~end_date, ~start_date, ~usage,
-    "100", "2022-07-31", "2021-08-01", 200,
-    "100", "2023-07-31", "2022-08-01", 0,
-    "100", "2024-07-31", "2023-08-01", 100,
-    "200", "2022-07-31", "2021-08-01", 200,
-    "200", "2023-07-31", "2022-08-01", 0,
-    "200", "2024-07-31", "2023-08-01", 100
+    ~code, ~end_date, ~start_date, ~usage, ~description,
+    "100", "2022-07-31", "2021-08-01", 200, "Code 100 description",
+    "100", "2023-07-31", "2022-08-01", 0, "Code 100 description",
+    "100", "2024-07-31", "2023-08-01", 100, "Code 100 description",
+    "200", "2022-07-31", "2021-08-01", 200, "Code 200 description",
+    "200", "2023-07-31", "2022-08-01", 0, "Code 200 description",
+    "200", "2024-07-31", "2023-08-01", 100, "Code 200 description"
   ) |>
     dplyr::mutate(
       dplyr::across(c(start_date, end_date), as.Date)
