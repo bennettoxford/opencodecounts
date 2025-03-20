@@ -33,13 +33,13 @@ app_server <- function(input, output, session) {
     updateCheckboxInput(session, "show_individual_codes", value = FALSE)
 
     if (input$dataset == "snomedct") {
-      opencodes::snomed_usage |>
+      opencodecounts::snomed_usage |>
         select(start_date, end_date, code = snomed_code, description, usage)
     } else if (input$dataset == "icd10") {
-      opencodes::icd10_usage |>
+      opencodecounts::icd10_usage |>
         select(start_date, end_date, code = icd10_code, description, usage)
     } else if (input$dataset == "opcs4") {
-      opencodes::opcs4_usage |>
+      opencodecounts::opcs4_usage |>
         select(start_date, end_date, code = opcs4_code, description, usage)
     }
   })

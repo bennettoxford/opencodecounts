@@ -92,7 +92,7 @@ snomed_usage |>
 # A tibble: 0 × 3
 
 # Check encoding problems before fix
-codes_with_encoding_problems <- opencodes:::get_codes_with_encoding_problems(snomed_usage, snomed_code)
+codes_with_encoding_problems <- opencodecounts:::get_codes_with_encoding_problems(snomed_usage, snomed_code)
 # [1] "1011271000000107"   "1011311000000107"   "13445001"           "83901003"           "40956001"           "201281002"
 # [7] "190818004"          "111303009"          "43234007"           "150091000000106"    "266994001"          "313005"
 # [13] "275542004"          "408521009"          "236504007"          "239912009"          "27982003"           "75895005"
@@ -110,14 +110,14 @@ codes_with_encoding_problems <- opencodes:::get_codes_with_encoding_problems(sno
 
 # Fix encoding problems
 snomed_usage <- snomed_usage |>
-  mutate(description = opencodes:::fix_encoding(description))
+  mutate(description = opencodecounts:::fix_encoding(description))
 
 # Check encoding problems after fix
-opencodes:::get_codes_with_encoding_problems(snomed_usage, snomed_code)
+opencodecounts:::get_codes_with_encoding_problems(snomed_usage, snomed_code)
 # character(0)
 
 # Check (but dont fix) codes with multiple descriptions
-codes_with_multiple_desc <- opencodes:::get_codes_with_multiple_desc(snomed_usage, snomed_code)
+codes_with_multiple_desc <- opencodecounts:::get_codes_with_multiple_desc(snomed_usage, snomed_code)
 length(codes_with_multiple_desc)
 # [1] 8520
 

@@ -2,10 +2,10 @@
 % Please edit documentation in R/run_app.R
 \name{run_app}
 \alias{run_app}
-\title{Run \code{opencodes} \href{https://milanwiedemann.shinyapps.io/opencodes/}{Shiny App} locally}
+\title{Run \code{opencodecounts} \href{https://milanwiedemann.shinyapps.io/opencodecounts/}{Shiny App} locally}
 \usage{
 run_app()
 }
 \description{
-Run \code{opencodes} \href{https://milanwiedemann.shinyapps.io/opencodes/}{Shiny App} locally
+Run \code{opencodecounts} \href{https://milanwiedemann.shinyapps.io/opencodecounts/}{Shiny App} locally
 }

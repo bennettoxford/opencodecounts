@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# opencodes
+# opencodecounts
 
 <!-- badges: start -->
 
@@ -9,11 +9,11 @@
 
 <!-- badges: end -->
 
-The goal of `opencodes` is to make yearly summaries of **SNOMED Code
-Usage in Primary Care** and **ICD-10 and OPCS-4 Code Usage in Secondary
-Care** in England, published by NHS Digital, available in R for
-research. The interactive [OpenCodes Shiny
-App](https://bennettoxford.github.io/opencodes/articles/app.html)
+The goal of `opencodecounts` is to make yearly summaries of **SNOMED
+Code Usage in Primary Care** and **ICD-10 and OPCS-4 Code Usage in
+Secondary Care** in England, published by NHS Digital, available in R
+for research. The interactive [opencodecounts Shiny
+App](https://bennettoxford.github.io/opencodecounts/articles/app.html)
 provides different options to explore these datasets.  
 The original data is available from NHS Digital at:
 
@@ -24,13 +24,13 @@ The original data is available from NHS Digital at:
 
 ## Installation
 
-You can install the development version of `opencodes` like so:
+You can install the development version of `opencodecounts` like so:
 
 ``` r
-remotes::install_github("bennettoxford/opencodes")
+remotes::install_github("bennettoxford/opencodecounts")
 ```
 
-## Main functions of the `opencodes` R package
+## Main functions of the `opencodecounts` R package
 
 - **Datasets:**
   - `snomedct_usage`: SNOMED CT code usage dataset
@@ -39,13 +39,13 @@ remotes::install_github("bennettoxford/opencodes")
 - **Functions:**
   - `get_codelist()`: Imports a codelists from
     [www.opencodelists.org](https://www.opencodelists.org/)
-  - `run_app()`: Launches interactive OpenCodes Shiny App locally
+  - `run_app()`: Launches interactive opencodecounts Shiny App locally
 
 ## Example
 
 ``` r
-# Load opencodes package
-library(opencodes)
+# Load opencodecounts package
+library(opencodecounts)
 ```
 
 ### Dataset: SNOMED Code Usage in Primary Care in England
@@ -86,7 +86,7 @@ for the data pre-processing see `/data-raw/icd10_usage.R`.
 ``` r
 # Return ICD-10 code usage data
 icd10_usage
-#> # A tibble: 135,951 × 5
+#> # A tibble: 136,136 × 5
 #>    start_date end_date   icd10_code description                            usage
 #>    <date>     <date>     <chr>      <chr>                                  <int>
 #>  1 2023-04-01 2024-03-31 A000       Cholera due to Vibrio cholerae 01, bi…     2
@@ -99,7 +99,7 @@ icd10_usage
 #>  8 2023-04-01 2024-03-31 A020       Salmonella enteritis                    2165
 #>  9 2023-04-01 2024-03-31 A021       Salmonella sepsis                        319
 #> 10 2023-04-01 2024-03-31 A022       Localized salmonella infections           82
-#> # ℹ 135,941 more rows
+#> # ℹ 136,126 more rows
 ```
 
 ### Dataset: OPCS-4 Code Usage in Secondary Care in England
@@ -115,7 +115,7 @@ for the data pre-processing see `/data-raw/opcs4_usage.R`.
 ``` r
 # Return OPCS-4 code usage data
 opcs4_usage
-#> # A tibble: 107,376 × 5
+#> # A tibble: 107,379 × 5
 #>    start_date end_date   opcs4_code description                            usage
 #>    <date>     <date>     <chr>      <chr>                                  <int>
 #>  1 2023-04-01 2024-03-31 A011       Hemispherectomy                            7
@@ -128,5 +128,5 @@ opcs4_usage
 #>  8 2023-04-01 2024-03-31 A023       Excision of lesion of tissue of parie…   704
 #>  9 2023-04-01 2024-03-31 A024       Excision of lesion of tissue of occip…   260
 #> 10 2023-04-01 2024-03-31 A025       Excision of lesion of tissue of cereb…   604
-#> # ℹ 107,366 more rows
+#> # ℹ 107,369 more rows
 ```
