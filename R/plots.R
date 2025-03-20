@@ -5,7 +5,7 @@
 #' @keywords internal
 plot_summary <- function(data) {
   scale_x_date_breaks <- unique(data$end_date)
-
+  
   ggplot(
     data,
     aes(x = end_date, y = total_usage)
@@ -47,7 +47,7 @@ plot_summary <- function(data) {
 #' @keywords internal
 plot_individual <- function(data) {
   scale_x_date_breaks <- unique(data$end_date)
-
+  
   data <- data |>
     group_by(start_date, end_date) |>
     summarise(

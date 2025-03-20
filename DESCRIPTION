@@ -45,5 +45,6 @@ Imports:
     scales,
     shiny,
     stringr,
-    tibble
+    tibble,
+    tidyr
 VignetteBuilder: knitr
