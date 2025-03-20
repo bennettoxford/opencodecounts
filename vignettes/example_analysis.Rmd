@@ -22,56 +22,53 @@ library(tidyverse)
 
 ```{r}
 # Import the codelist
-pregnancy_codelist <- get_codelist("opensafely/pregnancy-icd10-aurum/5a7d8d12/")
+icd10_xix_codelist <- get_codelist("opensafely/icd-10-chapter-xix/4dce479b/")
 ```
 
 ```{r}
-# Filter ICD-10 code usage for those codes contained in the
-# pregnancy codelist between 2014 and 2024
-pregnancy_data <- icd10_usage |>
-  filter(icd10_code %in% pregnancy_codelist$code) |>
+# Filter ICD-10 code usage to codes contained in the
+# ICD-10 Chapter XIX codelist and years 2014 to 2024
+injury_data <- icd10_usage |>
+  filter(icd10_code %in% icd10_xix_codelist$code) |>
   filter(year(start_date) >= 2014 & year(start_date) < 2024)
 
 # Calculate proportional usage for each code 
-# and select five most frequently used codes
-top5_pregnancy_codes <- pregnancy_data |> 
+# and select ten most frequently used codes
+top10_injury_codes <- injury_data |> 
   group_by(icd10_code, description) |>
   summarise(usage = sum(usage), .groups = "drop") |>
   mutate(prop_usage = usage/ sum(usage)) |>
-  slice_max(prop_usage, n = 5) |>
+  slice_max(prop_usage, n = 10) |>
   pull(icd10_code)
 ```
 
 ```{r}
-# Visaulise time trends for the five selected codes
-pregnancy_data |>
-  filter(icd10_code %in% top5_pregnancy_codes) |>
+# Visualise the time trends for the ten selected codes
+injury_data |>
+  filter(icd10_code %in% top10_injury_codes) |>
   ggplot(aes(x = year(end_date), y = usage, group = icd10_code, color = description)) +
-  geom_line(size = 0.8) +
-  geom_point(size = 3) +
-  ggrepel::geom_label_repel(
-    data = pregnancy_data |>
-      filter(icd10_code %in% top5_pregnancy_codes) |>
+  geom_line() +
+  geom_point() +
+  ggrepel::geom_text_repel(
+    data = injury_data |>
+      filter(icd10_code %in% top10_injury_codes) |>
       filter(end_date == max(end_date)),
     aes(x = year(end_date),
         y = usage,
         color = description,
-        label = paste(icd10_code)),
-    size = 2.8,
-    box.padding = 0.2,
-    label.padding = 0.15,
-    nudge_y = 3,
-    direction ="y") +
-#     lineheight = 0.7,
-#     hjust = 1,
-#     segment.color = 'dark grey',
-#     direction = "y",
-#     nudge_x = 3,
-#     nudge_y = 3) +
+        label = str_wrap(paste(icd10_code,":", description), width = 20)),
+    lineheight = 0.8,
+    hjust = 1,
+    segment.color = 'dark grey',
+    segment.linetype = 2,
+    direction = "y",
+    nudge_x = 1.5,
+    size = 2.5,
+    box.padding = .3) +
   scale_y_continuous(labels = scales::comma) +
-  scale_x_continuous(breaks = seq(min(year(pregnancy_data$end_date)), max(year(pregnancy_data$end_date)), by = 1)) +
+  scale_x_continuous(breaks = seq(min(year(injury_data$end_date)), max(year(injury_data$end_date)), by = 1)) +
   labs(x = "", y = "Usage count", color = "ICD-10 code") +
-  theme_grey() +
+  theme_light() +
   theme(legend.position = "none")
 
 ```
