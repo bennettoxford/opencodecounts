@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(opencodes)
+library(opencodecounts)
 
-test_check("opencodes")
+test_check("opencodecounts")

@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# opencodes
+# opencodecounts
 
 <!-- badges: start -->
 
@@ -21,8 +21,8 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of `opencodes` is to make yearly summaries of **SNOMED Code Usage in Primary Care** and **ICD-10 and OPCS-4 Code Usage in Secondary Care** in England, published by NHS Digital, available in R for research.
-The interactive [OpenCodes Shiny App](https://bennettoxford.github.io/opencodes/articles/app.html) provides different options to explore these datasets.  
+The goal of `opencodecounts` is to make yearly summaries of **SNOMED Code Usage in Primary Care** and **ICD-10 and OPCS-4 Code Usage in Secondary Care** in England, published by NHS Digital, available in R for research.
+The interactive [opencodecounts Shiny App](https://bennettoxford.github.io/opencodecounts/articles/app.html) provides different options to explore these datasets.  
 The original data is available from NHS Digital at:
 
 -   [SNOMED Code Usage in Primary Care](https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care)
@@ -30,13 +30,13 @@ The original data is available from NHS Digital at:
 
 ## Installation
 
-You can install the development version of `opencodes` like so:
+You can install the development version of `opencodecounts` like so:
 
 ``` r
-remotes::install_github("bennettoxford/opencodes")
+remotes::install_github("bennettoxford/opencodecounts")
 ```
 
-## Main functions of the `opencodes` R package
+## Main functions of the `opencodecounts` R package
 
 - **Datasets:**
   - `snomedct_usage`: SNOMED CT code usage dataset
@@ -44,13 +44,13 @@ remotes::install_github("bennettoxford/opencodes")
   - `opcs4_usage`: OPCS-4 code usage dataset
 - **Functions:**
    - `get_codelist()`: Imports a codelists from [www.opencodelists.org](https://www.opencodelists.org/)
-   - `run_app()`: Launches interactive OpenCodes Shiny App locally
+   - `run_app()`: Launches interactive opencodecounts Shiny App locally
 
 ## Example
 
 ```{r load-pkg}
-# Load opencodes package
-library(opencodes)
+# Load opencodecounts package
+library(opencodecounts)
 ```
 
 ### Dataset: SNOMED Code Usage in Primary Care in England

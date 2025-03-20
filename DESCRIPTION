@@ -1,4 +1,4 @@
-Package: opencodes
+Package: opencodecounts
 Title: Clinical Code Usage in England
 Version: 0.0.2
 Authors@R: c(
@@ -26,8 +26,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://github.com/bennettoxford/opencodes, https://bennettoxford.github.io/opencodes/
-BugReports: https://github.com/bennettoxford/opencodes/issues
+URL: https://github.com/bennettoxford/opencodecounts, https://bennettoxford.github.io/opencodecounts/
+BugReports: https://github.com/bennettoxford/opencodecounts/issues
 Imports: 
     bsicons,
     bslib,

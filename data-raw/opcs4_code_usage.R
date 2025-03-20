@@ -154,11 +154,11 @@ opcs4_usage <- opcs4_usage |>
   filter(!is.na(description))
 
 # Check encoding problems before fix
-codes_with_encoding_problems <- opencodes:::get_codes_with_encoding_problems(opcs4_usage, opcs4_code)
+codes_with_encoding_problems <- opencodecounts:::get_codes_with_encoding_problems(opcs4_usage, opcs4_code)
 # character(0)
 
 # Check (but dont fix) codes with multiple descriptions
-codes_with_multiple_desc <- opencodes:::get_codes_with_multiple_desc(opcs4_usage, opcs4_code)
+codes_with_multiple_desc <- opencodecounts:::get_codes_with_multiple_desc(opcs4_usage, opcs4_code)
 length(codes_with_multiple_desc)
 # [1] 99
 
