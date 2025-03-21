@@ -1,3 +1,35 @@
+#' Helper function fill usage for missing years
+#' 
+#' This only fills gaps between existing start and end dates for each code
+#' but does not extent the date range for a code.
+#' @importFrom tidyr complete
+#' @keywords internal
+complete_usage_gaps_with_zeros <- function(data){
+  
+  # This function currently expects a specific data format.
+  # This isn't a problem because we know what the data in the app looks like.
+  # But we should improve this with tidyselect at some point in the future.
+  data_without_gaps <- data |>
+    group_by(code)|>
+    complete(
+      end_date = seq.Date(
+        from = min(end_date), 
+        to = max(end_date), 
+        by = "year"),
+      fill = list(usage = 0))|>
+    arrange(code, end_date) |>
+    mutate(
+      start_date = seq.Date(
+        from = min(start_date, na.rm = TRUE), 
+        to = max(start_date, na.rm = TRUE), 
+        by = "year")
+    )|>
+    tidyr::fill(description, .direction = "down")|>
+    ungroup()
+  
+  data_without_gaps
+}
+
 #' Find codes with multiple description
 #' @importFrom dplyr count distinct filter group_by pull select
 #' @keywords internal

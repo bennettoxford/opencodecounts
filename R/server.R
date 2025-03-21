@@ -340,6 +340,24 @@ app_server <- function(input, output, session) {
   output$usage_plot <- renderPlotly({
     withProgress(message = "Plotting data ...", {
       unique_codes <- length(unique(filtered_data()$code))
+      
+      # When there are 500 or less selected codes, impute 0 usage 
+      # in the annual usage gaps. We do this because the absence of data for
+      # any particular year between two available years implies that the usage 
+      # for that year is 0. However, the plots do not show zero but interpolate
+      # a line between the two last available data points, which is misleading.
+      # We impute 0 usage in annual usage gaps in the summary plot 
+      # when the number of selected codes is =< 500 and in the individual
+      # codes plot (which, by default, can only be displayed with =< 500
+      # selected codes). This cut-off was selected for efficiency, since if the user
+      # selects >500 codes, the imputation will take longer, but the total usage 
+      # shown on the summary plot for any year is unlikely to be zero, making
+      # imputation redundant.
+      if (unique_codes <= 500) {
+        df_plot <- complete_usage_gaps_with_zeros(filtered_data())
+      } else {
+        df_plot <- filtered_data()
+      }
 
       # As a workaround we are adding a plot with text only if the
       # search criteria match no data. At some point in the future we
@@ -362,7 +380,7 @@ app_server <- function(input, output, session) {
           )
       } else {
         if (input$show_individual_codes & unique_codes <= 500) {
-          p <- filtered_data() |>
+          p <- df_plot |>
             plot_individual()
         } else {
           if (input$show_individual_codes & unique_codes >= 500) {
@@ -372,7 +390,7 @@ app_server <- function(input, output, session) {
             )
           }
 
-          p <- filtered_data() |>
+          p <- df_plot |>
             group_by(start_date, end_date) |>
             summarise(total_usage = sum(usage, na.rm = TRUE)) |>
             plot_summary()
