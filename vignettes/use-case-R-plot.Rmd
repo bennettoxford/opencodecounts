@@ -1,0 +1,76 @@
+---
+title: "Use Case: Bespoke Analyses in R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{use-case-R-plot}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(opencodecounts)
+library(tibble)
+library(dplyr)
+library(ggplot2)
+```
+
+## Load codelist
+```{r load-codelist}
+# Import the codelist from OpenCodelists.org
+icd10_xix_codelist <- get_codelist("opensafely/icd-10-chapter-xix/4dce479b/")
+as_tibble(icd10_xix_codelist)
+```
+
+## Select all codes from codelist from 2024 onwards
+
+```{r select-xix}
+# Filter ICD-10 code usage to only include
+#  1. codes from icd10_xix_codelist
+#  2. code usage data from 2014 onwards
+df_icd10_xix <- icd10_usage |>
+  filter(icd10_code %in% icd10_xix_codelist$code) |>
+  filter(start_date >= "2014-03-31")
+```
+
+## Select the 3 most frequently used codes
+
+```{r select-top3}
+# Select 3 most frequently used codes
+top3_icd10_xix_codes <- df_icd10_xix |> 
+  group_by(icd10_code, description) |>
+  summarise(total_usage = sum(usage)) |> 
+  ungroup() |> 
+  slice_max(total_usage, n = 3) |>
+  pull(icd10_code)
+```
+
+## Visualise trends over time
+
+```{r visualisation}
+# Visualise the time trends for the ten selected codes
+plot_top3_icd10_xix <- df_icd10_xix |> 
+  filter(icd10_code %in% top3_icd10_xix_codes) |>
+  ggplot(aes(
+    x = end_date,
+    y = usage,
+    colour = paste0(description, " (", icd10_code, ")"),
+    shape = paste0(description, " (", icd10_code, ")"))
+  ) +
+  geom_line(alpha = .3) +
+  geom_point() +
+  scale_y_continuous(labels = scales::label_number(accuracy = 1)) +
+  scale_x_date() +
+  scale_colour_viridis_d(end = .7) +
+  labs(
+    x = NULL, y = "Usage count", 
+    colour = NULL, shape = NULL)
+
+plot_top3_icd10_xix
+```
