@@ -62,6 +62,11 @@ test_that("Test SNOMEDCT missing description", {
   expect_equal(test_sum_missing_description, 0)
 })
 
+test_that("Atorvastatin code is correct", {
+  atorvastatin_code <- snomed_usage[snomed_usage$description == "Atorvastatin 20mg tablets (product)",]$snomed_code
+  expect_identical(unique(atorvastatin_code), "39733011000001106")
+})
+
 # ICD-10 Tests
 
 test_that("Test icd10_usage column types", {
