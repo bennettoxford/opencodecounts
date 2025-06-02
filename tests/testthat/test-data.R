@@ -62,6 +62,10 @@ test_that("Test SNOMEDCT missing description", {
   expect_equal(test_sum_missing_description, 0)
 })
 
+# This tests if we read in the codes correctly. We might want to improve this to test more than one case in futre.
+# This illustrates the problem:
+# $ python -c 'print(int(float("39733011000001106")))'
+# 39733011000001104
 test_that("Atorvastatin code is correct", {
   atorvastatin_code <- snomed_usage[snomed_usage$description == "Atorvastatin 20mg tablets (product)",]$snomed_code
   expect_identical(unique(atorvastatin_code), "39733011000001106")
