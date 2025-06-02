@@ -47,13 +47,10 @@ snomed_code_usage_urls <- list(
 
 # The following files show the number of times each listed SNOMED code was added to a GP patient record within the period 1 Aug to 31 July for the years available, aggregated at England level.
 
-# Disanble scientific notation
-options(scipen = 999)
-
 snomed_usage <- snomed_code_usage_urls %>%
   map(read_tsv,
     col_types = list(
-      snomed_code = "c",
+      SNOMED_Concept_ID = "c",
       Description = "c",
       Usage = "i",
       Active_at_Start = "l",
@@ -66,12 +63,8 @@ snomed_usage <- snomed_code_usage_urls %>%
   mutate(
     start_date = as.Date(paste0(start_date, "-08-01")),
     end_date = as.Date(paste0(end_date, "-07-31"))
-  )
-
-# Manipulation required due to variable name change
-snomed_usage <- snomed_usage |>
-  rename(snomed_code = snomed_concept_id) |>
-  mutate(snomed_code = as.character(snomed_code))
+  ) |>
+  rename(snomed_code = snomed_concept_id)
 
 # Count number of usage with NAs
 sum(is.na(snomed_usage$usage))
