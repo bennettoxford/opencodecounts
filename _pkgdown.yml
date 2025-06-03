@@ -1,4 +1,4 @@
-url: https://ebmdatalab.github.io/codeusage/
+url: https://bennettoxford.github.io/opencodecounts/
 template:
   bootstrap: 5
 
@@ -17,15 +17,16 @@ reference:
 
 navbar:
   structure:
-    left:
-    - home
-    - reference
-    - launch_shiny
-    right:
-    - search
-    - github
+    left: [home, reference, articles, launch_shiny]
+    right: [search, github]
 
   components:
+    articles:
+      text: "How-to guides"
+      menu:
+        - text: "How to use the R package"
+          href: articles/how-to-use-R-pkg.html
+
     launch_shiny:
       text: "Launch Shiny App"
       href: articles/app.html
