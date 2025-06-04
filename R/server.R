@@ -157,25 +157,30 @@ app_server <- function(input, output, session) {
   }) |>
     bindEvent(input$reset_search_methods)
 
+  # Create a debounced version of the description search input
+  # Currently 500 milliseconds (0.5 seconds) delay 
+  description_search_debounced <- reactive(input$description_search) |> 
+    debounce(500)
+  
   # Set filtering method to search when search inputs change
   observe({
     # If a codelist is loaded AND the user is not entering a new search, do nothing
     if (rv_search_method() == "codelist" &&
       (is.null(input$code_specific_search) || length(input$code_specific_search) == 0) &&
       (is.null(input$code_pattern_search) || input$code_pattern_search == "") &&
-      (is.null(input$description_search) || input$description_search == "")) {
+      (is.null(description_search_debounced()) || description_search_debounced() == "")) {
       return()
     }
 
     # If any search input is used, switch to "search"
     if (!is.null(input$code_specific_search) && length(input$code_specific_search) > 0 ||
       !is.null(input$code_pattern_search) && input$code_pattern_search != "" ||
-      !is.null(input$description_search) && input$description_search != "") {
+      !is.null(description_search_debounced()) && description_search_debounced() != "") {
       rv_search_method("search")
     } else {
       rv_search_method("none")
     }
-  }) |> bindEvent(input$code_specific_search, input$code_pattern_search, input$description_search)
+  }) |> bindEvent(input$code_specific_search, input$code_pattern_search, description_search_debounced())
 
   # Filtered usage data
   filtered_data <- reactive({
@@ -199,9 +204,9 @@ app_server <- function(input, output, session) {
             filter(grepl(paste("^", input$code_pattern_search, sep = ""), code, ignore.case = TRUE))
         }
 
-        if (!is.null(input$description_search) && input$description_search != "") {
+        if (!is.null(description_search_debounced()) && description_search_debounced() != "") {
           data <- data |>
-            filter(grepl(input$description_search, description, ignore.case = TRUE))
+            filter(grepl(description_search_debounced(), description, ignore.case = TRUE))
         }
       } else if (rv_search_method() == "codelist") {
         req(rv_codelist())
