@@ -1,8 +1,8 @@
 ---
-title: "Use Case: Bespoke Analyses in R"
+title: "How to use the R package"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{use-case-R-plot}
+  %\VignetteIndexEntry{how-to-use-R-pkg}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, message = FALSE}
 library(opencodecounts)
 library(tibble)
 library(dplyr)
@@ -25,10 +25,12 @@ library(ggplot2)
 ```{r load-codelist}
 # Import the codelist from OpenCodelists.org
 icd10_xix_codelist <- get_codelist("opensafely/icd-10-chapter-xix/4dce479b/")
+
+# Return the first 10 rows of the codelist
 as_tibble(icd10_xix_codelist)
 ```
 
-## Select all codes from codelist from 2024 onwards
+## Filter code usage data
 
 ```{r select-xix}
 # Filter ICD-10 code usage to only include
@@ -39,14 +41,14 @@ df_icd10_xix <- icd10_usage |>
   filter(start_date >= "2014-03-31")
 ```
 
-## Select the 3 most frequently used codes
+## Calculate codes with most usage
 
 ```{r select-top3}
 # Select 3 most frequently used codes
-top3_icd10_xix_codes <- df_icd10_xix |> 
+top3_icd10_xix_codes <- df_icd10_xix |>
   group_by(icd10_code, description) |>
-  summarise(total_usage = sum(usage)) |> 
-  ungroup() |> 
+  summarise(total_usage = sum(usage)) |>
+  ungroup() |>
   slice_max(total_usage, n = 3) |>
   pull(icd10_code)
 ```
@@ -54,8 +56,7 @@ top3_icd10_xix_codes <- df_icd10_xix |>
 ## Visualise trends over time
 
 ```{r visualisation}
-# Visualise the time trends for the ten selected codes
-plot_top3_icd10_xix <- df_icd10_xix |> 
+plot_top3_icd10_xix <- df_icd10_xix |>
   filter(icd10_code %in% top3_icd10_xix_codes) |>
   ggplot(aes(
     x = end_date,
@@ -69,8 +70,9 @@ plot_top3_icd10_xix <- df_icd10_xix |>
   scale_x_date() +
   scale_colour_viridis_d(end = .7) +
   labs(
-    x = NULL, y = "Usage count", 
-    colour = NULL, shape = NULL)
+    x = NULL, y = "Usage count",
+    colour = NULL, shape = NULL
+  )
 
 plot_top3_icd10_xix
 ```
