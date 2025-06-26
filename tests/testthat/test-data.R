@@ -49,7 +49,12 @@ test_that("Test snomed_usage date range", {
 
 test_that("Test sum of usage", {
   test_usage_sum <- sum(snomed_usage$usage)
-  expect_equal(test_usage_sum, 41723620720)
+  expect_equal(test_usage_sum, 41721589830)
+})
+
+test_that("Minimum SNOMED usage", {
+  min_snomed_usage <- min(snomed_usage$usage)
+  expect_equal(min_snomed_usage, 5)
 })
 
 test_that("Test no non-alphanumeric characters in SNOMED codes", {
@@ -107,7 +112,7 @@ test_that("Test icd10_usage minimum usage", {
 
 test_that("Test cummulative ICD-10 usage", {
   test_sum_usage <- sum(icd10_usage$usage)
-  expect_equal(test_sum_usage, 1333660475)
+  expect_equal(test_sum_usage, 1333659515)
 })
 
 test_that("Test ICD-10 usage are all integers", {
