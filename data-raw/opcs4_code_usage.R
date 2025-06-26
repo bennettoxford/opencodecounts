@@ -134,9 +134,9 @@ opcs4_usage <- opcs4_code_usage_urls |>
 sum(is.na(opcs4_usage$usage))
 # [1] 143
 
-# Replace NAs with 10
+# Replace NAs with 5
 opcs4_usage <- opcs4_usage |>
-  mutate(usage = replace_na(usage, 10))
+  mutate(usage = replace_na(usage, 5))
 
 # Check number of usage with NAs is 0
 sum(is.na(opcs4_usage$usage)) == 0

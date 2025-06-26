@@ -70,9 +70,9 @@ snomed_usage <- snomed_code_usage_urls %>%
 sum(is.na(snomed_usage$usage))
 # [1] 406178
 
-# Replace NAs with 10
+# Replace NAs with 5
 snomed_usage <- snomed_usage |>
-  mutate(usage = replace_na(usage, 10))
+  mutate(usage = replace_na(usage, 5))
 
 # Check number of usage with NAs is 0
 sum(is.na(snomed_usage$usage)) == 0
