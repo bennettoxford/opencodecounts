@@ -135,9 +135,9 @@ icd10_usage <- icd10_code_usage_urls |>
 sum(is.na(icd10_usage$usage))
 # [1] 323
 
-# Replace NAs with 10
+# Replace NAs with 5
 icd10_usage <- icd10_usage |>
-  mutate(usage = replace_na(usage, 10))
+  mutate(usage = replace_na(usage, 5))
 
 # Check number of usage with NAs is 0
 sum(is.na(icd10_usage$usage)) == 0

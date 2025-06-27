@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of `opencodecounts` is to make yearly summaries of **SNOMED Code Usage in Primary Care** and **ICD-10 and OPCS-4 Code Usage in Secondary Care** in England, published by NHS Digital, available in R for research.
+The goal of `opencodecounts` is to make yearly summaries of **SNOMED Code Usage in Primary Care** and **ICD-10 and OPCS-4 Code Usage in Secondary Care** in England, published by NHS, available in R for research.
 The interactive [opencodecounts Shiny App](https://bennettoxford.github.io/opencodecounts/articles/app.html) provides different options to explore these datasets.  
 The original data is available from NHS Digital at:
 
