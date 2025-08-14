@@ -1,3 +1,18 @@
+#' Extract semantic tag from SNOMED CT description
+#' 
+#' Add description
+#'
+#' @param string String, ADD MORE INFOR FOR PARAMETER
+#' @importFrom stringr str_extract str_replace_all
+#' @export
+#' @examples
+#' # Add examples later
+extract_semantic_tag <- function(string) {
+  sem_tag <- str_extract(string, "\\(([^()]+)\\)$")
+  sem_tag <- str_replace_all(sem_tag, "[()]", "")
+  sem_tag
+}
+
 #' Helper function fill usage for missing years
 #' 
 #' This only fills gaps between existing start and end dates for each code

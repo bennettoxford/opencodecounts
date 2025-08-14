@@ -1,3 +1,60 @@
+
+test_that("Test extract semantic tag - One string with sem tag", {
+  
+  snomed_ct_description <- c("Blood pressure (observable entity)")
+  semantic_tag <- extract_semantic_tag(snomed_ct_description)
+  
+  expect_equal(
+    semantic_tag,
+    c("observable entity")
+  )
+})
+
+test_that("Test extract semantic tag - Two string with sem tag", {
+  
+  snomed_ct_description <- c("Foo (foo)", "Boo (boo)")
+  semantic_tag <- extract_semantic_tag(snomed_ct_description)
+  
+  expect_equal(
+    semantic_tag,
+    c("foo", "boo")
+  )
+})
+
+test_that("Test extract semantic tag - One string with () and sem tag", {
+  
+  snomed_ct_description <- c("Foo (foo_desc) (foo_sem_tag)")
+  semantic_tag <- extract_semantic_tag(snomed_ct_description)
+  
+  expect_equal(
+    semantic_tag,
+    c("foo_sem_tag")
+  )
+})
+
+test_that("Test extract semantic tag - One string without sem tag", {
+  
+  snomed_ct_description <- c("Blood pressure")
+  semantic_tag <- extract_semantic_tag(snomed_ct_description)
+  
+  expect_equal(
+    semantic_tag,
+    c(NA_character_)
+  )
+})
+
+test_that("Test extract semantic tag - Numeric", {
+  
+  snomed_ct_description <- c(10)
+  semantic_tag <- extract_semantic_tag(snomed_ct_description)
+  
+  expect_equal(
+    semantic_tag,
+    c(NA_character_)
+  )
+})
+
+
 test_that("Test get codes with multiple desc", {
   df_test <- tibble::tribble(
     ~start_date, ~end_date, ~snomed_code, ~description, ~active_at_start, ~active_at_start, ~active_at_end,
