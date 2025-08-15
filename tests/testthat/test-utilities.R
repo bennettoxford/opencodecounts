@@ -1,3 +1,47 @@
+test_that("Test strip semantic tag - One string with sem tag", {
+  
+  snomed_ct_description <- c("Blood Pressure (observable entity)")
+  description_short <- strip_semantic_tag(snomed_ct_description)
+  
+  expect_equal(
+    description_short,
+    c("Blood Pressure")
+  )
+})
+
+test_that("Test strip semantic tag - two string with sem tag", {
+  
+  snomed_ct_description <- c("Blood Pressure (observable entity)", "Hypertension (finding)")
+  description_short <- strip_semantic_tag(snomed_ct_description)
+  
+  expect_equal(
+    description_short,
+    c("Blood Pressure", "Hypertension")
+  )
+})
+
+test_that("Test strip semantic tag - One string with () and sem tag", {
+  
+  snomed_ct_description <- c("Foo (foo_desc) (foo_sem_tag)")
+  description_short <- strip_semantic_tag(snomed_ct_description)
+  
+  expect_equal(
+    description_short,
+    c("Foo (foo_desc)")
+  )
+})
+
+test_that("Test strip semantic tag - One string without sem tag", {
+  
+  snomed_ct_description <- c("Blood pressure")
+  description_short <- strip_semantic_tag(snomed_ct_description)
+  
+  expect_equal(
+    description_short,
+    c("Blood pressure")
+  )
+})
+
 
 test_that("Test extract semantic tag - One string with sem tag", {
   

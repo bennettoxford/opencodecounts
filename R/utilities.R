@@ -1,8 +1,23 @@
+#' Strip semantic tag from SNOMED CT description
+#' 
+#' Removes semantic tag and returns a  short description
+#'
+#' @param string String, ADD MORE INFO FOR PARAMETER
+#' @importFrom stringr str_remove_all
+#' @export
+#' @examples
+#' # Add examples later
+strip_semantic_tag <- function(string) {
+  description_short = str_remove_all(string, " \\(([^()]+)\\)$")
+  
+  description_short
+}
+
 #' Extract semantic tag from SNOMED CT description
 #' 
 #' Add description
 #'
-#' @param string String, ADD MORE INFOR FOR PARAMETER
+#' @param string String, ADD MORE INFO FOR PARAMETER
 #' @importFrom stringr str_extract str_replace_all
 #' @export
 #' @examples
