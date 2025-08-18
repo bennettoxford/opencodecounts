@@ -1,6 +1,6 @@
 #' Strip semantic tag from SNOMED CT description
 #' 
-#' Removes semantic tag and returns a  short description
+#' Removes semantic tag from the description
 #'
 #' @param string String, ADD MORE INFO FOR PARAMETER
 #' @importFrom stringr str_remove_all
