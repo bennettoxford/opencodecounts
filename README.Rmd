@@ -21,20 +21,22 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of `opencodecounts` is to make yearly summaries of **SNOMED Code Usage in Primary Care** and **ICD-10 and OPCS-4 Code Usage in Secondary Care** in England, published by NHS, available in R for research.
+The goal of `opencodecounts` is to make yearly summaries of **SNOMED Code Usage in Primary Care** and **ICD-10 and OPCS-4 Code Usage in Secondary Care** in England, published by the NHS, available in R for research.
 The interactive [opencodecounts Shiny App](https://bennettoxford.github.io/opencodecounts/articles/app.html) provides different options to explore these datasets.  
 The original data is available from NHS Digital at:
 
 -   [SNOMED Code Usage in Primary Care](https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care)
--   [ICD-10 and OPCS-4 Code Usage in Secondary Care](https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity)
+-   [ICD-10 and OPCS-4 Code Usage in Inpatient Secondary Care](https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity)
 
 ## Installation
 
-You can install the development version of `opencodecounts` like so:
+You can install the `opencodecounts` package with:  
 
 ``` r
 remotes::install_github("bennettoxford/opencodecounts")
 ```
+
+Futher guides on how to use the package can be found at https://bennettoxford.github.io/opencodecounts/.
 
 ## Main functions of the `opencodecounts` R package
 
@@ -46,40 +48,3 @@ remotes::install_github("bennettoxford/opencodecounts")
    - `get_codelist()`: Imports a codelists from [www.opencodelists.org](https://www.opencodelists.org/)
    - `run_app()`: Launches interactive opencodecounts Shiny App locally
 
-## Example
-
-```{r load-pkg}
-# Load opencodecounts package
-library(opencodecounts)
-```
-
-### Dataset: SNOMED Code Usage in Primary Care in England
-
-This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see `/data-raw/snomed_code_usage.R`.
-
-```{r snomed-usage}
-# Return SNOMED code usage data
-snomed_usage
-```
-
-### Dataset: ICD-10 Code Usage in Secondary Care in England
-
-This is the total annual count of the Finished Consultant Episodes (FCE) listing each 4-character ICD-10 code either in primary or secondary diagnosis position in the Hospital Episode Statistics in England.
-
-This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see `/data-raw/icd10_usage.R`.
-
-```{r icd10-usage}
-# Return ICD-10 code usage data
-icd10_usage
-```
-
-### Dataset: OPCS-4 Code Usage in Secondary Care in England
-
-This is the total annual count of each instance that each 4-character OPCS-4 code is listed across all primary and secondary procedure positions in the Finished Consultant Episodes (FCE) of the Hospital Episode Statistics in England.
-
-This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see `/data-raw/opcs4_usage.R`.
-
-```{r opcs-4-usage}
-# Return OPCS-4 code usage data
-opcs4_usage
-```
