@@ -21,7 +21,7 @@ strip_semantic_tag <- function(string) {
 #' @importFrom stringr str_extract str_replace_all
 #' @export
 #' @examples
-#' # Add examples later
+#' extract_semantic_tag("Blood Pressure (observable entity)")
 extract_semantic_tag <- function(string) {
   sem_tag <- str_extract(string, "\\(([^()]+)\\)$")
   sem_tag <- str_replace_all(sem_tag, "[()]", "")
