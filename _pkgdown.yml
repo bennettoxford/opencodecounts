@@ -14,6 +14,10 @@ reference:
 - title: Shiny App
   contents:
   - run_app
+- title: Helper functions
+  contents: 
+  - extract_semantic_tag
+  - strip_semantic_tag
 
 navbar:
   structure:
