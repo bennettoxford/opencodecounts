@@ -30,8 +30,12 @@ You can install the `opencodecounts` package with:
 remotes::install_github("bennettoxford/opencodecounts")
 ```
 
-Futher guides on how to use the package can be found at
-<https://bennettoxford.github.io/opencodecounts/>.
+## How-to guides
+
+- [How to use the R
+  package](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-R-pkg.html)
+- [Available
+  datasets](https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html)
 
 ## Main functions of the `opencodecounts` R package
 
