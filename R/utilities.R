@@ -1,3 +1,33 @@
+#' Strip semantic tag from SNOMED CT description
+#' 
+#' Removes semantic tag from the description
+#'
+#' @param string String, description of SNOMED CT codes
+#' @importFrom stringr str_remove_all
+#' @export
+#' @examples
+#' strip_semantic_tag("Blood Pressure (observable entity)")
+strip_semantic_tag <- function(string) {
+  description_short = str_remove_all(string, " \\(([^()]+)\\)$")
+  
+  description_short
+}
+
+#' Extract semantic tag from SNOMED CT description
+#' 
+#' Add description
+#'
+#' @param string String, description of SNOMED CT codes
+#' @importFrom stringr str_extract str_replace_all
+#' @export
+#' @examples
+#' extract_semantic_tag("Blood Pressure (observable entity)")
+extract_semantic_tag <- function(string) {
+  sem_tag <- str_extract(string, "\\(([^()]+)\\)$")
+  sem_tag <- str_replace_all(sem_tag, "[()]", "")
+  sem_tag
+}
+
 #' Helper function fill usage for missing years
 #' 
 #' This only fills gaps between existing start and end dates for each code
