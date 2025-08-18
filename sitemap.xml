@@ -11,6 +11,7 @@
 <url><loc>https://bennettoxford.github.io/opencodecounts/reference/complete_usage_gaps_with_zeros.html</loc></url>
 <url><loc>https://bennettoxford.github.io/opencodecounts/reference/datatable_codelist.html</loc></url>
 <url><loc>https://bennettoxford.github.io/opencodecounts/reference/datatable_usage.html</loc></url>
+<url><loc>https://bennettoxford.github.io/opencodecounts/reference/extract_semantic_tag.html</loc></url>
 <url><loc>https://bennettoxford.github.io/opencodecounts/reference/fix_encoding.html</loc></url>
 <url><loc>https://bennettoxford.github.io/opencodecounts/reference/get_codelist.html</loc></url>
 <url><loc>https://bennettoxford.github.io/opencodecounts/reference/get_codelist_organisation.html</loc></url>
@@ -24,5 +25,6 @@
 <url><loc>https://bennettoxford.github.io/opencodecounts/reference/plot_summary.html</loc></url>
 <url><loc>https://bennettoxford.github.io/opencodecounts/reference/run_app.html</loc></url>
 <url><loc>https://bennettoxford.github.io/opencodecounts/reference/snomed_usage.html</loc></url>
+<url><loc>https://bennettoxford.github.io/opencodecounts/reference/strip_semantic_tag.html</loc></url>
 </urlset>
 
