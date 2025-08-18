@@ -36,6 +36,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-how-to-guides" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">How-to guides</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-how-to-guides">
 <li><a class="dropdown-item" href="articles/how-to-use-R-pkg.html">How to use the R package</a></li>
+    <li><a class="dropdown-item" href="articles/available-datasets.html">Available datasets</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="articles/app.html">Launch Shiny App</a></li>
@@ -58,7 +59,7 @@
 <!-- badges: start -->
 
 <!-- badges: end -->
-<p>The goal of <code>opencodecounts</code> is to make yearly summaries of <strong>SNOMED Code Usage in Primary Care</strong> and <strong>ICD-10 and OPCS-4 Code Usage in Secondary Care</strong> in England, published by NHS Digital, available in R for research. The interactive <a href="https://bennettoxford.github.io/opencodecounts/articles/app.html">opencodecounts Shiny App</a> provides different options to explore these datasets.<br>
+<p>The goal of <code>opencodecounts</code> is to make yearly summaries of <strong>SNOMED Code Usage in Primary Care</strong> and <strong>ICD-10 and OPCS-4 Code Usage in Secondary Care</strong> in England, published by the NHS, available in R for research. The interactive <a href="https://bennettoxford.github.io/opencodecounts/articles/app.html">opencodecounts Shiny App</a> provides different options to explore these datasets.<br>
 The original data is available from NHS Digital at:</p>
 <ul>
 <li><a href="https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care" class="external-link">SNOMED Code Usage in Primary Care</a></li>
@@ -67,9 +68,17 @@ The original data is available from NHS Digital at:</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of <code>opencodecounts</code> like so:</p>
+<p>You can install the <code>opencodecounts</code> package with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"bennettoxford/opencodecounts"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="how-to-guides">How-to guides<a class="anchor" aria-label="anchor" href="#how-to-guides"></a>
+</h2>
+<ul>
+<li><a href="https://bennettoxford.github.io/opencodecounts/articles/how-to-use-R-pkg.html">How to use the R package</a></li>
+<li><a href="https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html">Available datasets</a></li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="main-functions-of-the-opencodecounts-r-package">Main functions of the <code>opencodecounts</code> R package<a class="anchor" aria-label="anchor" href="#main-functions-of-the-opencodecounts-r-package"></a>
@@ -97,82 +106,6 @@ The original data is available from NHS Digital at:</p>
 </ul>
 </li>
 </ul>
-</div>
-<div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load opencodecounts package</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bennettoxford/opencodecounts" class="external-link">opencodecounts</a></span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="dataset-snomed-code-usage-in-primary-care-in-england">Dataset: SNOMED Code Usage in Primary Care in England<a class="anchor" aria-label="anchor" href="#dataset-snomed-code-usage-in-primary-care-in-england"></a>
-</h3>
-<p>This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see <code>/data-raw/snomed_code_usage.R</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Return SNOMED code usage data</span></span>
-<span><span class="va">snomed_usage</span></span>
-<span><span class="co">#&gt; # A tibble: 1,523,967 × 7</span></span>
-<span><span class="co">#&gt;    start_date end_date   snomed_code      description      usage active_at_start</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;            &lt;chr&gt;            &lt;int&gt; &lt;lgl&gt;          </span></span>
-<span><span class="co">#&gt;  1 2023-08-01 2024-07-31 279991000000102  Short message … 4.41e8 TRUE           </span></span>
-<span><span class="co">#&gt;  2 2023-08-01 2024-07-31 184103008        Patient teleph… 1.91e8 TRUE           </span></span>
-<span><span class="co">#&gt;  3 2023-08-01 2024-07-31 428481002        Patient mobile… 1.16e8 TRUE           </span></span>
-<span><span class="co">#&gt;  4 2023-08-01 2024-07-31 423876004        Clinical docum… 7.81e7 TRUE           </span></span>
-<span><span class="co">#&gt;  5 2023-08-01 2024-07-31 72313002         Systolic arter… 6.87e7 TRUE           </span></span>
-<span><span class="co">#&gt;  6 2023-08-01 2024-07-31 1091811000000102 Diastolic arte… 6.87e7 TRUE           </span></span>
-<span><span class="co">#&gt;  7 2023-08-01 2024-07-31 1000731000000107 Serum creatini… 4.82e7 TRUE           </span></span>
-<span><span class="co">#&gt;  8 2023-08-01 2024-07-31 60621009         Body mass inde… 4.65e7 TRUE           </span></span>
-<span><span class="co">#&gt;  9 2023-08-01 2024-07-31 1000661000000107 Serum sodium l… 4.63e7 TRUE           </span></span>
-<span><span class="co">#&gt; 10 2023-08-01 2024-07-31 1000651000000109 Serum potassiu… 4.62e7 TRUE           </span></span>
-<span><span class="co">#&gt; # ℹ 1,523,957 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 1 more variable: active_at_end &lt;lgl&gt;</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="dataset-icd-10-code-usage-in-inpatient-secondary-care-in-england">Dataset: ICD-10 Code Usage in Inpatient Secondary Care in England<a class="anchor" aria-label="anchor" href="#dataset-icd-10-code-usage-in-inpatient-secondary-care-in-england"></a>
-</h3>
-<p>This is the total annual count of the Finished Consultant Episodes (FCE) listing each 4-character ICD-10 code either in primary or secondary diagnosis position in the Admitted Patient Care of the Hospital Episode Statistics in England.</p>
-<p>This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see <code>/data-raw/icd10_usage.R</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Return ICD-10 code usage data</span></span>
-<span><span class="va">icd10_usage</span></span>
-<span><span class="co">#&gt; # A tibble: 136,136 × 5</span></span>
-<span><span class="co">#&gt;    start_date end_date   icd10_code description                            usage</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;      &lt;chr&gt;                                  &lt;int&gt;</span></span>
-<span><span class="co">#&gt;  1 2023-04-01 2024-03-31 A000       Cholera due to Vibrio cholerae 01, bi…     2</span></span>
-<span><span class="co">#&gt;  2 2023-04-01 2024-03-31 A009       Cholera, unspecified                      40</span></span>
-<span><span class="co">#&gt;  3 2023-04-01 2024-03-31 A010       Typhoid fever                            884</span></span>
-<span><span class="co">#&gt;  4 2023-04-01 2024-03-31 A011       Paratyphoid fever A                      139</span></span>
-<span><span class="co">#&gt;  5 2023-04-01 2024-03-31 A012       Paratyphoid fever B                       13</span></span>
-<span><span class="co">#&gt;  6 2023-04-01 2024-03-31 A013       Paratyphoid fever C                        2</span></span>
-<span><span class="co">#&gt;  7 2023-04-01 2024-03-31 A014       Paratyphoid fever, unspecified            68</span></span>
-<span><span class="co">#&gt;  8 2023-04-01 2024-03-31 A020       Salmonella enteritis                    2165</span></span>
-<span><span class="co">#&gt;  9 2023-04-01 2024-03-31 A021       Salmonella sepsis                        319</span></span>
-<span><span class="co">#&gt; 10 2023-04-01 2024-03-31 A022       Localized salmonella infections           82</span></span>
-<span><span class="co">#&gt; # ℹ 136,126 more rows</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="dataset-opcs-4-code-usage-in-secondary-care-in-england">Dataset: OPCS-4 Code Usage in Secondary Care in England<a class="anchor" aria-label="anchor" href="#dataset-opcs-4-code-usage-in-secondary-care-in-england"></a>
-</h3>
-<p>This is the total annual count of each instance that each 4-character OPCS-4 code is listed across all primary and secondary procedure positions in the Finished Consultant Episodes (FCE) of the Hospital Episode Statistics in England.</p>
-<p>This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see <code>/data-raw/opcs4_usage.R</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Return OPCS-4 code usage data</span></span>
-<span><span class="va">opcs4_usage</span></span>
-<span><span class="co">#&gt; # A tibble: 107,379 × 5</span></span>
-<span><span class="co">#&gt;    start_date end_date   opcs4_code description                            usage</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;      &lt;chr&gt;                                  &lt;int&gt;</span></span>
-<span><span class="co">#&gt;  1 2023-04-01 2024-03-31 A011       Hemispherectomy                            7</span></span>
-<span><span class="co">#&gt;  2 2023-04-01 2024-03-31 A012       Total lobectomy of brain                  36</span></span>
-<span><span class="co">#&gt;  3 2023-04-01 2024-03-31 A013       Partial lobectomy of brain               134</span></span>
-<span><span class="co">#&gt;  4 2023-04-01 2024-03-31 A018       Other specified major excision of tis…    27</span></span>
-<span><span class="co">#&gt;  5 2023-04-01 2024-03-31 A019       Unspecified major excision of tissue …     3</span></span>
-<span><span class="co">#&gt;  6 2023-04-01 2024-03-31 A021       Excision of lesion of tissue of front…  1399</span></span>
-<span><span class="co">#&gt;  7 2023-04-01 2024-03-31 A022       Excision of lesion of tissue of tempo…   971</span></span>
-<span><span class="co">#&gt;  8 2023-04-01 2024-03-31 A023       Excision of lesion of tissue of parie…   704</span></span>
-<span><span class="co">#&gt;  9 2023-04-01 2024-03-31 A024       Excision of lesion of tissue of occip…   260</span></span>
-<span><span class="co">#&gt; 10 2023-04-01 2024-03-31 A025       Excision of lesion of tissue of cereb…   604</span></span>
-<span><span class="co">#&gt; # ℹ 107,369 more rows</span></span></code></pre></div>
-</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
