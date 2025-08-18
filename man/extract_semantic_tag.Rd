@@ -7,11 +7,11 @@
 extract_semantic_tag(string)
 }
 \arguments{
-\item{string}{String, ADD MORE INFO FOR PARAMETER}
+\item{string}{String, description of SNOMED CT codes}
 }
 \description{
 Add description
 }
 \examples{
-# Add examples later
+extract_semantic_tag("Blood Pressure (observable entity)")
 }
