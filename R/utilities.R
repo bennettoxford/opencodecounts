@@ -2,7 +2,7 @@
 #' 
 #' Removes semantic tag from the description
 #'
-#' @param string String, ADD MORE INFO FOR PARAMETER
+#' @param string String, description of SNOMED CT codes
 #' @importFrom stringr str_remove_all
 #' @export
 #' @examples
