@@ -17,7 +17,7 @@ strip_semantic_tag <- function(string) {
 #' 
 #' Add description
 #'
-#' @param string String, ADD MORE INFO FOR PARAMETER
+#' @param string String, description of SNOMED CT codes
 #' @importFrom stringr str_extract str_replace_all
 #' @export
 #' @examples
