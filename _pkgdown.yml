@@ -30,6 +30,8 @@ navbar:
       menu:
         - text: "How to use the R package"
           href: articles/how-to-use-R-pkg.html
+        - text: "Available datasets"
+          href: articles/available-datasets.html
 
     launch_shiny:
       text: "Launch Shiny App"
