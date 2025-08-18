@@ -6,7 +6,7 @@
 #' @importFrom stringr str_remove_all
 #' @export
 #' @examples
-#' # Add examples later
+#' strip_semantic_tag("Blood Pressure (observable entity)")
 strip_semantic_tag <- function(string) {
   description_short = str_remove_all(string, " \\(([^()]+)\\)$")
   
