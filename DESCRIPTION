@@ -12,7 +12,7 @@ Authors@R: c(
            comment = c(ORCID = "0009-0003-0864-7132")),
     person("Louis", "Fisher", email = "louis.fisher@phc.ox.ac.uk", role = "aut",
            comment = c(ORCID = "0000-0002-0295-3812")),
-    person("Lola", "Ojedele", role = "aut",
+    person("Lola", "Ojedele", email = "lolaojedele@gmail.com", role = "aut",
            comment = c(ORCID = "0009-0008-4895-6913")),
     person("Wellcome Trust", role = "fnd"))
 Description: SNOMED and ICD-10 Code Usage Counts in England provided by NHS Digital.
