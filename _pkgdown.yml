@@ -32,7 +32,8 @@ navbar:
           href: articles/how-to-use-R-pkg.html
         - text: "Available datasets"
           href: articles/available-datasets.html
-
+        - text: "Extract semantic tags from SNOMED CT"
+          href: articles/extract-snomedct-sem-tag.html
     launch_shiny:
       text: "Launch Shiny App"
       href: articles/app.html
