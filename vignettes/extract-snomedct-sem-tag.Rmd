@@ -1,5 +1,5 @@
 ---
-title: "Extract SNOMEDCT semantic tags"
+title: "Extract semantic tags from SNOMED CT descriptions"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{extract-snomedct-sem-tag}
