@@ -36,6 +36,8 @@ remotes::install_github("bennettoxford/opencodecounts")
   package](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-R-pkg.html)
 - [Available
   datasets](https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html)
+- [Extract semantic tags from SNOMED CT
+  descriptions](https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html)
 
 ## Main functions of the `opencodecounts` R package
 

@@ -1,5 +1,6 @@
 .onLoad <- function(...) {
   S7::methods_register()
+  options(rmarkdown.html_vignette.check_title = FALSE)
 }
 
 utils::globalVariables(c(
