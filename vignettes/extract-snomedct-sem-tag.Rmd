@@ -1,5 +1,5 @@
 ---
-title: "extract-snomedct-sem-tag"
+title: "Extract SNOMEDCT semantic tags"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{extract-snomedct-sem-tag}
@@ -27,7 +27,9 @@ In this example we're looking at the
 ```{r load-packages, message=FALSE, warning=FALSE}
 # Load packages
 library(opencodecounts)
-library(tidyverse)
+library(dplyr)
+library(stringr)
+library(ggplot2)
 library(scales)
 library(gt)
 ```
@@ -37,6 +39,7 @@ library(gt)
 depscrn_cod <- get_codelist(
   "nhsd-primary-care-domain-refsets/depscrn_cod/20250627"
 )
+
 # Get data for both codelists and extract semantic tag
 depscrn_cod_usage <- snomed_usage |>
   filter(snomed_code %in% c(depscrn_cod$code)) |>
@@ -56,6 +59,7 @@ df_tab_top10_depscrn_cod <- depscrn_cod_usage |>
   summarise(total_usage = sum(usage), .groups = 'drop') |>
   mutate(ratio_usage = total_usage / sum(total_usage)) |> 
   slice_max(order_by = total_usage, n = 10)
+
 # Create table
 df_tab_top10_depscrn_cod |>
   group_by(semantic_tag) |>
@@ -86,6 +90,7 @@ df_tab_top10_depscrn_cod |>
 df_fig_sem_tag_depscrn_cod <- depscrn_cod_usage |>
   group_by(start_date, semantic_tag) |>
   summarise(total_usage = sum(usage), .groups = 'drop')
+
 # Create figure
 df_fig_sem_tag_depscrn_cod |>
   ggplot(
