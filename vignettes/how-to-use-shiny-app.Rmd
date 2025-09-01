@@ -25,8 +25,8 @@ It can be launched locally with the `run_app()` function or accessed online at [
 
 The Shiny app has a sidebar to select one of the available datasets (i.e., SNOMED CT, ICD-10, or OPCS-4) and search for a specific code or a collection of codes, including codelists from [OpenCodelists.org](http://opencodelists.org/).
 
-```{r, echo=FALSE, fig.cap="**Figure 1.**  Select dataset for anlysis."}
-knitr::include_graphics((here::here("inst/screenshots/shiny_app_datasets.png")))
+```{r, echo=FALSE, out.width="100%", fig.cap="**Figure 1.**  Select dataset for anlysis."}
+knitr::include_graphics(screenshot("shiny_app_datasets.png"))
 ```
 
 ## Step 2: Select codes
@@ -37,8 +37,8 @@ The app offers flexible ways to select codes for analysis:
 2. Enter keywords to find codes (use `|` to combine terms, e.g., `diabetes|diabetic`)
 3. Load codelist by URL from [OpenCodelists.org](http://opencodelists.org/).
 
-```{r, echo=FALSE, fig.cap="**Figure 2.** Search codes by specific code, description, or load codelist."}
-knitr::include_graphics((here::here("inst/screenshots/shiny_app_select_codes.png")))
+```{r, echo=FALSE, out.width="100%", fig.cap="**Figure 2.** Search codes by specific code, description, or load codelist."}
+knitr::include_graphics(screenshot("shiny_app_select_codes.png"))
 ```
 
 
@@ -48,6 +48,6 @@ knitr::include_graphics((here::here("inst/screenshots/shiny_app_select_codes.png
 - **Usage table**: A table provides key statistics on the frequency and proportional contribution of selected codes across all years.
 - **Selected codes**: Additionally, the app presents a structured list of all selected codes along with their descriptions and a column specifiying if usage data is available. This list can be downloaded as a CSV file for use in EHR research or for upload to [OpenCodelists.org](http://opencodelists.org/).
 
-```{r, echo=FALSE, fig.cap="**Figure 4.** Main page with tabs for *Trends over time*, *Usage table*, and *Selected codes*."}
-knitr::include_graphics((here::here("inst/screenshots/shiny_app_views.png")))
+```{r, echo=FALSE, out.width="100%", fig.cap="**Figure 4.** Main page with tabs for *Trends over time*, *Usage table*, and *Selected codes*."}
+knitr::include_graphics(screenshot("shiny_app_views.png"))
 ```
