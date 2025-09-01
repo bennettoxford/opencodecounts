@@ -1,5 +1,5 @@
 ---
-title: "Available datasets"
+title: "Available datasets in opencodecounts"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{available-datasets}
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 library(opencodecounts)
 ```
 
-### SNOMED Code Usage in Primary Care in England
+### SNOMED CT code usage in primary care in England
 
 This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see `/data-raw/snomed_code_usage.R`.
 
@@ -30,7 +30,7 @@ This is only a selection of the full dataset published by NHS Digital, for the d
 snomed_usage
 ```
 
-### ICD-10 Code Usage in Secondary Care in England
+### ICD-10 code usage in secondary care in England
 
 This is the total annual count of the Finished Consultant Episodes (FCE) listing each 4-character ICD-10 code either in primary or secondary diagnosis position in the Hospital Episode Statistics in England.
 
@@ -41,7 +41,7 @@ This is only a selection of the full dataset published by NHS Digital, for the d
 icd10_usage
 ```
 
-### OPCS-4 Code Usage in Secondary Care in England
+### OPCS-4 code Usage in secondary care in England
 
 This is the total annual count of each instance that each 4-character OPCS-4 code is listed across all primary and secondary procedure positions in the Finished Consultant Episodes (FCE) of the Hospital Episode Statistics in England.
 
