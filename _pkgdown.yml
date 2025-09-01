@@ -28,6 +28,8 @@ navbar:
     articles:
       text: "How-to guides"
       menu:
+        - text: "How to use the Shiny app"
+          href: articles/how-to-use-shiny-app.html
         - text: "How to use the R package"
           href: articles/how-to-use-R-pkg.html
         - text: "Available datasets"

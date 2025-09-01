@@ -1,0 +1,53 @@
+---
+title: "How to use the Shiny app"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{how-to-use-shiny-app}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+screenshot <- function(x) system.file("screenshots", x, package = "opencodecounts")
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Overview
+
+The `opencodecounts` Shiny app is an interactive tool for exploring clinical code usage data in England. It visualises trends over time and helps you search, filter, and analyse clinical codes from three major coding systems used in the NHS.
+It can be launched locally with the `run_app()` function or accessed online at [https://bennettoxford.github.io/opencodecounts/articles/app](https://bennettoxford.github.io/opencodecounts/articles/app).
+
+## Step 1: Select data
+
+The Shiny app has a sidebar to select one of the available datasets (i.e., SNOMED CT, ICD-10, or OPCS-4) and search for a specific code or a collection of codes, including codelists from [OpenCodelists.org](http://opencodelists.org/).
+
+```{r, echo=FALSE, fig.cap="**Figure 1.**  Select dataset for anlysis."}
+knitr::include_graphics((here::here("inst/screenshots/shiny_app_datasets.png")))
+```
+
+## Step 2: Select codes
+
+The app offers flexible ways to select codes for analysis:
+
+1. Search by code: If you know exact codes, start typing and select from suggestions
+2. Enter keywords to find codes (use `|` to combine terms, e.g., `diabetes|diabetic`)
+3. Load codelist by URL from [OpenCodelists.org](http://opencodelists.org/).
+
+```{r, echo=FALSE, fig.cap="**Figure 2.** Search codes by specific code, description, or load codelist."}
+knitr::include_graphics((here::here("inst/screenshots/shiny_app_select_codes.png")))
+```
+
+
+## Step 3: Review your results
+
+- **Trends over time**: You can explore visualisations summarising overall trends and inspect individual code usage over time. You can hover over data points for detailed information. Toggle "Show individual codes" to see separate lines for each code (available when ≤500 codes selected).
+- **Usage table**: A table provides key statistics on the frequency and proportional contribution of selected codes across all years.
+- **Selected codes**: Additionally, the app presents a structured list of all selected codes along with their descriptions and a column specifiying if usage data is available. This list can be downloaded as a CSV file for use in EHR research or for upload to [OpenCodelists.org](http://opencodelists.org/).
+
+```{r, echo=FALSE, fig.cap="**Figure 4.** Main page with tabs for *Trends over time*, *Usage table*, and *Selected codes*."}
+knitr::include_graphics((here::here("inst/screenshots/shiny_app_views.png")))
+```

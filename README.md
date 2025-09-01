@@ -10,9 +10,8 @@
 <!-- badges: end -->
 
 The `opencodecounts` R package provides easy access to yearly summaries
-of clinical code usage in primary and secondary care in England. The
-package makes NHS England’s published datasets available in R and an
-[interactive online
+of clinical code usage in England. The package makes NHS England’s
+published datasets available in R and an [interactive online
 tool](https://bennettoxford.github.io/opencodecounts/articles/app.html),
 covering SNOMED-CT codes in primary care and ICD-10/OPCS-4 codes in
 secondary care.
@@ -27,6 +26,8 @@ remotes::install_github("bennettoxford/opencodecounts")
 
 ## How-to guides
 
+- [How to use the Shiny
+  app](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-shiny-app.html)
 - [How to use the R
   package](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-R-pkg.html)
 - [Available datasets in
