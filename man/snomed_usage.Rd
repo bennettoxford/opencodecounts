@@ -3,7 +3,7 @@
 \docType{data}
 \name{snomed_usage}
 \alias{snomed_usage}
-\title{Yearly SNOMED-CT Code Usage in Primary Care in England}
+\title{Yearly SNOMED CT Code Usage in Primary Care in England}
 \format{
 A data frame with 1,366,513 rows and 6 columns:
 \describe{
@@ -25,7 +25,7 @@ Counts of 5 or below are displayed as 5.}
 snomed_usage
 }
 \description{
-Yearly summary of SNOMED-CT code usage from 1st August 2011 to 31st July 2023.
+Yearly summary of SNOMED CT code usage from 1st August 2011 to 31st July 2023.
 The variables in this dataset include:
 }
 \examples{
