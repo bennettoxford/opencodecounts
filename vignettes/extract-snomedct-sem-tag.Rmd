@@ -37,7 +37,7 @@ library(gt)
 ```{r get-codelists}
 # Load code extract semantic tag
 depscrn_cod <- get_codelist(
-  "nhsd-primary-care-domain-refsets/depscrn_cod/20250627"
+  "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/depscrn_cod/20250627/"
 )
 
 # Get data for both codelists and extract semantic tag

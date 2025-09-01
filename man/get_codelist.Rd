@@ -4,20 +4,17 @@
 \alias{get_codelist}
 \title{Get codelist from \href{https://www.opencodelists.org}{OpenCodelists}}
 \usage{
-get_codelist(codelist_slug)
+get_codelist(url)
 }
 \arguments{
-\item{codelist_slug}{String, specifying the slug of the codelist.
-The naming convention of the codelist slug follows this structure: a \verb{<codelist-id>} is followed by / and a \verb{<version-id>}.
-Note that the version ID is a sequence of 8 characters.
-Some codelists may also have a version tag in the form of a date (YYYY-MM-DD) or a version number (e.g., v1.2) that can be used in place of the version ID.}
+\item{url}{String, specifying URL to codelist on \href{https://www.opencodelists.org}{OpenCodelists}}
 }
 \description{
 Get codelist from \href{https://www.opencodelists.org}{OpenCodelists}
 }
 \examples{
 # Get the 'cpeptide_cod' codelist from OpenCodelists.org
-cpeptide_cod <- get_codelist("nhsd-primary-care-domain-refsets/cpeptide_cod/20200812/")
+cpeptide_cod <- get_codelist("https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/cpeptide_cod/20200812/")
 
 # Return all codes
 cpeptide_cod$code

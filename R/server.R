@@ -100,12 +100,12 @@ app_server <- function(input, output, session) {
 
   # Load codelist
   observe({
-    req(input$codelist_slug, input$load_codelist)
+    req(input$codelist_url, input$load_codelist)
 
     withProgress(message = "Loading codelist ...", {
       tryCatch(
         {
-          codelist_s7 <- get_codelist(input$codelist_slug)
+          codelist_s7 <- get_codelist(input$codelist_url)
 
           if (codelist_s7@coding_system == input$dataset) {
             showNotification(
@@ -152,7 +152,7 @@ app_server <- function(input, output, session) {
     updateSelectizeInput(session, "code_specific_search", selected = character(0))
     updateTextInput(session, "code_pattern_search", value = "")
     updateTextInput(session, "description_search", value = "")
-    updateTextInput(session, "codelist_slug", value = "")
+    updateTextInput(session, "codelist_url", value = "")
     showNotification("The code selection has been reset.", type = "default")
   }) |>
     bindEvent(input$reset_search_methods)

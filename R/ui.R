@@ -76,18 +76,18 @@ app_ui <- function(request) {
               "Load OpenCodelist",
               br(),
               textInput(
-                "codelist_slug",
+                "codelist_url",
                 tooltip(
                   span(
-                    "Codelist ID / Version Tag",
+                    "Codelist URL",
                     bs_icon("info-circle")
                   ),
-                  "Enter <codelist_id>/<version_id>, e.g., 'opensafely/anxiety-disorders/6aef605a'",
+                  "Enter codelist URL, e.g., 'https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/'",
                   options = list(
                     customClass = "left-align-tooltip"
                   )
                 ),
-                placeholder = "opensafely/anxiety-disorders/6aef605a",
+                placeholder = "https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/",
                 NULL
               ),
               actionButton("load_codelist", "Load codelist", class = "btn-outline-primary", style = "width: 100%;")
@@ -150,37 +150,60 @@ app_ui <- function(request) {
           class = "row justify-content-center align-items-center",
           div(
             class = "col-auto",
-            a(href = "https://www.ox.ac.uk/",
-            target = "_blank",
-            img(src = "www/university-oxford-logo.png", 
-            height = "60px", 
-            alt = "University of Oxford",
-            style = "margin: 0 20px;")
+            a(
+              href = "https://www.bennett.ox.ac.uk/",
+              target = "_blank",
+              img(
+                src = "www/bennett-brand-white.png",
+                height = "60px",
+                alt = "Bennett Institute",
+                style = "margin: 0 20px;"
+              )
+            )
+          ),
+          div(
+            class = "col-auto",
+            a(
+              href = "https://www.phc.ox.ac.uk/",
+              target = "_blank",
+              img(
+                src = "www/ndpchs-logo.png",
+                height = "60px",
+                alt = "Nuffield Department of Primary Care Health Sciences",
+                style = "margin: 0 20px;"
+              )
+            )
+          ),
+          div(
+            class = "col-auto",
+            a(
+              href = "https://www.ox.ac.uk/",
+              target = "_blank",
+              img(
+                src = "www/university-oxford-logo.png",
+                height = "60px",
+                alt = "University of Oxford",
+                style = "margin: 0 20px;"
+              )
+            )
           )
         ),
         div(
-          class = "col-auto",
-          a(href = "https://www.phc.ox.ac.uk/",
-            target = "_blank",
-            img(src = "www/ndpchs-logo.png", 
-                height = "60px", 
-                alt = "Nuffield Department of Primary Care Health Sciences",
-                style = "margin: 0 20px;")
-          )
-        ),
+          class = "row justify-content-center align-items-center",
           div(
-            class = "col-auto",
-            a(href = "https://www.bennett.ox.ac.uk/",
-              target = "_blank",
-              img(src = "www/bennett-brand-white.png", 
-                  height = "60px", 
-                  alt = "Bennett Institute",
-                  style = "margin: 0 20px;")
+            class = "col-12 text-center",
+            style = "margin-bottom: 15px;",
+            p("Designed and built by the Bennett Institute for Applied Data Science, Department of Primary Care Health Sciences, University of Oxford. For documentation and support, visit ",
+              a("https://bennettoxford.github.io/opencodecounts/", href = "https://bennettoxford.github.io/opencodecounts/", target = "_blank"),
+              " or contact the R package maintainer.",
+              style = "margin: 0; color: #6c757d; font-size: 14px;"
             )
           )
         )
       )
     ),
+
+    # CSS styles
     tags$style(HTML("
       .left-align-tooltip .tooltip-inner {
         text-align: left;
@@ -213,17 +236,28 @@ app_ui <- function(request) {
       .footer a:hover {
         opacity: 0.8;
       }
-      
+      .footer p a {
+        text-decoration: underline !important;
+        transition: opacity 0.3s ease;
+      }
+      .footer p a:hover {
+        opacity: 0.8;
+        text-decoration: underline !important;
+      }
+      .footer .row:last-child {
+        margin-top: 20px;
+      }
+
       /* Ensure footer stays at bottom */
       html, body {
         height: 100%;
       }
-      
+
       body {
         display: flex;
         flex-direction: column;
       }
-      
+
       .bslib-page-sidebar {
         flex: 1;
       }
