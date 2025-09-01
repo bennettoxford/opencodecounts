@@ -25,9 +25,9 @@ app_ui <- function(request) {
               options = list(customClass = "left-align-tooltip")
             ),
             choices = c(
-              "SNOMED-CT" = "snomedct",
-              "ICD-10" = "icd10",
-              "OPCS-4" = "opcs4"
+              "Primary care (SNOMED CT)" = "snomedct",
+              "Secondary care (ICD-10)" = "icd10",
+              "Secondary care (OPCS-4)" = "opcs4"
             )
           ),
           uiOutput("dynamic_date_slider")
