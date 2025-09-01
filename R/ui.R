@@ -76,18 +76,18 @@ app_ui <- function(request) {
               "Load OpenCodelist",
               br(),
               textInput(
-                "codelist_slug",
+                "codelist_url",
                 tooltip(
                   span(
-                    "Codelist ID / Version Tag",
+                    "Codelist URL",
                     bs_icon("info-circle")
                   ),
-                  "Enter <codelist_id>/<version_id>, e.g., 'opensafely/anxiety-disorders/6aef605a'",
+                  "Enter codelist URL, e.g., 'https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/'",
                   options = list(
                     customClass = "left-align-tooltip"
                   )
                 ),
-                placeholder = "opensafely/anxiety-disorders/6aef605a",
+                placeholder = "https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/",
                 NULL
               ),
               actionButton("load_codelist", "Load codelist", class = "btn-outline-primary", style = "width: 100%;")

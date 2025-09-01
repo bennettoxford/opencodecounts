@@ -23,6 +23,29 @@ Codelist <- S7::new_class("Codelist",
   )
 )
 
+#' Helper function to extract the codelist slug from the OpenCodelists URL
+#' @keywords internal
+extract_codelist_slug <- function(url) {
+  # Check if URL is from opencodelists.org
+  if (!grepl("^https://www\\.opencodelists\\.org/", url)) {
+    stop("URL must be from https://www.opencodelists.org")
+  }
+  
+  # Remove fragment identifier if present
+  url_clean <- sub("#.*$", "", url)
+  
+  # Extract path after /codelist/ - handles both org and user patterns
+  pattern <- "^https://www\\.opencodelists\\.org/codelist/((?:user/[^/]+|[^/]+)/[^/]+/[^/]+)"
+  
+  if (grepl(pattern, url_clean)) {
+    codelist_slug <- (sub(pattern, "\\1", url_clean))
+    codelist_slug <- sub("/$", "", codelist_slug)
+    codelist_slug
+  } else {
+    stop("URL does not match expected OpenCodelists codelist pattern")
+  }
+}
+
 #' Helper function to get the organisation for a codelist from OpenCodelists
 #' This is important to use the API from OpenCodelists
 #' @keywords internal
@@ -38,14 +61,11 @@ get_codelist_organisation <- function(codelist_slug) {
 
 #' Get codelist from [OpenCodelists](https://www.opencodelists.org)
 #'
-#' @param codelist_slug String, specifying the slug of the codelist.
-#' The naming convention of the codelist slug follows this structure: a `<codelist-id>` is followed by / and a `<version-id>`.
-#' Note that the version ID is a sequence of 8 characters.
-#' Some codelists may also have a version tag in the form of a date (YYYY-MM-DD) or a version number (e.g., v1.2) that can be used in place of the version ID.
+#' @param url String, specifying URL to codelist on [OpenCodelists](https://www.opencodelists.org)
 #' @export
 #' @examples
 #' # Get the 'cpeptide_cod' codelist from OpenCodelists.org
-#' cpeptide_cod <- get_codelist("nhsd-primary-care-domain-refsets/cpeptide_cod/20200812/")
+#' cpeptide_cod <- get_codelist("https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/cpeptide_cod/20200812/")
 #'
 #' # Return all codes
 #' cpeptide_cod$code
@@ -55,8 +75,9 @@ get_codelist_organisation <- function(codelist_slug) {
 #'
 #' # Return 'full_slug' of codelist
 #' cpeptide_cod@full_slug
-get_codelist <- function(codelist_slug) {
-  codelist_slug <- sub("/$", "", codelist_slug)
+get_codelist <- function(url) {
+
+  codelist_slug <- extract_codelist_slug(url)
   url_api_base <- "https://www.opencodelists.org/api/v1/codelist/"
   url_download_base <- "https://www.opencodelists.org/codelist/"
   url_download <- paste0(url_download_base, codelist_slug, "/download.csv")

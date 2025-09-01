@@ -24,7 +24,7 @@ library(ggplot2)
 ## Load codelist
 ```{r load-codelist}
 # Import the codelist from OpenCodelists.org
-icd10_xix_codelist <- get_codelist("opensafely/icd-10-chapter-xix/4dce479b/")
+icd10_xix_codelist <- get_codelist("https://www.opencodelists.org/codelist/opensafely/icd-10-chapter-xix/4dce479b/")
 
 # Return the first 10 rows of the codelist
 as_tibble(icd10_xix_codelist)

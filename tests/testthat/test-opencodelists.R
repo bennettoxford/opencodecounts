@@ -1,3 +1,17 @@
+test_that("Get codelist slug from opencodelists URL", {
+  codelist_url_org_clean <- "https://www.opencodelists.org/codelist/phc/2ww-referral-colorectal/7eac259d/"
+  codelist_url_user_full_list <- "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/cpeptide_cod/20200812/#full-list"
+  codelist_url_org_search_results <- "https://www.opencodelists.org/codelist/user/milanwiedemann/diastolic-blood-pressure-qof/697e3433/#search-results"
+
+  test_codelist_url_org_clean <- extract_codelist_slug(codelist_url_org_clean)
+  test_codelist_url_user_full_list <- extract_codelist_slug(codelist_url_user_full_list)
+  test_codelist_url_org_search_results <- extract_codelist_slug(codelist_url_org_search_results)
+
+  expect_equal(test_codelist_url_org_clean, "phc/2ww-referral-colorectal/7eac259d")
+  expect_equal(test_codelist_url_user_full_list, "nhsd-primary-care-domain-refsets/cpeptide_cod/20200812")
+  expect_equal(test_codelist_url_org_search_results, "user/milanwiedemann/diastolic-blood-pressure-qof/697e3433")
+})
+
 test_that("Get codelist organisation", {
   codelist_slug_user <- "user/milanwiedemann/diastolic-blood-pressure-qof/697e3433"
   codelist_slug_org <- "nhsd-primary-care-domain-refsets/cpeptide_cod/20200812/"
@@ -10,8 +24,8 @@ test_that("Get codelist organisation", {
 })
 
 test_that("Get codelist from OpenCodelists", {
-  codelist_slug_user <- "user/milanwiedemann/diastolic-blood-pressure-qof/697e3433"
-  codelist_slug_org <- "nhsd-primary-care-domain-refsets/cpeptide_cod/20200812/"
+  codelist_slug_user <- "https://www.opencodelists.org/codelist/user/milanwiedemann/diastolic-blood-pressure-qof/697e3433/"
+  codelist_slug_org <- "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/cpeptide_cod/20200812/"
 
   test_codelist_user <- get_codelist(codelist_slug_user)
   test_codelist_org <- get_codelist(codelist_slug_org)
