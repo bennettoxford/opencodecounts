@@ -4,11 +4,11 @@
 #' @importFrom scales label_date_short label_comma comma
 #' @keywords internal
 plot_summary <- function(data) {
-  scale_x_date_breaks <- unique(data$end_date)
+  scale_x_date_breaks <- unique(data$start_date)
   
   ggplot(
     data,
-    aes(x = end_date, y = total_usage)
+    aes(x = start_date, y = total_usage)
   ) +
     geom_line(
       colour = "#239b89ff",
@@ -29,7 +29,7 @@ plot_summary <- function(data) {
     ) +
     scale_x_date(
       breaks = scale_x_date_breaks,
-      labels = scales::label_date("%b\n%Y")
+      labels = scales::label_date("%Y")
     ) +
     scale_y_continuous(
       limits = c(0, NA),
@@ -46,7 +46,7 @@ plot_summary <- function(data) {
 #' @importFrom scales label_date_short label_comma comma
 #' @keywords internal
 plot_individual <- function(data) {
-  scale_x_date_breaks <- unique(data$end_date)
+  scale_x_date_breaks <- unique(data$start_date)
   
   data <- data |>
     group_by(start_date, end_date) |>
@@ -61,7 +61,7 @@ plot_individual <- function(data) {
   ggplot(
     data,
     aes(
-      x = end_date,
+      x = start_date,
       y = usage,
       colour = code
     )
@@ -84,7 +84,7 @@ plot_individual <- function(data) {
     ) +
     scale_x_date(
       breaks = scale_x_date_breaks,
-      labels = scales::label_date("%b\n%Y")
+      labels = scales::label_date("%Y")
     ) +
     scale_y_continuous(
       limits = c(0, NA),
@@ -105,12 +105,12 @@ plot_individual <- function(data) {
 #' @keywords internal
 plot_sparkline <- function(data) {
   data_spark <- data |>
-    group_by(end_date) |>
+    group_by(start_date) |>
     summarise(total_usage = sum(usage, na.rm = TRUE))
 
   plot_ly(data_spark, hoverinfo = "none") |>
     add_lines(
-      x = ~end_date, y = ~total_usage,
+      x = ~start_date, y = ~total_usage,
       color = I("black"), span = I(1),
       fill = "tozeroy", alpha = 0.2
     ) |>
