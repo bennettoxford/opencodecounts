@@ -29,13 +29,13 @@ plot_summary <- function(data) {
     ) +
     scale_x_date(
       breaks = scale_x_date_breaks,
-      labels = scales::label_date("%Y")
+      labels = scales::label_date("%b\n%Y")
     ) +
     scale_y_continuous(
       limits = c(0, NA),
       labels = scales::label_number(accuracy = 1)
     ) +
-    labs(x = NULL, y = NULL) +
+    labs(x = "Start date of yearly time interval", y = "Recorded events") +
     theme_classic() +
     theme(text = element_text(size = 14))
 }
@@ -84,14 +84,14 @@ plot_individual <- function(data) {
     ) +
     scale_x_date(
       breaks = scale_x_date_breaks,
-      labels = scales::label_date("%Y")
+      labels = scales::label_date("%b\n%Y")
     ) +
     scale_y_continuous(
       limits = c(0, NA),
       labels = scales::label_number(accuracy = 1)
     ) +
     ggplot2::scale_colour_viridis_d() +
-    labs(x = NULL, y = NULL) +
+    labs(x = "Start date of yearly time interval", y = "Recorded events") +
     theme_classic() +
     theme(
       text = element_text(size = 14),

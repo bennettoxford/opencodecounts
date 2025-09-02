@@ -16,84 +16,153 @@ app_ui <- function(request) {
       title = NULL,
       sidebar = sidebar(
         width = "23%",
-        card(
-          card_header("Select data"),
-          radioButtons("dataset",
-            tooltip(
-              span("Dataset", bs_icon("info-circle")),
-              "SNOMED CT (Systematized Nomenclature of Medicine Clinical Terms); ICD-10 (International Classification of Diseases); OPCS-4 Classification of Interventions and Procedures",
-              options = list(customClass = "left-align-tooltip")
-            ),
-            choices = c(
-              "Primary care (SNOMED CT)" = "snomedct",
-              "Secondary care (ICD-10)" = "icd10",
-              "Secondary care (OPCS-4)" = "opcs4"
-            )
-          ),
-          uiOutput("dynamic_date_slider")
-        ),
-        card(
-          card_header("Select codes"),
-          navset_tab(
-            nav_panel(
-              "Search",
-              br(),
-              selectizeInput(
-                "code_specific_search",
+        navset_card_tab(
+          nav_panel(
+            p("Analyse"),
+            card(
+              card_header("Select data"),
+              radioButtons("dataset",
                 tooltip(
-                  span(
-                    "Specific code",
-                    bs_icon("info-circle")
-                  ),
-                  "Select specific clinical codes. Start typing to see a selection of available codes.",
-                  options = list(
-                    customClass = "left-align-tooltip"
-                  )
+                  span("Dataset", bs_icon("info-circle")),
+                  "SNOMED CT (Systematized Nomenclature of Medicine Clinical Terms); ICD-10 (International Classification of Diseases); OPCS-4 Classification of Interventions and Procedures",
+                  options = list(customClass = "left-align-tooltip")
                 ),
-                choices = NULL,
-                multiple = TRUE,
-                options = list(maxOptions = 15)
-              ),
-              textInput(
-                "description_search",
-                tooltip(
-                  span(
-                    "Description",
-                    bs_icon("info-circle")
-                  ),
-                  "Enter search term(s). Multiple terms can be combined by using '|'.",
-                  options = list(
-                    customClass = "left-align-tooltip"
-                  )
+                choices = c(
+                  "Primary care (SNOMED CT)" = "snomedct",
+                  "Secondary care (ICD-10)" = "icd10",
+                  "Secondary care (OPCS-4)" = "opcs4"
                 )
               ),
-              conditionalPanel(
-                condition = "input.dataset == 'icd10' || input.dataset == 'opcs4'",
-                uiOutput("dynamic_code_pattern_input")
-              )
+              uiOutput("dynamic_date_slider")
             ),
-            nav_panel(
-              "Load OpenCodelist",
-              br(),
-              textInput(
-                "codelist_url",
-                tooltip(
-                  span(
-                    "Codelist URL",
-                    bs_icon("info-circle")
+            card(
+              card_header("Select codes"),
+              navset_tab(
+                nav_panel(
+                  "Search",
+                  br(),
+                  selectizeInput(
+                    "code_specific_search",
+                    tooltip(
+                      span(
+                        "Specific code(s)",
+                        bs_icon("info-circle")
+                      ),
+                      "Select specific clinical codes. Start typing to see a selection of available codes.",
+                      options = list(
+                        customClass = "left-align-tooltip"
+                      )
+                    ),
+                    choices = NULL,
+                    multiple = TRUE,
+                    options = list(maxOptions = 15)
                   ),
-                  "Enter codelist URL, e.g., 'https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/'",
-                  options = list(
-                    customClass = "left-align-tooltip"
+                  textInput(
+                    "description_search",
+                    tooltip(
+                      span(
+                        "Description",
+                        bs_icon("info-circle")
+                      ),
+                      "Enter search term(s). Multiple terms can be combined by using '|'.",
+                      options = list(
+                        customClass = "left-align-tooltip"
+                      )
+                    )
+                  ),
+                  conditionalPanel(
+                    condition = "input.dataset == 'icd10' || input.dataset == 'opcs4'",
+                    uiOutput("dynamic_code_pattern_input")
                   )
                 ),
-                placeholder = "https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/",
-                NULL
+                nav_panel(
+                  "Load OpenCodelist",
+                  br(),
+                  textInput(
+                    "codelist_url",
+                    tooltip(
+                      span(
+                        "Codelist URL",
+                        bs_icon("info-circle")
+                      ),
+                      "Enter codelist URL, e.g., 'https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/'",
+                      options = list(
+                        customClass = "left-align-tooltip"
+                      )
+                    ),
+                    placeholder = "https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/",
+                    NULL
+                  ),
+                  actionButton("load_codelist", "Load codelist", class = "btn-outline-primary", style = "width: 100%;")
+                )
               ),
-              actionButton("load_codelist", "Load codelist", class = "btn-outline-primary", style = "width: 100%;")
+              actionButton("reset_search_methods", "Reset code selection", class = "btn-outline-dark")
             )
           ),
-          actionButton("reset_search_methods", "Reset code selection", class = "btn-outline-dark")
+          nav_panel(
+            p("More"),
+            card(
+              card_header("About"),
+              p(
+                "This Shiny app was developed to support healthcare researchers in exploring clinical coding data in England. ",
+                "This project was designed and built by the ",
+                a("Bennett Institute for Applied Data Science", href = "https://www.bennett.ox.ac.uk/", target = "_blank"),
+                ". For fruther documentation and support, visit the ",
+                a("opencodecounts", href = "https://bennettoxford.github.io/opencodecounts/", target = "_blank"),
+                "R package website or contact us at ",
+                a("bennett@phc.ox.ac.uk", href = "mailto:bennett@phc.ox.ac.uk?subject=opencodecounts%20Feedback"),
+                "."
+              )
+            ),
+            card(
+              card_header("How-to guides"),
+              p("Here is a list of our how-to guides:"),
+              tags$ul(
+                tags$li(
+                  a("How to use the Shiny app",
+                    href = "https://bennettoxford.github.io/opencodecounts/articles/how-to-use-shiny-app.html",
+                    target = "_blank"
+                  )
+                ),
+                tags$li(
+                  a("How to use the R package",
+                    href = "https://bennettoxford.github.io/opencodecounts/articles/how-to-use-R-pkg.html",
+                    target = "_blank"
+                  )
+                ),
+                tags$li(
+                  a("Extract semantic tags from SNOMED CT descriptions",
+                    href = "https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html",
+                    target = "_blank"
+                  )
+                ),
+                tags$li(
+                  a("Available datasets in opencodecounts",
+                    href = "https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html",
+                    target = "_blank"
+                  )
+                ),
+              )
+            ),
+            card(
+              card_header("Data sources"),
+              p("The original data is available from NHS Digital at:"),
+              tags$ul(
+                tags$li(
+                  a("SNOMED Code Usage in Primary Care",
+                    href = "https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care",
+                    target = "_blank"
+                  )
+                ),
+                tags$li(
+                  a("ICD-10 and OPCS-4 Code Usage in Inpatient Secondary Care",
+                    href = "https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity",
+                    target = "_blank"
+                  )
+                )
+              )
+            )
+          )
         )
       ),
       # Main page
@@ -101,12 +170,12 @@ app_ui <- function(request) {
       layout_columns(
         height = "20%",
         value_box(
-          title = "Number of selected codes with usage data",
+          title = "Selected codes with usage data in England",
           value = textOutput("unique_codes"),
           showcase = bs_icon("file-earmark-medical")
         ),
         value_box(
-          title = "Total number of recorded events",
+          title = "Total number of recorded events in England",
           value = textOutput("total_activity"),
           showcase = plotlyOutput("sparkline")
         )
@@ -187,18 +256,6 @@ app_ui <- function(request) {
               )
             )
           )
-        ),
-        div(
-          class = "row justify-content-center align-items-center",
-          div(
-            class = "col-12 text-center",
-            style = "margin-bottom: 15px;",
-            p("Designed and built by the Bennett Institute for Applied Data Science, Department of Primary Care Health Sciences, University of Oxford. For documentation and support, visit ",
-              a("https://bennettoxford.github.io/opencodecounts/", href = "https://bennettoxford.github.io/opencodecounts/", target = "_blank"),
-              " or contact the R package maintainer.",
-              style = "margin: 0; color: #6c757d; font-size: 14px;"
-            )
-          )
         )
       )
     ),
@@ -219,7 +276,7 @@ app_ui <- function(request) {
       .footer {
         background-color: #ffffff;
         border-top: 1px solid #dee2e6;
-        padding: 25px 0;
+        padding: 15px 0;
         margin-top: 0;
         position: relative;
         bottom: 0;
@@ -243,9 +300,6 @@ app_ui <- function(request) {
       .footer p a:hover {
         opacity: 0.8;
         text-decoration: underline !important;
-      }
-      .footer .row:last-child {
-        margin-top: 20px;
       }
 
       /* Ensure footer stays at bottom */
