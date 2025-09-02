@@ -45,7 +45,7 @@ app_ui <- function(request) {
                     "code_specific_search",
                     tooltip(
                       span(
-                        "Specific code",
+                        "Specific code(s)",
                         bs_icon("info-circle")
                       ),
                       "Select specific clinical codes. Start typing to see a selection of available codes.",
@@ -104,16 +104,14 @@ app_ui <- function(request) {
             card(
               card_header("About"),
               p(
-                "This Shiny app was developed to support healthcare researchers in exploring clinical coding data.",
-                "It builds on methods described in Tamborska et al. (",
-                a("2025", href = "https://www.medrxiv.org/", target = "_blank"),
-                ") and the underlying opencodecounts R package.",
-              ),
-              p(
-                "This project was designed and built by the Bennett Institute for Applied Data Science, Department of Primary Care Health Sciences, University of Oxford.",
-                "For fruther documentation and support, visit ",
-                a("https://bennettoxford.github.io/opencodecounts/", href = "https://bennettoxford.github.io/opencodecounts/", target = "_blank"),
-                " or contact the R package maintainer."
+                "This Shiny app was developed to support healthcare researchers in exploring clinical coding data in England. ",
+                "This project was designed and built by the ",
+                a("Bennett Institute for Applied Data Science", href = "https://www.bennett.ox.ac.uk/", target = "_blank"),
+                ". For fruther documentation and support, visit the ",
+                a("opencodecounts", href = "https://bennettoxford.github.io/opencodecounts/", target = "_blank"),
+                "R package website or contact us at ",
+                a("bennett@phc.ox.ac.uk", href = "mailto:bennett@phc.ox.ac.uk?subject=opencodecounts%20Feedback"),
+                "."
               )
             ),
             card(
@@ -144,9 +142,6 @@ app_ui <- function(request) {
                   )
                 )
               )
-            ),
-            card(
-              card_header("FAQ")
             )
           )
         )
@@ -156,12 +151,12 @@ app_ui <- function(request) {
       layout_columns(
         height = "20%",
         value_box(
-          title = "Number of selected codes with usage data",
+          title = "Selected codes with usage data in England",
           value = textOutput("unique_codes"),
           showcase = bs_icon("file-earmark-medical")
         ),
         value_box(
-          title = "Total number of recorded events",
+          title = "Total number of recorded events in England",
           value = textOutput("total_activity"),
           showcase = plotlyOutput("sparkline")
         )
