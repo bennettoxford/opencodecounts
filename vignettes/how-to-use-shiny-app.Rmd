@@ -38,16 +38,41 @@ The app offers flexible ways to select codes for analysis:
 2. Enter keywords to find codes (use `|` to combine terms, e.g., `diabetes|diabetic`)
 3. Load codelist by URL from [OpenCodelists.org](http://opencodelists.org/).
 
-```{r, echo=FALSE, fig.cap="**Figure 2.** Search codes by specific code, description, or load codelist."}
-knitr::include_graphics("img/shiny_app_select_codes.png")
+```{r, echo=FALSE, fig.cap="**Figure 2.** Search codes by specific code or description."}
+knitr::include_graphics("img/shiny_app_search_description.png")
+```
+
+```{r, echo=FALSE, fig.cap="**Figure 3.** Select codes by loading codelist."}
+knitr::include_graphics("img/shiny_app_load_codelist.png")
 ```
 
 ## Step 3: Review your results
 
-- **Trends over time**: You can explore visualisations summarising overall trends and inspect individual code usage over time. You can hover over data points for detailed information. Toggle "Show individual codes" to see separate lines for each code (available when ≤500 codes selected).
-- **Usage table**: A table provides key statistics on the frequency and proportional contribution of selected codes across all years.
-- **Selected codes**: Additionally, the app presents a structured list of all selected codes along with their descriptions and a column specifiying if usage data is available. This list can be downloaded as a CSV file for use in EHR research or for upload to [OpenCodelists.org](http://opencodelists.org/).
+There are three main tabs to review the results:
 
-```{r, echo=FALSE, fig.cap="**Figure 4.** Main page with tabs for *Trends over time*, *Usage table*, and *Selected codes*."}
-knitr::include_graphics("img/shiny_app_views.png")
+**Trends over time**: You can explore visualisations summarising overall trends and inspect individual code usage over time. You can hover over data points for detailed information. Toggle "Show individual codes" to see separate lines for each code (available when ≤500 codes selected).
+
+```{r, echo=FALSE, fig.cap="**Figure 4.** Main page showing *Trends over time*."}
+knitr::include_graphics("img/shiny_app_trends.png")
+```
+
+**Usage table**: A table provides key statistics on the frequency and proportional contribution of selected codes across all years.
+
+```{r, echo=FALSE, fig.cap="**Figure 5.** Main page showing *Usage table*."}
+knitr::include_graphics("img/shiny_app_usage_table.png")
+```
+
+**Selected codes**: Additionally, the app presents a structured list of all selected codes along with their descriptions and a column specifiying if usage data was reported. This list can be downloaded as a CSV file for use in EHR research or for upload to [OpenCodelists.org](http://opencodelists.org/).
+
+
+```{r, echo=FALSE, fig.cap="**Figure 6.** Main page showing *Selected codes*."}
+knitr::include_graphics("img/shiny_app_selected_codes.png")
+```
+
+## Find more information
+
+We provide more detailed information as part of the R package documentation.
+
+```{r, echo=FALSE, fig.cap="**Figure 7.** Tab with links to more documentation."}
+knitr::include_graphics("img/shiny_app_more.png")
 ```
