@@ -116,6 +116,7 @@ app_ui <- function(request) {
             ),
             card(
               card_header("How-to guides"),
+              p("Here is a list of our how-to guides:"),
               tags$ul(
                 tags$li(
                   a("How to use the Shiny app",
@@ -130,14 +131,32 @@ app_ui <- function(request) {
                   )
                 ),
                 tags$li(
+                  a("Extract semantic tags from SNOMED CT descriptions",
+                    href = "https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html",
+                    target = "_blank"
+                  )
+                ),
+                tags$li(
                   a("Available datasets in opencodecounts",
                     href = "https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html",
                     target = "_blank"
                   )
                 ),
+              )
+            ),
+            card(
+              card_header("Data sources"),
+              p("The original data is available from NHS Digital at:"),
+              tags$ul(
                 tags$li(
-                  a("Extract semantic tags from SNOMED CT descriptions",
-                    href = "https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html",
+                  a("SNOMED Code Usage in Primary Care",
+                    href = "https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care",
+                    target = "_blank"
+                  )
+                ),
+                tags$li(
+                  a("ICD-10 and OPCS-4 Code Usage in Inpatient Secondary Care",
+                    href = "https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity",
                     target = "_blank"
                   )
                 )
