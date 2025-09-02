@@ -21,7 +21,9 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The `opencodecounts` R package provides easy access to yearly summaries of clinical code usage in England. The package makes NHS England's published datasets available in R and an [interactive online tool](https://bennettoxford.github.io/opencodecounts/articles/app.html), covering SNOMED-CT codes in primary care and ICD-10/OPCS-4 codes in secondary care.
+The `opencodecounts` R package provides easy access to yearly summaries of clinical code usage in England. The package makes NHS England's published datasets available in R and an interactive online tool, covering SNOMED-CT codes in primary care and ICD-10/OPCS-4 codes in secondary care.
+
+You can launch the interactive Shiny app by clicking on [*Launch Shiny app*](https://bennettoxford.github.io/opencodecounts/articles/app.html). All available functions (including datasets) are documented in the [*Reference*](https://bennettoxford.github.io/opencodecounts/reference/index.html) section.
 
 ## Installation
 
@@ -30,8 +32,6 @@ You can install the `opencodecounts` package with:
 ```r
 remotes::install_github("bennettoxford/opencodecounts")
 ```
-
-All available functions (including datasets) are documented in the [*Reverence*](https://bennettoxford.github.io/opencodecounts/reference/index.html) section of the R package website.
 
 ## How-to guides
 
@@ -44,5 +44,5 @@ All available functions (including datasets) are documented in the [*Reverence*]
 
 The original data is available from NHS Digital at:
 
--  [SNOMED Code Usage in Primary Care](https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care)
--  [ICD-10 and OPCS-4 Code Usage in Inpatient Secondary Care](https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity)
+- [SNOMED Code Usage in Primary Care](https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care)
+- [ICD-10 and OPCS-4 Code Usage in Inpatient Secondary Care](https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity)
