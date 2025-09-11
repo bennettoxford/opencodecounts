@@ -77,7 +77,23 @@ get_codelist_organisation <- function(codelist_slug) {
 #' cpeptide_cod@full_slug
 get_codelist <- function(url) {
 
-  codelist_slug <- extract_codelist_slug(url)
+    if (grepl("^https://www\\.opencodelists\\.org/", url)) {
+      codelist_slug <- extract_codelist_slug(url)
+    } else {
+
+      if (!grepl("^[^/]+/[^/]+/[^/]+/?$|^user/[^/]+/[^/]+/[^/]+/?$", url)) {
+        stop(
+          "Invalid format. Please use full OpenCodelists URL or ensure slug follows 'org/name/version' or 'user/username/name/version' pattern."
+        )
+      }
+
+      message(
+        "Note: For clarity, please use the full OpenCodelists URL instead of just the slug.\n",
+        "Full URL would be: https://www.opencodelists.org/codelist/", url
+      )
+      codelist_slug <- sub("/$", "", url)
+    }
+
   url_api_base <- "https://www.opencodelists.org/api/v1/codelist/"
   url_download_base <- "https://www.opencodelists.org/codelist/"
   url_download <- paste0(url_download_base, codelist_slug, "/download.csv")
