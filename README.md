@@ -12,18 +12,19 @@
 The `opencodecounts` R package provides easy access to yearly summaries
 of clinical code usage in England. The package makes NHS England’s
 published datasets available in R and an interactive online tool,
-covering SNOMED-CT codes in primary care and ICD-10/OPCS-4 codes in
+covering SNOMED CT codes in primary care and ICD-10/OPCS-4 codes in
 secondary care.
 
 You can launch the interactive Shiny app by clicking on [*Launch Shiny
 app*](https://bennettoxford.github.io/opencodecounts/articles/app.html).
-All available functions (including datasets) are documented in the
-[*Reference*](https://bennettoxford.github.io/opencodecounts/reference/index.html)
+For work in R, all available functions (including datasets) are
+documented in the [*R
+Reference*](https://bennettoxford.github.io/opencodecounts/reference/index.html)
 section.
 
 ## Installation
 
-You can install the `opencodecounts` package with:
+You can install the `opencodecounts` package in R with:
 
 ``` r
 remotes::install_github("bennettoxford/opencodecounts")
@@ -35,10 +36,10 @@ remotes::install_github("bennettoxford/opencodecounts")
   app](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-shiny-app.html)
 - [How to use the R
   package](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-R-pkg.html)
-- [Extract semantic tags from SNOMED CT
+- [How to extract semantic tags from SNOMED CT
   descriptions](https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html)
-- [Available datasets in
-  opencodecounts](https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html)
+- [Learn about the available
+  datasets](https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html)
 
 ## Data sources
 
