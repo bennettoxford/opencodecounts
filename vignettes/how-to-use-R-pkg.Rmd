@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Setup
+
 ```{r setup, message = FALSE}
 library(opencodecounts)
 library(tibble)
@@ -22,6 +24,7 @@ library(ggplot2)
 ```
 
 ## Load codelist
+
 ```{r load-codelist}
 # Import the codelist from OpenCodelists.org
 icd10_xix_codelist <- get_codelist("https://www.opencodelists.org/codelist/opensafely/icd-10-chapter-xix/4dce479b/")

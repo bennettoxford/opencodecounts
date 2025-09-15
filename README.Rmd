@@ -38,7 +38,7 @@ remotes::install_github("bennettoxford/opencodecounts")
 - [How to use the Shiny app](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-shiny-app.html)
 - [How to use the R package](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-R-pkg.html)
 - [How to extract semantic tags from SNOMED CT descriptions](https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html)
-- [How to understand available datasets](https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html)
+- [Learn about the available datasets](https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html)
 
 ## Data sources
 
