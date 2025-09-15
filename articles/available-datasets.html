@@ -68,17 +68,57 @@
 
     
     
-<div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h2>
+<p>Clinical codes are unique numeric or alphanumeric identifiers used in
+healthcare settings for administrative, billing and clinical care
+purposes. They are grouped into different classification systems to
+allow standardised recording of diagnoses, procedures or medications, as
+well as other clinical, demographic and administrative data. In England,
+three clinical coding classification systems are used: SNOMED Clinical
+Terms (<a href="https://www.england.nhs.uk/digitaltechnology/digital-primary-care/snomed-ct/" class="external-link">SNOMED
+CT</a>) in primary care (GP practices); and International Statistical
+Classification of Diseases and Related Health Problems, 10th Revision
+(<a href="https://digital.nhs.uk/developer/guides-and-documentation/building-healthcare-software/clinical-coding-classifications-and-terminology#icd-10" class="external-link">ICD-10</a>)
+and OPCS Classification of Interventions and Procedures, version 4 (<a href="https://digital.nhs.uk/developer/guides-and-documentation/building-healthcare-software/clinical-coding-classifications-and-terminology#opcs-4" class="external-link">OPCS-4</a>)
+in secondary care.</p>
+<p>NHS England makes annual summaries of clinical coding activity in
+general practice (SNOMED CT UK) and NHS hospitals (ICD-10 and OPCS-4,
+with the most complete data available for inpatient admissions) openly
+available. For each of the three classification systems, the summaries
+provide annual usage of each code used at least once each year. The
+<em>opencodecounts</em> package aggregates these summaries to allow data
+exploration. The key consideration is that instances of clinical code
+recording should not be misinterpreted as estimates of incidence,
+prevalence or healthcare utilisation.</p>
+<div class="section level3">
+<h3 id="r-setup">R setup<a class="anchor" aria-label="anchor" href="#r-setup"></a>
+</h3>
+<p>To work with the datasets in R, ensure that the
+<em>opencodecounts</em> package is loaded.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load opencodecounts package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bennettoxford/opencodecounts" class="external-link">opencodecounts</a></span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="snomed-ct-code-usage-in-primary-care-in-england">SNOMED CT code usage in primary care in England<a class="anchor" aria-label="anchor" href="#snomed-ct-code-usage-in-primary-care-in-england"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="snomed-ct-code-usage-in-gp-practices-in-england">SNOMED CT code usage in GP practices in England<a class="anchor" aria-label="anchor" href="#snomed-ct-code-usage-in-gp-practices-in-england"></a>
+</h2>
+<p>SNOMED CT is the world’s most comprehensive clinical terminology
+system, encoding clinical findings, observations, anatomical terms,
+disease causes, products and procedures. In England, the SNOMED CT UK
+edition has been used in general practices since 2019, and contains
+357,000 globally common codes, alongside UK-specific extension for local
+screening procedures and products. In most cases, the information coded
+prior to 2019 has been translated to SNOMED CT.</p>
+<p>The annual code usage is <a href="https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care" class="external-link">published</a>
+every October by NHS England, covering the preceding August to July. The
+number of individuals included has been increasing, reaching over 62
+million patient records across 6,600 providers in 2023/24. The annual
+usage count reflects how many times each listed SNOMED code was added to
+a GP patient record in England in a given year. The codes are included
+if they have been used at least ones across the selected years. The
+counts are rounded to the nearest 10, while counts between 1 and 4 are
+withheld. The codes with no usage are excluded.</p>
 <p>This is only a selection of the full dataset published by NHS
-Digital, for the data pre-processing see
+Digital, for data pre-processing see
 <code>/data-raw/snomed_code_usage.R</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Return SNOMED code usage data</span></span>
@@ -99,15 +139,31 @@ Digital, for the data pre-processing see
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,523,957 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: active_at_end &lt;lgl&gt;</span></span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="icd-10-code-usage-in-secondary-care-in-england">ICD-10 code usage in secondary care in England<a class="anchor" aria-label="anchor" href="#icd-10-code-usage-in-secondary-care-in-england"></a>
-</h3>
-<p>This is the total annual count of the Finished Consultant Episodes
-(FCE) listing each 4-character ICD-10 code either in primary or
-secondary diagnosis position in the Hospital Episode Statistics in
-England.</p>
+<div class="section level2">
+<h2 id="icd-10-code-usage-in-inpatient-admissions-in-england">ICD-10 code usage in inpatient admissions in England<a class="anchor" aria-label="anchor" href="#icd-10-code-usage-in-inpatient-admissions-in-england"></a>
+</h2>
+<p>ICD-10 is a global classification system, containing 18,000 diagnoses
+coded as four or five-character alphanumeric codes. It is used to
+determine financial reimbursement for admitted patient care in all
+NHS-commissioned acute hospitals in England. The coding data submitted
+by the hospitals is aggregated and published openly by NHS England as
+the Admitted Patient Care Activity of the Hospital Episode Statistics
+(<a href="https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity" class="external-link">HES-APC</a>).
+It is released in annual intervals, covering April to March. Hospital
+Episode Statistics also include information on the emergency, outpatient
+and critical care, which is seperate from the Admitted Patient Care
+activity presented in <em>opencodecounts</em>.</p>
+<p>Activity in HES-APC is captured in episodes of care under one
+consultant, known as Finished Consultant Episodes (FCEs). Each FCE can
+be assigned up to 20 clinical diagnoses (ICD-10 codes). The usage count
+for ICD-10 codes equals the number of FCEs with a specific
+four-character ICD-10 code recorded in any diagnostic position. This
+means that each diagnoses can be counted only once per FCE. To be
+included in the dataset, each diagnosis code must have been used at
+least once across the selected years. The counts in HES-APC are not
+rounded and codes with no usage are excluded.</p>
 <p>This is only a selection of the full dataset published by NHS
-Digital, for the data pre-processing see
+Digital, for data pre-processing see
 <code>/data-raw/icd10_usage.R</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Return ICD-10 code usage data</span></span>
@@ -127,13 +183,24 @@ Digital, for the data pre-processing see
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-04-01 2024-03-31 A022       Localized salmonella infections           82</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 136,126 more rows</span></span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="opcs-4-code-usage-in-secondary-care-in-england">OPCS-4 code Usage in secondary care in England<a class="anchor" aria-label="anchor" href="#opcs-4-code-usage-in-secondary-care-in-england"></a>
-</h3>
-<p>This is the total annual count of each instance that each 4-character
-OPCS-4 code is listed across all primary and secondary procedure
-positions in the Finished Consultant Episodes (FCE) of the Hospital
-Episode Statistics in England.</p>
+<div class="section level2">
+<h2 id="opcs-4-code-usage-in-inpatient-admissions-in-england">OPCS-4 code usage in inpatient admissions in England<a class="anchor" aria-label="anchor" href="#opcs-4-code-usage-in-inpatient-admissions-in-england"></a>
+</h2>
+<p>OPCS-4 consists of 11,500 four-letter alphanumeric codes and was
+developed by NHS Digital for recording procedures. Similarly to ICD-10,
+it determines financial reimbursement for admitted patient care in all
+NHS-commissioned acute hospitals in England and is published in annual
+April - March intervals by the NHS England as the Admitted Patient Care
+Activity of the Hospital Episode Statistics (<a href="https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity" class="external-link">HES-APC</a>).</p>
+<p>Activity in HES-APC is captured in episodes of care under one
+consultant, known as Finished Consultant Episodes (FCEs). Each FCE can
+be assigned up to 24 procedures (OPCS-4 codes). The usage count for the
+OPCS-4 codes equals the number of times each 4-character OPCS-4 code is
+listed across all FCEs in a given year. This means that unlike
+diagnoses, a procedure can be counted multiple times within one FCE. To
+be included in the dataset, each procedure code must have been used at
+least once across the selected years. The counts in HES-APC are not
+rounded and codes with no usage are excluded.</p>
 <p>This is only a selection of the full dataset published by NHS
 Digital, for the data pre-processing see
 <code>/data-raw/opcs4_usage.R</code>.</p>
@@ -154,7 +221,6 @@ Digital, for the data pre-processing see
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-04-01 2024-03-31 A024       Excision of lesion of tissue of occip…   260</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-04-01 2024-03-31 A025       Excision of lesion of tissue of cereb…   604</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 107,369 more rows</span></span></span></code></pre></div>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
