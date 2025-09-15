@@ -32,10 +32,11 @@ navbar:
           href: articles/how-to-use-shiny-app.html
         - text: "How to use the R package"
           href: articles/how-to-use-R-pkg.html
-        - text: "Available datasets"
-          href: articles/available-datasets.html
-        - text: "Extract SNOMEDCT semantic tag"
+        - text: "How to extract SNOMED CT semantic tag in R"
           href: articles/extract-snomedct-sem-tag.html
+        - text: "Learn about the available datasets"
+          href: articles/available-datasets.html
+
 
     launch_shiny:
       text: "Launch Shiny App"
