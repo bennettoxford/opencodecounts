@@ -28,9 +28,9 @@ app_ui <- function(request) {
                   options = list(customClass = "left-align-tooltip")
                 ),
                 choices = c(
-                  "Primary care (SNOMED CT)" = "snomedct",
-                  "Secondary care (ICD-10)" = "icd10",
-                  "Secondary care (OPCS-4)" = "opcs4"
+                  "General practice (SNOMED CT)" = "snomedct",
+                  "Hospital admissions (ICD-10)" = "icd10",
+                  "Hospital admissions (OPCS-4)" = "opcs4"
                 )
               ),
               uiOutput("dynamic_date_slider")
@@ -131,13 +131,13 @@ app_ui <- function(request) {
                   )
                 ),
                 tags$li(
-                  a("Extract semantic tags from SNOMED CT descriptions",
+                  a("How to extract semantic tags from SNOMED CT descriptions",
                     href = "https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html",
                     target = "_blank"
                   )
                 ),
                 tags$li(
-                  a("Available datasets in opencodecounts",
+                  a("Learn about the available datasets",
                     href = "https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html",
                     target = "_blank"
                   )

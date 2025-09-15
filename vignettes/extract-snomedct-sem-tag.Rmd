@@ -1,5 +1,5 @@
 ---
-title: "Extract semantic tags from SNOMED CT descriptions"
+title: "How to extract semantic tags from SNOMED CT descriptions"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{extract-snomedct-sem-tag}
@@ -7,9 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-SNOMED CT descriptions include semantic tags in parentheses that classify concepts into categories such as (procedure), (finding), (observable entity), or (disorder). 
-Understanding these tags helps researchers interpret what types of clinical activities their codelists capture.
-For example, a depression screening codelist might include procedures (the act of screening), observable entities (measurable scores), and findings (clinical conclusions).
+SNOMED CT descriptions include semantic tags in parentheses that classify concepts into categories such as (procedure), (finding), (observable entity), or (disorder). Understanding these tags helps researchers interpret what types of clinical activities their codelists capture. For example, a depression screening codelist might include procedures (the act of screening), observable entities (measurable scores), and findings (clinical conclusions).
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -19,8 +17,8 @@ knitr::opts_chunk$set(
 ```
 
 ## Worked example
-In this example we're looking at the 
-[Depression screening codes (`DEPSCRN_COD`)](https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/depscrn_cod/20250627/) from the [NHS Primary Care Domain Reference Set Portal](https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-collections/quality-and-outcomes-framework-qof/quality-and-outcome-framework-qof-business-rules/primary-care-domain-reference-set-portal):
+
+In this example we're looking at the [Depression screening codes (`DEPSCRN_COD`)](https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/depscrn_cod/20250627/) from the [NHS Primary Care Domain Reference Set Portal](https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-collections/quality-and-outcomes-framework-qof/quality-and-outcome-framework-qof-business-rules/primary-care-domain-reference-set-portal):
 
 ### Setup
 

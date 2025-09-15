@@ -14,36 +14,50 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Example
+Clinical codes are unique numeric or alphanumeric identifiers used in healthcare settings for administrative, billing and clinical care purposes. They are grouped into different classification systems to allow standardised recording of diagnoses, procedures or medications, as well as other clinical, demographic and administrative data. In England, three clinical coding classification systems are used: SNOMED Clinical Terms ([SNOMED CT](https://www.england.nhs.uk/digitaltechnology/digital-primary-care/snomed-ct/)) in primary care (GP practices); and International Statistical Classification of Diseases and Related Health Problems, 10th Revision ([ICD-10](https://digital.nhs.uk/developer/guides-and-documentation/building-healthcare-software/clinical-coding-classifications-and-terminology#icd-10)) and OPCS Classification of Interventions and Procedures, version 4 ([OPCS-4](https://digital.nhs.uk/developer/guides-and-documentation/building-healthcare-software/clinical-coding-classifications-and-terminology#opcs-4)) in secondary care.
+
+NHS England makes annual summaries of clinical coding activity in general practice (SNOMED CT UK) and NHS hospitals (ICD-10 and OPCS-4, with the most complete data available for inpatient admissions) openly available. For each of the three classification systems, the summaries provide annual usage of each code used at least once each year. The *opencodecounts* package aggregates these summaries to allow data exploration. The key consideration is that instances of clinical code recording should not be misinterpreted as estimates of incidence, prevalence or healthcare utilisation.
+
+### R setup
+
+To work with the datasets in R, ensure that the *opencodecounts* package is loaded.
 
 ```{r setup}
 # Load opencodecounts package
 library(opencodecounts)
 ```
 
-### SNOMED CT code usage in primary care in England
+## SNOMED CT code usage in GP practices in England
 
-This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see `/data-raw/snomed_code_usage.R`.
+SNOMED CT is the world’s most comprehensive clinical terminology system, encoding clinical findings, observations, anatomical terms, disease causes, products and procedures. In England, the SNOMED CT UK edition has been used in general practices since 2019, and contains 357,000 globally common codes, alongside UK-specific extension for local screening procedures and products. In most cases, the information coded prior to 2019 has been translated to SNOMED CT.
+
+The annual code usage is [published](https://digital.nhs.uk/data-and-information/publications/statistical/mi-snomed-code-usage-in-primary-care) every October by NHS England, covering the preceding August to July. The number of individuals included has been increasing, reaching over 62 million patient records across 6,600 providers in 2023/24. The annual usage count reflects how many times each listed SNOMED code was added to a GP patient record in England in a given year. The codes are included if they have been used at least ones across the selected years. The counts are rounded to the nearest 10, while counts between 1 and 4 are withheld. The codes with no usage are excluded.
+
+This is only a selection of the full dataset published by NHS Digital, for data pre-processing see `/data-raw/snomed_code_usage.R`.
 
 ```{r snomed-usage}
 # Return SNOMED code usage data
 snomed_usage
 ```
 
-### ICD-10 code usage in secondary care in England
+## ICD-10 code usage in inpatient admissions in England
 
-This is the total annual count of the Finished Consultant Episodes (FCE) listing each 4-character ICD-10 code either in primary or secondary diagnosis position in the Hospital Episode Statistics in England.
+ICD-10 is a global classification system, containing 18,000 diagnoses coded as four or five-character alphanumeric codes. It is used to determine financial reimbursement for admitted patient care in all NHS-commissioned acute hospitals in England. The coding data submitted by the hospitals is aggregated and published openly by NHS England as the Admitted Patient Care Activity of the Hospital Episode Statistics ([HES-APC](https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity)). It is released in annual intervals, covering April to March. Hospital Episode Statistics also include information on the emergency, outpatient and critical care, which is seperate from the Admitted Patient Care activity presented in *opencodecounts*.
 
-This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see `/data-raw/icd10_usage.R`.
+Activity in HES-APC is captured in episodes of care under one consultant, known as Finished Consultant Episodes (FCEs). Each FCE can be assigned up to 20 clinical diagnoses (ICD-10 codes). The usage count for ICD-10 codes equals the number of FCEs with a specific four-character ICD-10 code recorded in any diagnostic position. This means that each diagnoses can be counted only once per FCE. To be included in the dataset, each diagnosis code must have been used at least once across the selected years. The counts in HES-APC are not rounded and codes with no usage are excluded.
+
+This is only a selection of the full dataset published by NHS Digital, for data pre-processing see `/data-raw/icd10_usage.R`.
 
 ```{r icd10-usage}
 # Return ICD-10 code usage data
 icd10_usage
 ```
 
-### OPCS-4 code Usage in secondary care in England
+## OPCS-4 code usage in inpatient admissions in England
 
-This is the total annual count of each instance that each 4-character OPCS-4 code is listed across all primary and secondary procedure positions in the Finished Consultant Episodes (FCE) of the Hospital Episode Statistics in England.
+OPCS-4 consists of 11,500 four-letter alphanumeric codes and was developed by NHS Digital for recording procedures. Similarly to ICD-10, it determines financial reimbursement for admitted patient care in all NHS-commissioned acute hospitals in England and is published in annual April - March intervals by the NHS England as the Admitted Patient Care Activity of the Hospital Episode Statistics ([HES-APC](https://digital.nhs.uk/data-and-information/publications/statistical/hospital-admitted-patient-care-activity)).
+
+Activity in HES-APC is captured in episodes of care under one consultant, known as Finished Consultant Episodes (FCEs). Each FCE can be assigned up to 24 procedures (OPCS-4 codes). The usage count for the OPCS-4 codes equals the number of times each 4-character OPCS-4 code is listed across all FCEs in a given year. This means that unlike diagnoses, a procedure can be counted multiple times within one FCE. To be included in the dataset, each procedure code must have been used at least once across the selected years. The counts in HES-APC are not rounded and codes with no usage are excluded.
 
 This is only a selection of the full dataset published by NHS Digital, for the data pre-processing see `/data-raw/opcs4_usage.R`.
 
