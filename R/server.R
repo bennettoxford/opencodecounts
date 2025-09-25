@@ -47,19 +47,18 @@ app_server <- function(input, output, session) {
   output$dynamic_date_slider <- renderUI({
     req(selected_data())
 
-    available_start_dates <- sort(unique(selected_data()$start_date))
     available_end_dates <- sort(unique(selected_data()$end_date))
 
     sliderInput(
       "date_range",
       label = tooltip(
         span("Date range", bs_icon("info-circle")),
-        "Filter available data by selecting start and end year.",
+        "Filter available data by selecting end dates of yearly reporting intervals",
         options = list(customClass = "left-align-tooltip")
       ),
-      min = min(available_start_dates),
+      min = min(available_end_dates),
       max = max(available_end_dates),
-      value = range(available_start_dates, available_end_dates),
+      value = range(available_end_dates, available_end_dates),
       step = 365,
       timeFormat = "%Y",
       ticks = FALSE
@@ -190,7 +189,7 @@ app_server <- function(input, output, session) {
       data <- selected_data()
 
       data <- data |>
-        filter(start_date >= input$date_range[1] & end_date <= input$date_range[2])
+        filter(end_date >= input$date_range[1] & end_date <= input$date_range[2])
 
       # Apply filters based on the current filtering method
       if (rv_search_method() == "search") {
