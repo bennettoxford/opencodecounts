@@ -49,7 +49,7 @@ plot_individual <- function(data) {
   scale_x_date_breaks <- unique(data$end_date)
   
   data <- data |>
-    group_by(end_date, end_date) |>
+    group_by(start_date, end_date) |>
     summarise(
       code = code,
       description = description,
