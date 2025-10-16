@@ -18,9 +18,114 @@ app_server <- function(input, output, session) {
   # Reactive values for search method (1) none, (2) code/desc or (3) codelist) and codelist data
   rv_search_method <- reactiveVal("none")
   rv_codelist <- reactiveVal(NULL)
+  rv_skip_dataset_reset <- reactiveVal(FALSE)
+
+  load_codelist_from_url <- function(url, dataset = NULL, align_dataset = TRUE, show_progress = TRUE) {
+    if (is.null(url) || !nzchar(url)) {
+      FALSE
+    }
+
+    dataset_accessor <- function() {
+      if (!is.null(dataset)) {
+        dataset
+      }
+
+      domain <- shiny::getDefaultReactiveDomain()
+      if (is.null(domain)) {
+        stop("dataset must be supplied when loading a codelist outside a reactive context.")
+      }
+
+      domain$input$dataset
+    }
+
+    perform_load <- function() {
+      tryCatch(
+        {
+          codelist_s7 <- get_codelist(url)
+          current_dataset <- dataset_accessor()
+          target_dataset <- current_dataset
+
+          if (align_dataset && !is.null(codelist_s7@coding_system) &&
+            codelist_s7@coding_system %in% c("snomedct", "icd10", "opcs4") &&
+            !identical(codelist_s7@coding_system, current_dataset)) {
+            rv_skip_dataset_reset(TRUE)
+            updateRadioButtons(session, "dataset", selected = codelist_s7@coding_system)
+            target_dataset <- codelist_s7@coding_system
+          }
+
+          if (codelist_s7@coding_system == target_dataset) {
+            showNotification(
+              paste0("Successfully loaded ", codelist_s7@coding_system, " codelist."),
+              type = "default"
+            )
+
+            rv_codelist(codelist_s7 |>
+              tibble::as_tibble() |>
+              dplyr::select(1:2))
+
+            rv_search_method("codelist")
+
+            updateSelectizeInput(session, "code_specific_search", selected = character(0))
+            updateTextInput(session, "code_pattern_search", value = "")
+            updateTextInput(session, "description_search", value = "")
+
+            canonical_slug <- codelist_s7@full_slug
+            canonical_url <- if (!is.null(canonical_slug) &&
+              length(canonical_slug) == 1 &&
+              !is.na(canonical_slug) &&
+              nzchar(canonical_slug)) {
+              paste0("https://www.opencodelists.org/codelist/", canonical_slug, "/")
+            } else {
+              url
+            }
+
+            updateTextInput(session, "codelist_url", value = canonical_url)
+
+            encoded_param <- if (!is.null(canonical_slug) &&
+              length(canonical_slug) == 1 &&
+              !is.na(canonical_slug) &&
+              nzchar(canonical_slug)) {
+              utils::URLencode(canonical_slug, reserved = TRUE)
+            } else {
+              utils::URLencode(canonical_url, reserved = TRUE)
+            }
+
+            updateQueryString(paste0("?codelist=", encoded_param), mode = "push")
+
+            TRUE
+          } else {
+            showNotification(
+              paste0("Loaded codelist (", codelist_s7@coding_system, ") does not match selected data (", current_dataset, ")."),
+              type = "error"
+            )
+            FALSE
+          }
+        },
+        error = function(e) {
+          showNotification(
+            sprintf("Error loading Codelist: %s", conditionMessage(e)),
+            type = "error"
+          )
+          FALSE
+        }
+      )
+    }
+
+    if (show_progress) {
+      withProgress(message = "Loading codelist ...", {
+        perform_load()
+      })
+    } else {
+      perform_load()
+    }
+  }
 
   # Reset search inputs when dataset changes
   observe({
+    if (isTRUE(rv_skip_dataset_reset())) {
+      rv_skip_dataset_reset(FALSE)
+      return()
+    }
     rv_search_method("none")
     updateSelectizeInput(session, "code_specific_search", selected = character(0))
     updateSelectizeInput(session, "code_pattern_search", selected = character(0))
@@ -100,47 +205,31 @@ app_server <- function(input, output, session) {
   # Load codelist
   observe({
     req(input$codelist_url, input$load_codelist)
-
-    withProgress(message = "Loading codelist ...", {
-      tryCatch(
-        {
-          codelist_s7 <- get_codelist(input$codelist_url)
-
-          if (codelist_s7@coding_system == input$dataset) {
-            showNotification(
-              paste0("Successfully loaded ", codelist_s7@coding_system, " codelist."),
-              type = "default"
-            )
-
-            # Store the codelist data
-            rv_codelist(codelist_s7 |>
-              tibble::as_tibble() |>
-              dplyr::select(1:2))
-
-            # Set filtering method to codelist
-            rv_search_method("codelist")
-
-            # Reset search inputs
-            updateSelectizeInput(session, "code_specific_search", selected = character(0))
-            updateTextInput(session, "code_pattern_search", value = "")
-            updateTextInput(session, "description_search", value = "")
-          } else {
-            showNotification(
-              paste0("Loaded codelist (", codelist_s7@coding_system, ") does not match selected data (", input$dataset, ")."),
-              type = "error"
-            )
-          }
-        },
-        error = function(e) {
-          showNotification(
-            sprintf("Error loading Codelist: %s", conditionMessage(e)),
-            type = "error"
-          )
-        }
-      )
-    })
+    load_codelist_from_url(input$codelist_url, dataset = input$dataset)
   }) |>
     bindEvent(input$load_codelist)
+
+  observeEvent(session$clientData$url_search, {
+    query_string <- session$clientData$url_search
+
+    if (is.null(query_string) || !nzchar(query_string)) {
+      return()
+    }
+
+    params <- tryCatch(
+      shiny::parseQueryString(query_string),
+      error = function(e) NULL
+    )
+
+    if (is.null(params) || is.null(params$codelist) || !length(params$codelist)) {
+      return()
+    }
+
+    initial_url <- utils::URLdecode(params$codelist[[1]])
+    updateTextInput(session, "codelist_url", value = initial_url)
+    req(input$dataset)
+    load_codelist_from_url(initial_url, dataset = input$dataset, align_dataset = TRUE, show_progress = TRUE)
+  }, once = TRUE, ignoreNULL = TRUE)
 
   # Reset all search methods when reset button is clicked
   observe({
