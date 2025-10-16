@@ -1,0 +1,8 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "OpenCodeCounts: An open-access, interactive online tool and R package for analysing clinical code usage in England",
+  author   = "Arina Anna Tamborska, Rose Higgins, Yamina Boukari, Viveck Kingsley, Lola Ojedele, Kunle Oreagba, Jon Massey, Andrea Schaffer, Amelia Green, William Hulme, Brian MacKenna, Helen J Curtis, Louis Fisher, Milan Wiedemann",
+  journal  = "medRxiv",
+  year     = "2025",
+  doi      = "10.1101/2025.10.14.25338005"
+)
