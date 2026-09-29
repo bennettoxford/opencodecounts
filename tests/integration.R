@@ -29,15 +29,24 @@ compare_rebuilt_dataset <- function(build_script, dataset_name) {
   )
 }
 
-compare_rebuilt_dataset("data-raw/snomed_code_usage.R", "snomed_usage")
-compare_rebuilt_dataset("data-raw/icd10_code_usage.R", "icd10_usage")
 compare_rebuilt_dataset(
-  "data-raw/icd10_usage_breakdowns.R",
+  "data-raw/gp_snomed.R",
+  "snomed_usage"
+)
+compare_rebuilt_dataset(
+  "data-raw/hesapc_icd10.R",
+  "icd10_usage"
+)
+compare_rebuilt_dataset(
+  "data-raw/hesapc_icd10_breakdowns.R",
   "icd10_usage_breakdowns"
 )
-compare_rebuilt_dataset("data-raw/opcs4_code_usage.R", "opcs4_usage")
 compare_rebuilt_dataset(
-  "data-raw/opcs4_usage_breakdowns.R",
+  "data-raw/hesapc_opcs4.R",
+  "opcs4_usage"
+)
+compare_rebuilt_dataset(
+  "data-raw/hesapc_opcs4_breakdowns.R",
   "opcs4_usage_breakdowns"
 )
 

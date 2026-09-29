@@ -24,11 +24,11 @@ build:
 # Rebuild all the datasets from NHS Digital's website (slow - downloads years of data)
 build-data:
     Rscript --quiet --vanilla -e '\
-        source("data-raw/snomed_code_usage.R"); \
-        source("data-raw/icd10_code_usage.R"); \
-        source("data-raw/icd10_usage_breakdowns.R"); \
-        source("data-raw/opcs4_code_usage.R"); \
-        source("data-raw/opcs4_usage_breakdowns.R")'
+        source("data-raw/gp_snomed.R"); \
+        source("data-raw/hesapc_icd10.R"); \
+        source("data-raw/hesapc_icd10_breakdowns.R"); \
+        source("data-raw/hesapc_opcs4.R"); \
+        source("data-raw/hesapc_opcs4_breakdowns.R")'
 
 # Publish one dataset's file to GitHub as a new release (push your branch first)
 # Usage: just release <dataset> <version> [notes]
