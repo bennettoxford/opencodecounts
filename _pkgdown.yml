@@ -1,4 +1,5 @@
 url: https://bennettoxford.github.io/opencodecounts/
+title: OpenCodeCounts
 template:
   bootstrap: 5
   includes:
@@ -18,6 +19,10 @@ template:
         .template-home table th:nth-child(2),
         .template-home table td:nth-child(2) {
           width: 50%;
+        }
+        .navbar-brand img {
+          height: 2rem;
+          width: auto;
         }
       </style>
 
