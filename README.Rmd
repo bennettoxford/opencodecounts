@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 devtools::load_all(quiet = TRUE)
 ```
 
-# opencodecounts
+# opencodecounts <img src="man/figures/logo-hex.png" align="right" height="139" alt="OpenCodeCounts"/>
 
 <!-- badges: start -->
 
