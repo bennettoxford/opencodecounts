@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# opencodecounts
+# OpenCodeCounts <a href="https://bennettoxford.github.io/opencodecounts/"><img src="man/figures/logo.png" align="right" height="138" alt="OpenCodeCounts website" /></a>
 
 <!-- badges: start -->
 
@@ -15,9 +15,9 @@ covering SNOMED CT codes in primary care and ICD-10/OPCS-4 codes in
 secondary care.
 
 You can launch the interactive Shiny app by clicking on [Launch Shiny
-app](https://bennettoxford.github.io/opencodecounts/articles/app.html).
-For work in R, all available functions are documented in the [R
-Reference](https://bennettoxford.github.io/opencodecounts/reference/index.html)
+App](https://bennettoxford.github.io/opencodecounts/articles/app.html).
+For work in R, all available functions are documented in the [Function
+reference](https://bennettoxford.github.io/opencodecounts/reference/index.html)
 section.
 
 ## Installation

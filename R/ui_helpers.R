@@ -29,7 +29,7 @@ external_link <- function(text, href) {
 
 #' Footer logo wrapped in a link
 #' @keywords internal
-footer_logo <- function(href, src, alt) {
+footer_logo <- function(href, src, alt, height = "60px") {
   shiny::div(
     class = "col-auto",
     shiny::a(
@@ -37,7 +37,7 @@ footer_logo <- function(href, src, alt) {
       target = "_blank",
       shiny::img(
         src = src,
-        height = "60px",
+        height = height,
         alt = alt,
         style = "margin: 0 20px;"
       )
@@ -54,6 +54,12 @@ footer_ui <- function() {
       class = "container-fluid",
       shiny::div(
         class = "row justify-content-center align-items-center",
+        footer_logo(
+          href = "https://bennettoxford.github.io/opencodecounts/",
+          src = "www/logo-wordmark.png",
+          alt = "opencodecounts website",
+          height = "45px"
+        ),
         footer_logo(
           href = "https://www.bennett.ox.ac.uk/",
           src = "www/bennett-brand-white.png",
