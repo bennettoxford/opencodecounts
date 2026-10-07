@@ -6,17 +6,9 @@
 #' @import bslib
 app_ui <- function(request) {
   tagList(
-    tags$head(
-      tags$link(rel = "icon", href = "www/favicon.ico")
-    ),
     page_sidebar(
       theme = bs_theme(version = 5, bootswatch = "lumen"),
-      window_title = "OpenCodeCounts",
-      title = tags$img(
-        src = "www/logo-wordmark.png",
-        alt = "OpenCodeCounts",
-        style = "height: 34px; width: auto;"
-      ),
+      title = NULL,
       sidebar = mod_sidebar_ui("sidebar"),
       # Main page
       # Value boxes
