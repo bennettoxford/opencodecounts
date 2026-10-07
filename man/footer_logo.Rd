@@ -4,7 +4,7 @@
 \alias{footer_logo}
 \title{Footer logo wrapped in a link}
 \usage{
-footer_logo(href, src, alt)
+footer_logo(href, src, alt, height = "60px")
 }
 \description{
 Footer logo wrapped in a link
