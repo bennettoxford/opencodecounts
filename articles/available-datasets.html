@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Available datasets in opencodecounts • opencodecounts</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -22,6 +27,39 @@
   .template-home table th:nth-child(2),
   .template-home table td:nth-child(2) {
     width: 50%;
+  }
+  /* Logo and page header rules copied from tidytemplate (inst/pkgdown/BS5/extra.scss) */
+  .page-header {
+    border-bottom: none;
+    min-height: 0;
+    margin-bottom: 2rem;
+  }
+  .page-header h1 {
+    margin-top: 3rem;
+  }
+  .template-home .page-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    min-height: 0;
+    margin: 2rem 0;
+    padding: 2rem 0;
+    border-bottom: 1px solid #efefef;
+  }
+  .template-home .page-header h1 {
+    margin-top: 0;
+  }
+  .template-home img.logo {
+    margin-left: 0;
+  }
+  @media (max-width: 575.98px) {
+    .template-home .page-header {
+      margin: 0.5rem 0;
+      padding: 0.5rem 0;
+    }
+    .template-home img.logo {
+      width: 100px;
+    }
   }
 </style>
 </head>
@@ -72,8 +110,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Available datasets in opencodecounts</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Available datasets in opencodecounts</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/main/vignettes/available-datasets.Rmd" class="external-link"><code>vignettes/available-datasets.Rmd</code></a></small>
@@ -139,7 +176,7 @@ Digital, for data pre-processing see
 <code class="sourceCode R"><span><span class="co"># Return SNOMED code usage data</span></span>
 <span><span class="fu"><a href="../reference/get_gp_snomed.html">get_gp_snomed</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.1.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.1.0) <span style="color: #B2B2B2;">[1.7s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.1.0) <span style="color: #B2B2B2;">[537ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,682,534 × 7</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   snomed_code      description      usage active_at_start</span></span>
@@ -187,7 +224,7 @@ Digital, for data pre-processing see
 <code class="sourceCode R"><span><span class="co"># Return ICD-10 code usage data</span></span>
 <span><span class="fu"><a href="../reference/get_hesapc_icd10.html">get_hesapc_icd10</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"hesapc_icd10"</span> (v0.1.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_icd10"</span> (v0.1.0) <span style="color: #B2B2B2;">[218ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_icd10"</span> (v0.1.0) <span style="color: #B2B2B2;">[170ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 147,483 × 5</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   icd10_code description                            usage</span></span>
@@ -229,7 +266,7 @@ Digital, for the data pre-processing see
 <code class="sourceCode R"><span><span class="co"># Return OPCS-4 code usage data</span></span>
 <span><span class="fu"><a href="../reference/get_hesapc_opcs4.html">get_hesapc_opcs4</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"hesapc_opcs4"</span> (v0.1.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_opcs4"</span> (v0.1.0) <span style="color: #B2B2B2;">[214ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_opcs4"</span> (v0.1.0) <span style="color: #B2B2B2;">[150ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 116,680 × 5</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   opcs4_code description                            usage</span></span>
