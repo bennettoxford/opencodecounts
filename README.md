@@ -44,17 +44,17 @@ pak::pak("bennettoxford/opencodecounts")
 
 The table below lists every dataset in the `opencodecounts` R package,
 with links to download the tidy data as Parquet files. GP data covers
-2011-08-01 to 2026-07-31, and HES data covers 2012-04-01 to 2025-03-31.
+2011-08-01 to 2026-07-31, and HES data covers 2012-04-01 to 2026-03-31.
 Read the vignette for more on each dataset: [Available datasets in
 opencodecounts](https://bennettoxford.github.io/opencodecounts/articles/available-datasets.html).
 
 | Function | Description | Tidy data |
 |:---|:---|:---|
 | `get_gp_snomed()` | GP records, SNOMED CT (v0.2.0) | [Download](https://github.com/bennettoxford/opencodecounts/releases/download/gp-snomed-v0.2.0/gp_snomed.parquet) |
-| `get_hesapc_icd10()` | HES Admitted Patient Care, ICD-10 diagnoses (v0.1.0) | [Download](https://github.com/bennettoxford/opencodecounts/releases/download/icd10-usage-v0.1.0/icd10_usage.parquet) |
-| `get_hesapc_icd10_breakdowns()` | HES Admitted Patient Care, ICD-10 diagnoses, with breakdowns (v0.1.0) | [Download](https://github.com/bennettoxford/opencodecounts/releases/download/icd10-usage-breakdowns-v0.1.0/icd10_usage_breakdowns.parquet) |
-| `get_hesapc_opcs4()` | HES Admitted Patient Care, OPCS-4 procedures (v0.1.0) | [Download](https://github.com/bennettoxford/opencodecounts/releases/download/opcs4-usage-v0.1.0/opcs4_usage.parquet) |
-| `get_hesapc_opcs4_breakdowns()` | HES Admitted Patient Care, OPCS-4 procedures, with breakdowns (v0.1.0) | [Download](https://github.com/bennettoxford/opencodecounts/releases/download/opcs4-usage-breakdowns-v0.1.0/opcs4_usage_breakdowns.parquet) |
+| `get_hesapc_icd10()` | HES Admitted Patient Care, ICD-10 diagnoses (v0.2.0) | [Download](https://github.com/bennettoxford/opencodecounts/releases/download/hesapc-icd10-v0.2.0/hesapc_icd10.parquet) |
+| `get_hesapc_icd10_breakdowns()` | HES Admitted Patient Care, ICD-10 diagnoses, with breakdowns (v0.2.0) | [Download](https://github.com/bennettoxford/opencodecounts/releases/download/hesapc-icd10-breakdowns-v0.2.0/hesapc_icd10_breakdowns.parquet) |
+| `get_hesapc_opcs4()` | HES Admitted Patient Care, OPCS-4 procedures (v0.2.0) | [Download](https://github.com/bennettoxford/opencodecounts/releases/download/hesapc-opcs4-v0.2.0/hesapc_opcs4.parquet) |
+| `get_hesapc_opcs4_breakdowns()` | HES Admitted Patient Care, OPCS-4 procedures, with breakdowns (v0.2.0) | [Download](https://github.com/bennettoxford/opencodecounts/releases/download/hesapc-opcs4-breakdowns-v0.2.0/hesapc_opcs4_breakdowns.parquet) |
 
 ## For developers
 
