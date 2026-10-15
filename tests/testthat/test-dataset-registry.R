@@ -55,7 +55,11 @@ test_that("every registry entry's get_function is an exported opencodecounts fun
   for (dataset_id in names(registry)) {
     get_fn_name <- registry[[dataset_id]]$get_function
     expect_true(
-      exists(get_fn_name, where = asNamespace("opencodecounts"), inherits = FALSE),
+      exists(
+        get_fn_name,
+        where = asNamespace("opencodecounts"),
+        inherits = FALSE
+      ),
       info = dataset_id
     )
   }

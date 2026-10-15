@@ -11,15 +11,15 @@ test_that("load_tidy_sources_config() parses the package's tidy_data_sources.yml
     ) %in%
       names(sources)
   ))
-  expect_equal(sources$gp_snomed$version, "0.1.0")
+  expect_equal(sources$gp_snomed$version, "0.2.0")
   expect_true(grepl("^https://", sources$gp_snomed$url))
 })
 
 test_that("get_tidy_source_config() returns the latest version by default", {
   cfg <- get_tidy_source_config("gp_snomed")
 
-  expect_equal(cfg$version, "0.1.0")
-  expect_true(grepl("snomed_usage\\.parquet$", cfg$url))
+  expect_equal(cfg$version, "0.2.0")
+  expect_true(grepl("gp_snomed\\.parquet$", cfg$url))
 })
 
 test_that("get_tidy_source_config() errors for an unknown dataset", {
@@ -37,7 +37,7 @@ test_that("get_tidy_source_config() errors for an unknown version", {
 })
 
 test_that("available_versions() lists known versions newest first", {
-  expect_equal(available_versions("gp_snomed"), "0.1.0")
+  expect_equal(available_versions("gp_snomed"), c("0.2.0", "0.1.0"))
 })
 
 test_that("available_versions() errors for an unknown dataset", {

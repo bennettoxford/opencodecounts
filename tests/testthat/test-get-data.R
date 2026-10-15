@@ -23,7 +23,10 @@ test_that("get_dataset() downloads when not cached, then loads from cache", {
 
 test_that("get_local_data_path() returns NULL when inst/app-data doesn't exist", {
   local_dir <- system.file("app-data", package = "opencodecounts")
-  skip_if(nzchar(local_dir) && dir.exists(local_dir), "inst/app-data already exists locally")
+  skip_if(
+    nzchar(local_dir) && dir.exists(local_dir),
+    "inst/app-data already exists locally"
+  )
 
   expect_null(get_local_data_path("gp_snomed", "1.0.0"))
 })
@@ -85,7 +88,9 @@ test_that("get_app_dataset() reads the local copy when there is one, skipping ca
   download_calls <- 0
 
   local_mocked_bindings(
-    get_local_data_path = function(dataset, version) "fake/path/gp_snomed_1.0.0.parquet",
+    get_local_data_path = function(dataset, version) {
+      "fake/path/gp_snomed_1.0.0.parquet"
+    },
     read_parquet = function(path) {
       expect_equal(path, "fake/path/gp_snomed_1.0.0.parquet")
       tibble::tibble(x = 1)
@@ -234,5 +239,8 @@ test_that("ensure_app_datasets_cached() caches every dataset with no local app c
 
   ensure_app_datasets_cached()
 
-  expect_equal(sort(ensure_calls), sort(c("gp_snomed", "hesapc_icd10", "hesapc_opcs4")))
+  expect_equal(
+    sort(ensure_calls),
+    sort(c("gp_snomed", "hesapc_icd10", "hesapc_opcs4"))
+  )
 })
