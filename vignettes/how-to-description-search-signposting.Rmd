@@ -1,0 +1,172 @@
+---
+title: "How signposting coding has increased in general practice"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rise-of-signposting-codes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+"Signposting" describes directing a patient to a source of help (e.g., a pharmacist or a community service) without a formal referral.
+In this example we searched all SNOMED CT descriptions for the terms "signpost" or "signposted" to see how often this activity has been recorded in general practice in England.
+
+### Setup
+
+```{r load-packages, message=FALSE, warning=FALSE}
+# Load packages
+library(opencodecounts)
+library(dplyr)
+library(stringr)
+library(forcats)
+library(ggplot2)
+library(scales)
+library(gt)
+library(here)
+```
+
+```{r get-data}
+# Search all GP SNOMED CT descriptions for "signpost" or "signposted"
+signposting_usage <- get_gp_snomed() |>
+  filter(str_detect(str_to_lower(description), "signpost")) |>
+  mutate(
+    description_short = strip_semantic_tag(description),
+    description_short = str_replace(
+      description_short,
+      "Improving Access to Psychological Therapies",
+      "IAPT"
+    )
+  )
+```
+
+`r n_distinct(signposting_usage$snomed_code)` distinct SNOMED CT codes have a description containing "signpost", e.g. "Signposting (procedure)", "Signposting to general practitioner (procedure)", and "Informal referral - signposted to other agency (finding)".
+
+### Table with most used codes
+
+```{r create-table}
+# Calculate total usage by code for the entire time period
+df_tab_top10_signposting <- signposting_usage |>
+  group_by(snomed_code, description_short) |>
+  summarise(total_usage = sum(usage), .groups = "drop") |>
+  mutate(ratio_usage = total_usage / sum(total_usage)) |>
+  slice_max(order_by = total_usage, n = 10)
+
+# Create table
+tab_top10_signposting <- df_tab_top10_signposting |>
+  gt() |>
+  cols_label(
+    snomed_code = "SNOMED code",
+    description_short = "Description",
+    total_usage = "Usage",
+    ratio_usage = "%"
+  ) |>
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()
+  ) |>
+  tab_style(
+    style = cell_text(font = "Courier New"),
+    locations = cells_body(columns = snomed_code)
+  ) |>
+  cols_align(align = "left", columns = snomed_code) |>
+  fmt_number(total_usage, decimals = 0) |>
+  fmt_percent(ratio_usage, decimals = 1)
+
+tab_top10_signposting
+
+# Run this line manually to save the table as an image, e.g. to share on Slack
+# gtsave(tab_top10_signposting, here("vignettes", "img", "tab_top10_signposting_total.png"))
+```
+
+The ten most used codes account for `r scales::percent(sum(df_tab_top10_signposting$total_usage) / sum(signposting_usage$usage), accuracy = 0.1)` of all recorded signposting activity.
+
+### Figure showing change over time for the top 10 codes
+
+```{r create-figure, fig.height=6, fig.width=7}
+# Identify the 10 most used codes based on total usage
+top10_signposting_codes <- df_tab_top10_signposting |>
+  pull(snomed_code)
+
+# Calculate yearly sum for the top 10 codes
+df_fig_top10_signposting <- signposting_usage |>
+  filter(snomed_code %in% top10_signposting_codes) |>
+  group_by(end_date, description_short) |>
+  summarise(usage = sum(usage), .groups = "drop") |>
+  mutate(description_short = fct_reorder(
+    description_short,
+    usage,
+    .fun = sum,
+    .desc = TRUE
+    )
+  )
+
+# x-axis breaks
+x_breaks_signposting <- unique(df_fig_top10_signposting$end_date)
+
+# Create figure
+fig_top10_signposting <- df_fig_top10_signposting |>
+  ggplot(
+    aes(
+      y = usage,
+      x = end_date,
+      colour = description_short
+    )
+  ) +
+  geom_line(alpha = .7) +
+  geom_point(size = 2) +
+  labs(title = NULL, x = NULL, y = NULL, colour = NULL) +
+  scale_x_date(breaks = x_breaks_signposting, labels = label_date("%b\n%Y")) +
+  scale_y_continuous(labels = label_number(accuracy = 1), limits = c(0, NA)) +
+  theme_classic() +
+  theme(legend.position = "bottom") +
+  guides(colour = guide_legend(nrow = 5)) +
+  scale_colour_brewer(palette = "Set3")
+
+fig_top10_signposting
+
+# Run this line manually to save the figure as an image, e.g. to share on Slack
+# ggsave(here("vignettes", "img", "fig_top10_signposting_trends.png"), fig_top10_signposting, height = 6, width = 7)
+```
+
+```{r calc-yearly-trend, include = FALSE}
+# Yearly totals, used for the inline numbers below
+df_yearly_signposting <- signposting_usage |>
+  group_by(end_date) |>
+  summarise(total_usage = sum(usage), .groups = "drop") |>
+  arrange(end_date)
+
+date_first_year <- first(df_yearly_signposting$end_date)
+date_last_year <- last(df_yearly_signposting$end_date)
+usage_first_year <- first(df_yearly_signposting$total_usage)
+usage_last_year <- last(df_yearly_signposting$total_usage)
+usage_ratio_total <- usage_last_year / usage_first_year
+
+# Calculate ratios
+usage_2018 <- df_yearly_signposting |>
+  filter(end_date == as.Date("2018-07-31")) |>
+  pull(total_usage)
+
+usage_2019 <- df_yearly_signposting |>
+  filter(end_date == as.Date("2019-07-31")) |>
+  pull(total_usage)
+
+usage_2020 <- df_yearly_signposting |>
+  filter(end_date == as.Date("2020-07-31")) |>
+  pull(total_usage)
+
+usage_2021 <- df_yearly_signposting |>
+  filter(end_date == as.Date("2021-07-31")) |>
+  pull(total_usage)
+
+usage_ratio_2018_2019 <- usage_2019 / usage_2018
+usage_ratio_2020_2021 <- usage_2021 / usage_2020
+```
+
+Recorded signposting activity increased from `r scales::comma(usage_first_year)` events in `r format(date_first_year, "%B %Y")` to `r scales::comma(usage_last_year)` by `r format(date_last_year, "%B %Y")`, around `r round(usage_ratio_total)` times as many.
+Two periods stand out in the figure above: between July 2018 and July 2019, recording rose from `r scales::comma(usage_2018)` to `r scales::comma(usage_2019)` (`r round(usage_ratio_2018_2019, 1)` times as many), and between July 2020 and July 2021, from `r scales::comma(usage_2020)` to `r scales::comma(usage_2021)` (`r round(usage_ratio_2020_2021, 1)` times as many).

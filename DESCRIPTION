@@ -26,6 +26,7 @@ Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.1)
 Suggests:
+    forcats,
     gt,
     here,
     knitr,
