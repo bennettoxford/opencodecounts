@@ -71,7 +71,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">opencodecounts</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,7 +113,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Available datasets in opencodecounts</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/gp-snomed-v0.2.0/vignettes/available-datasets.Rmd" class="external-link"><code>vignettes/available-datasets.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/main/vignettes/available-datasets.Rmd" class="external-link"><code>vignettes/available-datasets.Rmd</code></a></small>
       <div class="d-none name"><code>available-datasets.Rmd</code></div>
     </div>
 
@@ -175,23 +175,23 @@ Digital, for data pre-processing see
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Return SNOMED code usage data</span></span>
 <span><span class="fu"><a href="../reference/get_gp_snomed.html">get_gp_snomed</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.1.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.1.0) <span style="color: #B2B2B2;">[323ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.2.0)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.2.0) <span style="color: #B2B2B2;">[349ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,682,534 × 7</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,857,443 × 7</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   snomed_code      description      usage active_at_start</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2024-08-01 2025-07-31 279991000000102  Short message … 4.27<span style="color: #949494;">e</span>8 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2024-08-01 2025-07-31 184103008        Patient teleph… 2.77<span style="color: #949494;">e</span>8 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2024-08-01 2025-07-31 423876004        Clinical docum… 8.83<span style="color: #949494;">e</span>7 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2024-08-01 2025-07-31 72313002         Systolic arter… 7.06<span style="color: #949494;">e</span>7 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2024-08-01 2025-07-31 1091811000000102 Diastolic arte… 7.06<span style="color: #949494;">e</span>7 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2024-08-01 2025-07-31 1068881000000101 eConsultation … 6.17<span style="color: #949494;">e</span>7 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2024-08-01 2025-07-31 60621009         Body mass inde… 5.08<span style="color: #949494;">e</span>7 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2024-08-01 2025-07-31 1000731000000107 Serum creatini… 5.02<span style="color: #949494;">e</span>7 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2024-08-01 2025-07-31 27113001         Body weight (o… 4.89<span style="color: #949494;">e</span>7 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2024-08-01 2025-07-31 1000661000000107 Serum sodium l… 4.83<span style="color: #949494;">e</span>7 TRUE           </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,682,524 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2025-08-01 2026-07-31 279991000000102  Short message … 4.41<span style="color: #949494;">e</span>8 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2025-08-01 2026-07-31 184103008        Patient teleph… 2.91<span style="color: #949494;">e</span>8 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2025-08-01 2026-07-31 423876004        Clinical docum… 9.45<span style="color: #949494;">e</span>7 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2025-08-01 2026-07-31 1068881000000101 eConsultation … 9.40<span style="color: #949494;">e</span>7 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2025-08-01 2026-07-31 72313002         Systolic arter… 7.14<span style="color: #949494;">e</span>7 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2025-08-01 2026-07-31 1091811000000102 Diastolic arte… 7.13<span style="color: #949494;">e</span>7 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2025-08-01 2026-07-31 60621009         Body mass inde… 5.33<span style="color: #949494;">e</span>7 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2025-08-01 2026-07-31 27113001         Body weight (o… 5.27<span style="color: #949494;">e</span>7 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2025-08-01 2026-07-31 1000731000000107 Serum creatini… 5.26<span style="color: #949494;">e</span>7 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2025-08-01 2026-07-31 1000661000000107 Serum sodium l… 5.06<span style="color: #949494;">e</span>7 TRUE           </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,857,433 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: active_at_end &lt;lgl&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -224,7 +224,7 @@ Digital, for data pre-processing see
 <code class="sourceCode R"><span><span class="co"># Return ICD-10 code usage data</span></span>
 <span><span class="fu"><a href="../reference/get_hesapc_icd10.html">get_hesapc_icd10</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"hesapc_icd10"</span> (v0.1.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_icd10"</span> (v0.1.0) <span style="color: #B2B2B2;">[138ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_icd10"</span> (v0.1.0) <span style="color: #B2B2B2;">[126ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 147,483 × 5</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   icd10_code description                            usage</span></span>
@@ -266,7 +266,7 @@ Digital, for the data pre-processing see
 <code class="sourceCode R"><span><span class="co"># Return OPCS-4 code usage data</span></span>
 <span><span class="fu"><a href="../reference/get_hesapc_opcs4.html">get_hesapc_opcs4</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"hesapc_opcs4"</span> (v0.1.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_opcs4"</span> (v0.1.0) <span style="color: #B2B2B2;">[141ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_opcs4"</span> (v0.1.0) <span style="color: #B2B2B2;">[114ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 116,680 × 5</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   opcs4_code description                            usage</span></span>

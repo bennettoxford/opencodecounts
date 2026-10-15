@@ -65,23 +65,23 @@ for data pre-processing see `/data-raw/gp_snomed.R`.
 
 # Return SNOMED code usage data
 get_gp_snomed()
-#> ℹ Downloading "gp_snomed" (v0.1.0)
-#> ✔ Downloading "gp_snomed" (v0.1.0) [323ms]
+#> ℹ Downloading "gp_snomed" (v0.2.0)
+#> ✔ Downloading "gp_snomed" (v0.2.0) [349ms]
 #> 
-#> # A tibble: 1,682,534 × 7
+#> # A tibble: 1,857,443 × 7
 #>    start_date end_date   snomed_code      description      usage active_at_start
 #>    <date>     <date>     <chr>            <chr>            <int> <lgl>          
-#>  1 2024-08-01 2025-07-31 279991000000102  Short message … 4.27e8 TRUE           
-#>  2 2024-08-01 2025-07-31 184103008        Patient teleph… 2.77e8 TRUE           
-#>  3 2024-08-01 2025-07-31 423876004        Clinical docum… 8.83e7 TRUE           
-#>  4 2024-08-01 2025-07-31 72313002         Systolic arter… 7.06e7 TRUE           
-#>  5 2024-08-01 2025-07-31 1091811000000102 Diastolic arte… 7.06e7 TRUE           
-#>  6 2024-08-01 2025-07-31 1068881000000101 eConsultation … 6.17e7 TRUE           
-#>  7 2024-08-01 2025-07-31 60621009         Body mass inde… 5.08e7 TRUE           
-#>  8 2024-08-01 2025-07-31 1000731000000107 Serum creatini… 5.02e7 TRUE           
-#>  9 2024-08-01 2025-07-31 27113001         Body weight (o… 4.89e7 TRUE           
-#> 10 2024-08-01 2025-07-31 1000661000000107 Serum sodium l… 4.83e7 TRUE           
-#> # ℹ 1,682,524 more rows
+#>  1 2025-08-01 2026-07-31 279991000000102  Short message … 4.41e8 TRUE           
+#>  2 2025-08-01 2026-07-31 184103008        Patient teleph… 2.91e8 TRUE           
+#>  3 2025-08-01 2026-07-31 423876004        Clinical docum… 9.45e7 TRUE           
+#>  4 2025-08-01 2026-07-31 1068881000000101 eConsultation … 9.40e7 TRUE           
+#>  5 2025-08-01 2026-07-31 72313002         Systolic arter… 7.14e7 TRUE           
+#>  6 2025-08-01 2026-07-31 1091811000000102 Diastolic arte… 7.13e7 TRUE           
+#>  7 2025-08-01 2026-07-31 60621009         Body mass inde… 5.33e7 TRUE           
+#>  8 2025-08-01 2026-07-31 27113001         Body weight (o… 5.27e7 TRUE           
+#>  9 2025-08-01 2026-07-31 1000731000000107 Serum creatini… 5.26e7 TRUE           
+#> 10 2025-08-01 2026-07-31 1000661000000107 Serum sodium l… 5.06e7 TRUE           
+#> # ℹ 1,857,433 more rows
 #> # ℹ 1 more variable: active_at_end <lgl>
 ```
 
@@ -117,7 +117,7 @@ for data pre-processing see `/data-raw/hesapc_icd10.R`.
 # Return ICD-10 code usage data
 get_hesapc_icd10()
 #> ℹ Downloading "hesapc_icd10" (v0.1.0)
-#> ✔ Downloading "hesapc_icd10" (v0.1.0) [138ms]
+#> ✔ Downloading "hesapc_icd10" (v0.1.0) [126ms]
 #> 
 #> # A tibble: 147,483 × 5
 #>    start_date end_date   icd10_code description                            usage
@@ -163,7 +163,7 @@ for the data pre-processing see `/data-raw/hesapc_opcs4.R`.
 # Return OPCS-4 code usage data
 get_hesapc_opcs4()
 #> ℹ Downloading "hesapc_opcs4" (v0.1.0)
-#> ✔ Downloading "hesapc_opcs4" (v0.1.0) [141ms]
+#> ✔ Downloading "hesapc_opcs4" (v0.1.0) [114ms]
 #> 
 #> # A tibble: 116,680 × 5
 #>    start_date end_date   opcs4_code description                            usage

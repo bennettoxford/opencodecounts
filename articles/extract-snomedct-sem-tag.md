@@ -82,18 +82,17 @@ df_tab_top10_depscrn_cod |>
 | SNOMED code | Description | Usage | % |
 |----|----|----|----|
 | Procedure |  |  |  |
-| 200971000000100 | Depression screening using questions | 22,339,530 | 52.63% |
-| 171207006 | Depression screening | 724,300 | 1.71% |
-| 792491000000100 | Assessment using Whooley depression screen | 142,910 | 0.34% |
-| 715252007 | Depression screening using Patient Health Questionnaire Nine Item score | 33,150 | 0.08% |
+| 200971000000100 | Depression screening using questions | 23,096,200 | 50.43% |
+| 171207006 | Depression screening | 847,890 | 1.85% |
+| 792491000000100 | Assessment using Whooley depression screen | 164,910 | 0.36% |
+| 715252007 | Depression screening using Patient Health Questionnaire Nine Item score | 40,600 | 0.09% |
 | Observable entity |  |  |  |
-| 720433000 | Patient Health Questionnaire Nine Item score | 18,131,670 | 42.72% |
-| 401320004 | Hospital Anxiety and Depression scale: depression score | 829,530 | 1.95% |
-| 450320001 | Edinburgh postnatal depression scale score | 172,690 | 0.41% |
-| 718366000 | Beck Depression Inventory II score | 44,940 | 0.11% |
-| 803351000000106 | Whooley depression screen score | 11,180 | 0.03% |
-| Finding |  |  |  |
-| 112011000119102 | Negative screening for depression on Patient Health Questionnaire 9 | 8,630 | 0.02% |
+| 720433000 | Patient Health Questionnaire Nine Item score | 20,384,150 | 44.51% |
+| 401320004 | Hospital Anxiety and Depression scale: depression score | 867,030 | 1.89% |
+| 450320001 | Edinburgh postnatal depression scale score | 198,280 | 0.43% |
+| 1104961000000104 | Patient Health Questionnaire-4 score | 114,220 | 0.25% |
+| 718366000 | Beck Depression Inventory II score | 46,310 | 0.10% |
+| 803351000000106 | Whooley depression screen score | 17,250 | 0.04% |
 
 ### Figure showing trends over time by semantic tag
 
