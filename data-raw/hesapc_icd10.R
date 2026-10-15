@@ -21,7 +21,7 @@ read_hesapc_icd10_xlsx_from_url <- function(url_list, ...) {
     col_names = FALSE,
     .name_repair = janitor::make_clean_names,
     sheet = url_list$sheet,
-    skip = url_list$skip,
+    range = url_list$range,
     ...
   )
 }
@@ -55,7 +55,7 @@ hesapc_icd10 <- hesapc_icd10_urls |>
 
 # Count number of usage with NAs
 sum(is.na(hesapc_icd10$usage))
-# [1] 341
+# [1] 215
 
 # Replace NAs with 5
 hesapc_icd10 <- hesapc_icd10 |>
@@ -69,10 +69,12 @@ hesapc_icd10 |>
   filter(is.na(description)) |>
   select(icd10_code, description, usage) |>
   distinct() |>
-  print(n = 39)
-# A tibble: 38 × 3
+  print()
+# A tibble: 7 × 3
 
-# Remove "codes" with missing description
+# Remove codes with missing description. These are invalid codes in the
+# 2021-22 and 2022-23 files (e.g. "NULL", "W19.X", "X62.."), which NHS
+# Digital lists without a description.
 hesapc_icd10 <- hesapc_icd10 |>
   filter(!is.na(description))
 
@@ -98,6 +100,6 @@ codes_with_multiple_desc <- opencodecounts:::get_codes_with_multiple_desc(
   icd10_code
 )
 length(codes_with_multiple_desc)
-# [1] 214
+# [1] 213
 
 arrow::write_parquet(hesapc_icd10, here("data-raw", "hesapc_icd10.parquet"))

@@ -1,3 +1,9 @@
+# opencodecounts 0.9.1
+
+## New data
+
+`get_hesapc_*()` functions now includes 2025-26 (1 August 2025 to 31 July 2026).
+
 # opencodecounts 0.9.0
 
 ## New data

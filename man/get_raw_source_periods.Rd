@@ -12,7 +12,7 @@ get_raw_source_periods(dataset)
 \value{
 A named list, one entry per period. For \code{gp_snomed} each entry is a
 url string; for the others, a list with \code{url} plus fields like \code{sheet},
-\code{skip_rows}, or \code{range}.
+\code{range} or \code{usage_col}.
 }
 \description{
 Reads \verb{inst/config/raw_<publication>.yml}, named by this dataset's
