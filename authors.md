@@ -25,7 +25,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/bennettoxford/opencodecounts/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/bennettoxford/opencodecounts/blob/gp-snomed-v0.2.0/inst/CITATION)
 
 Tamborska AA, Higgins R, Boukari Y, Kingsley V, Ojedele L, Oreagba K,
 Massey J, Schaffer A, Green A, Hulme W, MacKenna B, Curtis HJ, Fisher L,
