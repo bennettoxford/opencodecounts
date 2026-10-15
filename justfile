@@ -22,13 +22,30 @@ build:
     Rscript --quiet --vanilla -e 'pak::local_install()'
 
 # Rebuild all the datasets from NHS Digital's website (slow - downloads years of data)
-build-data:
+build-data: && inst-data
     Rscript --quiet --vanilla -e '\
+        devtools::load_all(quiet = TRUE); \
         source("data-raw/gp_snomed.R"); \
         source("data-raw/hesapc_icd10.R"); \
         source("data-raw/hesapc_icd10_breakdowns.R"); \
         source("data-raw/hesapc_opcs4.R"); \
         source("data-raw/hesapc_opcs4_breakdowns.R")'
+
+# Copy the parquet files in data-raw/ into inst/app-data/, named with the
+# newest version in tidy_data_sources.yml, so `devtools::load_all(); run_app()`
+# shows them before a release. Old files are removed first.
+inst-data:
+    rm -rf inst/app-data
+    Rscript --quiet --vanilla -e '\
+        devtools::load_all(quiet = TRUE); \
+        dir.create("inst/app-data"); \
+        for (ds in names(load_tidy_sources_config())) { \
+          src <- file.path("data-raw", paste0(ds, ".parquet")); \
+          if (!file.exists(src)) next; \
+          dest <- file.path("inst/app-data", paste0(ds, "_", get_tidy_source_config(ds)$version, ".parquet")); \
+          file.copy(src, dest); \
+          cli::cli_inform("Copied {.file {src}} to {.file {dest}}"); \
+        }'
 
 # Publish one dataset's file to GitHub as a new release (push your branch first)
 # Usage: just release <dataset> <version> [notes]

@@ -9,22 +9,22 @@ test_that("get_raw_source_periods() returns all periods for gp_snomed", {
   )
 })
 
-test_that("get_raw_source_periods() returns url/sheet/skip_rows/usage_col for hesapc_icd10", {
+test_that("get_raw_source_periods() returns url/sheet/range/usage_col for hesapc_icd10", {
   periods <- get_raw_source_periods("hesapc_icd10")
 
-  expect_length(periods, 13)
+  expect_length(periods, 14)
   expect_named(
     periods[["2024to2025"]],
-    c("url", "sheet", "skip_rows", "usage_col")
+    c("url", "sheet", "range", "usage_col")
   )
-  expect_equal(periods[["2013to2014"]]$skip_rows, 18)
+  expect_equal(periods[["2013to2014"]]$range, "A19:C11357")
   expect_equal(periods[["2013to2014"]]$usage_col, 3)
 })
 
 test_that("get_raw_source_periods() returns url/sheet/range for the breakdowns datasets", {
   periods <- get_raw_source_periods("hesapc_icd10_breakdowns")
 
-  expect_length(periods, 13)
+  expect_length(periods, 14)
   expect_named(periods[["2012to2013"]], c("url", "sheet", "range"))
   expect_equal(periods[["2012to2013"]]$range, "A18:AF11400")
 })
@@ -45,8 +45,8 @@ test_that("period keys use the same <start-year>to<end-year> format across all d
 })
 
 test_that("get_raw_source_periods() has matching period counts for hesapc_opcs4 datasets", {
-  expect_length(get_raw_source_periods("hesapc_opcs4"), 13)
-  expect_length(get_raw_source_periods("hesapc_opcs4_breakdowns"), 13)
+  expect_length(get_raw_source_periods("hesapc_opcs4"), 14)
+  expect_length(get_raw_source_periods("hesapc_opcs4_breakdowns"), 14)
 })
 
 test_that("usage and breakdowns datasets share the same url/sheet per period", {

@@ -19,7 +19,7 @@ read_hesapc_opcs4_xlsx_from_url <- function(url_list, ...) {
     col_names = FALSE,
     .name_repair = janitor::make_clean_names,
     sheet = url_list$sheet,
-    skip = url_list$skip,
+    range = url_list$range,
     ...
   )
 }
@@ -53,7 +53,7 @@ hesapc_opcs4 <- hesapc_opcs4_urls |>
 
 # Count number of usage with NAs
 sum(is.na(hesapc_opcs4$usage))
-# [1] 151
+# [1] 3
 
 # Replace NAs with 5
 hesapc_opcs4 <- hesapc_opcs4 |>
@@ -67,8 +67,8 @@ hesapc_opcs4 |>
   filter(is.na(description)) |>
   select(opcs4_code, description, usage) |>
   distinct() |>
-  print(n = 32)
-# A tibble: 32 × 3
+  print()
+# A tibble: 0 × 3
 
 # Remove "codes" with missing description
 hesapc_opcs4 <- hesapc_opcs4 |>

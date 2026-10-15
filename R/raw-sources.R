@@ -12,7 +12,7 @@
 #'
 #' @return A named list, one entry per period. For `gp_snomed` each entry is a
 #'   url string; for the others, a list with `url` plus fields like `sheet`,
-#'   `skip_rows`, or `range`.
+#'   `range` or `usage_col`.
 #'
 #' @importFrom yaml read_yaml
 #'

@@ -105,7 +105,7 @@ test_that("Test hesapc_icd10 column types", {
 
 test_that("Test hesapc_icd10 rows", {
   test_nrow <- nrow(hesapc_icd10)
-  expect_equal(test_nrow, 147483L)
+  expect_equal(test_nrow, 158849L)
 })
 
 test_that("Test hesapc_icd10 date range", {
@@ -114,11 +114,11 @@ test_that("Test hesapc_icd10 date range", {
 
   expect_equal(
     test_range_start_date,
-    c(as.Date("2012-04-01"), as.Date("2024-04-01"))
+    c(as.Date("2012-04-01"), as.Date("2025-04-01"))
   )
   expect_equal(
     test_range_end_date,
-    c(as.Date("2013-03-31"), as.Date("2025-03-31"))
+    c(as.Date("2013-03-31"), as.Date("2026-03-31"))
   )
 })
 
@@ -129,7 +129,7 @@ test_that("Test hesapc_icd10 minimum usage", {
 
 test_that("Test cummulative ICD-10 usage", {
   test_sum_usage <- sum(hesapc_icd10$usage)
-  expect_equal(test_sum_usage, 1498723323)
+  expect_equal(test_sum_usage, 1672014332)
 })
 
 test_that("Test ICD-10 usage are all integers", {
@@ -181,11 +181,11 @@ test_that("Test hesapc_icd10_breakdowns date range", {
 
   expect_equal(
     test_range_start_date,
-    c(as.Date("2012-04-01"), as.Date("2024-04-01"))
+    c(as.Date("2012-04-01"), as.Date("2025-04-01"))
   )
   expect_equal(
     test_range_end_date,
-    c(as.Date("2013-03-31"), as.Date("2025-03-31"))
+    c(as.Date("2013-03-31"), as.Date("2026-03-31"))
   )
 })
 
@@ -277,7 +277,7 @@ test_that("Test hesapc_opcs4 column types", {
 
 test_that("Test hesapc_opcs4 rows", {
   test_nrow <- nrow(hesapc_opcs4)
-  expect_equal(test_nrow, 116680L)
+  expect_equal(test_nrow, 125925L)
 })
 
 test_that("Test hesapc_opcs4 date range", {
@@ -286,11 +286,11 @@ test_that("Test hesapc_opcs4 date range", {
 
   expect_equal(
     test_range_start_date,
-    c(as.Date("2012-04-01"), as.Date("2024-04-01"))
+    c(as.Date("2012-04-01"), as.Date("2025-04-01"))
   )
   expect_equal(
     test_range_end_date,
-    c(as.Date("2013-03-31"), as.Date("2025-03-31"))
+    c(as.Date("2013-03-31"), as.Date("2026-03-31"))
   )
 })
 
@@ -350,11 +350,11 @@ test_that("Test hesapc_opcs4_breakdowns date range", {
 
   expect_equal(
     test_range_start_date,
-    c(as.Date("2012-04-01"), as.Date("2024-04-01"))
+    c(as.Date("2012-04-01"), as.Date("2025-04-01"))
   )
   expect_equal(
     test_range_end_date,
-    c(as.Date("2013-03-31"), as.Date("2025-03-31"))
+    c(as.Date("2013-03-31"), as.Date("2026-03-31"))
   )
 })
 

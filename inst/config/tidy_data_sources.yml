@@ -18,23 +18,31 @@ datasets:
     publication: hesapc_icd10
     variant: usage
     versions:
+      - version: "0.2.0"
+        url: "https://github.com/bennettoxford/opencodecounts/releases/download/hesapc-icd10-v0.2.0/hesapc_icd10.parquet"
       - version: "0.1.0"
         url: "https://github.com/bennettoxford/opencodecounts/releases/download/icd10-usage-v0.1.0/icd10_usage.parquet"
   hesapc_icd10_breakdowns:
     publication: hesapc_icd10
     variant: breakdowns
     versions:
+      - version: "0.2.0"
+        url: "https://github.com/bennettoxford/opencodecounts/releases/download/hesapc-icd10-breakdowns-v0.2.0/hesapc_icd10_breakdowns.parquet"
       - version: "0.1.0"
         url: "https://github.com/bennettoxford/opencodecounts/releases/download/icd10-usage-breakdowns-v0.1.0/icd10_usage_breakdowns.parquet"
   hesapc_opcs4:
     publication: hesapc_opcs4
     variant: usage
     versions:
+      - version: "0.2.0"
+        url: "https://github.com/bennettoxford/opencodecounts/releases/download/hesapc-opcs4-v0.2.0/hesapc_opcs4.parquet"
       - version: "0.1.0"
         url: "https://github.com/bennettoxford/opencodecounts/releases/download/opcs4-usage-v0.1.0/opcs4_usage.parquet"
   hesapc_opcs4_breakdowns:
     publication: hesapc_opcs4
     variant: breakdowns
     versions:
+      - version: "0.2.0"
+        url: "https://github.com/bennettoxford/opencodecounts/releases/download/hesapc-opcs4-breakdowns-v0.2.0/hesapc_opcs4_breakdowns.parquet"
       - version: "0.1.0"
         url: "https://github.com/bennettoxford/opencodecounts/releases/download/opcs4-usage-breakdowns-v0.1.0/opcs4_usage_breakdowns.parquet"
