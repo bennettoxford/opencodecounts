@@ -10,6 +10,8 @@ datasets:
     publication: gp_snomed
     variant: usage
     versions:
+      - version: "0.2.0"
+        url: "https://github.com/bennettoxford/opencodecounts/releases/download/gp-snomed-v0.2.0/gp_snomed.parquet"
       - version: "0.1.0"
         url: "https://github.com/bennettoxford/opencodecounts/releases/download/snomed-usage-v0.1.0/snomed_usage.parquet"
   hesapc_icd10:
