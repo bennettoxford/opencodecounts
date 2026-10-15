@@ -66,7 +66,7 @@ for data pre-processing see `/data-raw/gp_snomed.R`.
 # Return SNOMED code usage data
 get_gp_snomed()
 #> ℹ Downloading "gp_snomed" (v0.2.0)
-#> ✔ Downloading "gp_snomed" (v0.2.0) [349ms]
+#> ✔ Downloading "gp_snomed" (v0.2.0) [890ms]
 #> 
 #> # A tibble: 1,857,443 × 7
 #>    start_date end_date   snomed_code      description      usage active_at_start
@@ -116,23 +116,23 @@ for data pre-processing see `/data-raw/hesapc_icd10.R`.
 
 # Return ICD-10 code usage data
 get_hesapc_icd10()
-#> ℹ Downloading "hesapc_icd10" (v0.1.0)
-#> ✔ Downloading "hesapc_icd10" (v0.1.0) [126ms]
+#> ℹ Downloading "hesapc_icd10" (v0.2.0)
+#> ✔ Downloading "hesapc_icd10" (v0.2.0) [168ms]
 #> 
-#> # A tibble: 147,483 × 5
+#> # A tibble: 158,849 × 5
 #>    start_date end_date   icd10_code description                            usage
 #>    <date>     <date>     <chr>      <chr>                                  <int>
-#>  1 2024-04-01 2025-03-31 A000       Cholera due to Vibrio cholerae 01, bi…     9
-#>  2 2024-04-01 2025-03-31 A009       Cholera, unspecified                      40
-#>  3 2024-04-01 2025-03-31 A010       Typhoid fever                            896
-#>  4 2024-04-01 2025-03-31 A011       Paratyphoid fever A                      101
-#>  5 2024-04-01 2025-03-31 A012       Paratyphoid fever B                       14
-#>  6 2024-04-01 2025-03-31 A013       Paratyphoid fever C                        2
-#>  7 2024-04-01 2025-03-31 A014       Paratyphoid fever, unspecified            54
-#>  8 2024-04-01 2025-03-31 A020       Salmonella enteritis                    2446
-#>  9 2024-04-01 2025-03-31 A021       Salmonella sepsis                        358
-#> 10 2024-04-01 2025-03-31 A022       Localized salmonella infections           76
-#> # ℹ 147,473 more rows
+#>  1 2025-04-01 2026-03-31 A000       Cholera due to Vibrio cholerae 01, bi…     4
+#>  2 2025-04-01 2026-03-31 A001       Cholera due to Vibrio cholerae 01, bi…     2
+#>  3 2025-04-01 2026-03-31 A009       Cholera, unspecified                      31
+#>  4 2025-04-01 2026-03-31 A010       Typhoid fever                            836
+#>  5 2025-04-01 2026-03-31 A011       Paratyphoid fever A                      112
+#>  6 2025-04-01 2026-03-31 A012       Paratyphoid fever B                       13
+#>  7 2025-04-01 2026-03-31 A013       Paratyphoid fever C                        1
+#>  8 2025-04-01 2026-03-31 A014       Paratyphoid fever, unspecified            48
+#>  9 2025-04-01 2026-03-31 A020       Salmonella enteritis                    2789
+#> 10 2025-04-01 2026-03-31 A021       Salmonella sepsis                        436
+#> # ℹ 158,839 more rows
 ```
 
 ## OPCS-4 code usage in inpatient admissions in England
@@ -162,21 +162,21 @@ for the data pre-processing see `/data-raw/hesapc_opcs4.R`.
 
 # Return OPCS-4 code usage data
 get_hesapc_opcs4()
-#> ℹ Downloading "hesapc_opcs4" (v0.1.0)
-#> ✔ Downloading "hesapc_opcs4" (v0.1.0) [114ms]
+#> ℹ Downloading "hesapc_opcs4" (v0.2.0)
+#> ✔ Downloading "hesapc_opcs4" (v0.2.0) [220ms]
 #> 
-#> # A tibble: 116,680 × 5
+#> # A tibble: 125,925 × 5
 #>    start_date end_date   opcs4_code description                            usage
 #>    <date>     <date>     <chr>      <chr>                                  <int>
-#>  1 2024-04-01 2025-03-31 A011       Hemispherectomy                           17
-#>  2 2024-04-01 2025-03-31 A012       Total lobectomy of brain                  29
-#>  3 2024-04-01 2025-03-31 A013       Partial lobectomy of brain               126
-#>  4 2024-04-01 2025-03-31 A018       Other specified major excision of tis…    25
-#>  5 2024-04-01 2025-03-31 A019       Unspecified major excision of tissue …     6
-#>  6 2024-04-01 2025-03-31 A021       Excision of lesion of tissue of front…  1442
-#>  7 2024-04-01 2025-03-31 A022       Excision of lesion of tissue of tempo…   994
-#>  8 2024-04-01 2025-03-31 A023       Excision of lesion of tissue of parie…   644
-#>  9 2024-04-01 2025-03-31 A024       Excision of lesion of tissue of occip…   236
-#> 10 2024-04-01 2025-03-31 A025       Excision of lesion of tissue of cereb…   585
-#> # ℹ 116,670 more rows
+#>  1 2025-04-01 2026-03-31 A011       Hemispherectomy                           15
+#>  2 2025-04-01 2026-03-31 A012       Total lobectomy of brain                  33
+#>  3 2025-04-01 2026-03-31 A013       Partial lobectomy of brain                98
+#>  4 2025-04-01 2026-03-31 A018       Other specified major excision of tis…    32
+#>  5 2025-04-01 2026-03-31 A019       Unspecified major excision of tissue …     1
+#>  6 2025-04-01 2026-03-31 A021       Excision of lesion of tissue of front…  1446
+#>  7 2025-04-01 2026-03-31 A022       Excision of lesion of tissue of tempo…  1063
+#>  8 2025-04-01 2026-03-31 A023       Excision of lesion of tissue of parie…   723
+#>  9 2025-04-01 2026-03-31 A024       Excision of lesion of tissue of occip…   252
+#> 10 2025-04-01 2026-03-31 A025       Excision of lesion of tissue of cereb…   638
+#> # ℹ 125,915 more rows
 ```

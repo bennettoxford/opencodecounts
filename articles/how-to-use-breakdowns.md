@@ -22,8 +22,8 @@ called `all_procedures` and `main_procedure` instead.
 ``` r
 
 icd10_usage_breakdowns <- get_hesapc_icd10_breakdowns()
-#> ℹ Downloading "hesapc_icd10_breakdowns" (v0.1.0)
-#> ✔ Downloading "hesapc_icd10_breakdowns" (v0.1.0) [236ms]
+#> ℹ Downloading "hesapc_icd10_breakdowns" (v0.2.0)
+#> ✔ Downloading "hesapc_icd10_breakdowns" (v0.2.0) [460ms]
 #> 
 
 # Available breakdowns for ICD-10
@@ -52,20 +52,20 @@ icd10_adhd_breakdowns <- icd10_usage_breakdowns |>
   filter(icd10_code == "F900")
 
 icd10_adhd_breakdowns
-#> # A tibble: 377 × 6
+#> # A tibble: 406 × 6
 #>    start_date end_date   icd10_code description                 breakdown  usage
 #>    <date>     <date>     <chr>      <chr>                       <chr>      <int>
-#>  1 2024-04-01 2025-03-31 F900       Disturbance of activity an… all_diag… 121645
-#>  2 2024-04-01 2025-03-31 F900       Disturbance of activity an… main_dia…    287
-#>  3 2024-04-01 2025-03-31 F900       Disturbance of activity an… male       58670
-#>  4 2024-04-01 2025-03-31 F900       Disturbance of activity an… female     62059
-#>  5 2024-04-01 2025-03-31 F900       Disturbance of activity an… gender_u…    916
-#>  6 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_0          2
-#>  7 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_1_4      539
-#>  8 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_5_9     6869
-#>  9 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_10_14  12908
-#> 10 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_15      3451
-#> # ℹ 367 more rows
+#>  1 2025-04-01 2026-03-31 F900       Disturbance of activity an… all_diag… 168483
+#>  2 2025-04-01 2026-03-31 F900       Disturbance of activity an… main_dia…    290
+#>  3 2025-04-01 2026-03-31 F900       Disturbance of activity an… male       74895
+#>  4 2025-04-01 2026-03-31 F900       Disturbance of activity an… female     93289
+#>  5 2025-04-01 2026-03-31 F900       Disturbance of activity an… gender_u…    299
+#>  6 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_0         14
+#>  7 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_1_4      577
+#>  8 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_5_9     7872
+#>  9 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_10_14  15534
+#> 10 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_15      4123
+#> # ℹ 396 more rows
 ```
 
 ### Calculating the percentage of main diagnosis coding
@@ -87,10 +87,10 @@ adhd_diag_positions
 #> # A tibble: 1 × 5
 #>   icd10_code description         all_diagnoses main_diagnosis pct_main_diagnosis
 #>   <chr>      <chr>                       <int>          <int>              <dbl>
-#> 1 F900       Disturbance of act…        538927           3610               0.67
+#> 1 F900       Disturbance of act…        707410           3900               0.55
 ```
 
-Only 0.67% of F90.0 coding is recorded as the main diagnosis, indicating
+Only 0.55% of F90.0 coding is recorded as the main diagnosis, indicating
 that ADHD is typically recorded as a co-existing condition and not the
 main condition being treated.
 

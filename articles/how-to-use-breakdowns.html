@@ -71,7 +71,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">opencodecounts</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,7 +113,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>How to use ICD-10 and OPCS-4 breakdowns</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/main/vignettes/how-to-use-breakdowns.Rmd" class="external-link"><code>vignettes/how-to-use-breakdowns.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/hesapc-icd10-v0.2.0/vignettes/how-to-use-breakdowns.Rmd" class="external-link"><code>vignettes/how-to-use-breakdowns.Rmd</code></a></small>
       <div class="d-none name"><code>how-to-use-breakdowns.Rmd</code></div>
     </div>
 
@@ -144,8 +144,8 @@ called <code>all_procedures</code> and <code>main_procedure</code>
 instead.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">icd10_usage_breakdowns</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_hesapc_icd10_breakdowns.html">get_hesapc_icd10_breakdowns</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"hesapc_icd10_breakdowns"</span> (v0.1.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_icd10_breakdowns"</span> (v0.1.0) <span style="color: #B2B2B2;">[236ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"hesapc_icd10_breakdowns"</span> (v0.2.0)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_icd10_breakdowns"</span> (v0.2.0) <span style="color: #B2B2B2;">[460ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span></span>
 <span><span class="co"># Available breakdowns for ICD-10</span></span>
@@ -172,20 +172,20 @@ looks like this:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">icd10_code</span> <span class="op">==</span> <span class="st">"F900"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">icd10_adhd_breakdowns</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 377 × 6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 406 × 6</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   icd10_code description                 breakdown  usage</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… all_diag… <span style="text-decoration: underline;">121</span>645</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… main_dia…    287</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… male       <span style="text-decoration: underline;">58</span>670</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… female     <span style="text-decoration: underline;">62</span>059</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… gender_u…    916</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_0          2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_1_4      539</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_5_9     <span style="text-decoration: underline;">6</span>869</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_10_14  <span style="text-decoration: underline;">12</span>908</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2024-04-01 2025-03-31 F900       Disturbance of activity an… age_15      <span style="text-decoration: underline;">3</span>451</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 367 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… all_diag… <span style="text-decoration: underline;">168</span>483</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… main_dia…    290</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… male       <span style="text-decoration: underline;">74</span>895</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… female     <span style="text-decoration: underline;">93</span>289</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… gender_u…    299</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_0         14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_1_4      577</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_5_9     <span style="text-decoration: underline;">7</span>872</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_10_14  <span style="text-decoration: underline;">15</span>534</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2025-04-01 2026-03-31 F900       Disturbance of activity an… age_15      <span style="text-decoration: underline;">4</span>123</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 396 more rows</span></span></span></code></pre></div>
 <div class="section level3">
 <h3 id="calculating-the-percentage-of-main-diagnosis-coding">Calculating the percentage of main diagnosis coding<a class="anchor" aria-label="anchor" href="#calculating-the-percentage-of-main-diagnosis-coding"></a>
 </h3>
@@ -204,8 +204,8 @@ admission and those capturing co-existing conditions.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">#&gt;   icd10_code description         all_diagnoses main_diagnosis pct_main_diagnosis</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> F900       Disturbance of act…        <span style="text-decoration: underline;">538</span>927           <span style="text-decoration: underline;">3</span>610               0.67</span></span></code></pre></div>
-<p>Only 0.67% of F90.0 coding is recorded as the main diagnosis,
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> F900       Disturbance of act…        <span style="text-decoration: underline;">707</span>410           <span style="text-decoration: underline;">3</span>900               0.55</span></span></code></pre></div>
+<p>Only 0.55% of F90.0 coding is recorded as the main diagnosis,
 indicating that ADHD is typically recorded as a co-existing condition
 and not the main condition being treated.</p>
 </div>
