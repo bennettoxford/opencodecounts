@@ -13,8 +13,8 @@ test_that("dataset_choices() returns dataset ids named by their label", {
     choices,
     c(
       "General practice (SNOMED CT)" = "snomedct",
-      "Hospital admissions (ICD-10)" = "icd10",
-      "Hospital admissions (OPCS-4)" = "opcs4"
+      "Hospital admissions, diagnoses (ICD-10)" = "icd10",
+      "Hospital admissions, procedures (OPCS-4)" = "opcs4"
     )
   )
 })
