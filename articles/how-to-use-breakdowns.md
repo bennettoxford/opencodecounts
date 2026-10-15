@@ -23,7 +23,7 @@ called `all_procedures` and `main_procedure` instead.
 
 icd10_usage_breakdowns <- get_hesapc_icd10_breakdowns()
 #> ℹ Downloading "hesapc_icd10_breakdowns" (v0.2.0)
-#> ✔ Downloading "hesapc_icd10_breakdowns" (v0.2.0) [359ms]
+#> ✔ Downloading "hesapc_icd10_breakdowns" (v0.2.0) [431ms]
 #> 
 
 # Available breakdowns for ICD-10
