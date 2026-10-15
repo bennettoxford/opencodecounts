@@ -13,8 +13,8 @@ test_that("dataset_choices() returns dataset ids named by their label", {
     choices,
     c(
       "General practice (SNOMED CT)" = "snomedct",
-      "Hospital admissions (ICD-10)" = "icd10",
-      "Hospital admissions (OPCS-4)" = "opcs4"
+      "Hospital admissions, diagnoses (ICD-10)" = "icd10",
+      "Hospital admissions, procedures (OPCS-4)" = "opcs4"
     )
   )
 })
@@ -55,7 +55,11 @@ test_that("every registry entry's get_function is an exported opencodecounts fun
   for (dataset_id in names(registry)) {
     get_fn_name <- registry[[dataset_id]]$get_function
     expect_true(
-      exists(get_fn_name, where = asNamespace("opencodecounts"), inherits = FALSE),
+      exists(
+        get_fn_name,
+        where = asNamespace("opencodecounts"),
+        inherits = FALSE
+      ),
       info = dataset_id
     )
   }

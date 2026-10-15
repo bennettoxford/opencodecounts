@@ -13,14 +13,19 @@ test_that("copy_app_data_for_deploy() copies the cached parquet for every datase
 
   local_mocked_bindings(
     tidy_source_cache_is_current = function(dataset, version) TRUE,
-    get_tidy_source_cache_path = function(dataset, version) cache_paths[[dataset]]
+    get_tidy_source_cache_path = function(dataset, version) {
+      cache_paths[[dataset]]
+    }
   )
 
   result <- copy_app_data_for_deploy(dest_dir)
 
   for (dataset in names(load_tidy_sources_config())) {
     version <- get_tidy_source_config(dataset)$version
-    expected_path <- file.path(dest_dir, paste0(dataset, "_", version, ".parquet"))
+    expected_path <- file.path(
+      dest_dir,
+      paste0(dataset, "_", version, ".parquet")
+    )
     expect_true(file.exists(expected_path), info = dataset)
     expect_true(expected_path %in% result, info = dataset)
   }
@@ -57,7 +62,9 @@ test_that("copy_app_data_for_deploy() creates dest_dir if it doesn't exist", {
     tidy_source_cache_is_current = function(dataset, version) TRUE,
     get_tidy_source_cache_path = function(dataset, version) {
       path <- file.path(source_dir, paste0(dataset, "_", version, ".parquet"))
-      if (!file.exists(path)) writeLines("fake parquet", path)
+      if (!file.exists(path)) {
+        writeLines("fake parquet", path)
+      }
       path
     }
   )

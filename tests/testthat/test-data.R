@@ -42,7 +42,7 @@ test_that("Test gp_snomed column types", {
 
 test_that("Test gp_snomed rows", {
   test_nrow <- nrow(gp_snomed)
-  expect_equal(test_nrow, 1682534L)
+  expect_equal(test_nrow, 1857443L)
 })
 
 test_that("Test gp_snomed date range", {
@@ -51,17 +51,17 @@ test_that("Test gp_snomed date range", {
 
   expect_equal(
     test_range_start_date,
-    c(as.Date("2011-08-01"), as.Date("2024-08-01"))
+    c(as.Date("2011-08-01"), as.Date("2025-08-01"))
   )
   expect_equal(
     test_range_end_date,
-    c(as.Date("2012-07-31"), as.Date("2025-07-31"))
+    c(as.Date("2012-07-31"), as.Date("2026-07-31"))
   )
 })
 
 test_that("Test sum of usage", {
   test_usage_sum <- sum(gp_snomed$usage)
-  expect_equal(test_usage_sum, 47861217775)
+  expect_equal(test_usage_sum, 54409755375)
 })
 
 test_that("Minimum SNOMED usage", {
@@ -234,7 +234,9 @@ test_that("Test no non-alphanumeric characters in ICD-10 breakdown codes", {
 })
 
 test_that("Test ICD-10 breakdowns missing description", {
-  test_sum_missing_description <- sum(is.na(hesapc_icd10_breakdowns$description))
+  test_sum_missing_description <- sum(is.na(
+    hesapc_icd10_breakdowns$description
+  ))
   expect_equal(test_sum_missing_description, 0)
 })
 
@@ -401,7 +403,9 @@ test_that("Test no non-alphanumeric characters in OPCS-4 breakdown codes", {
 })
 
 test_that("Test OPCS-4 breakdowns missing description", {
-  test_sum_missing_description <- sum(is.na(hesapc_opcs4_breakdowns$description))
+  test_sum_missing_description <- sum(is.na(
+    hesapc_opcs4_breakdowns$description
+  ))
   expect_equal(test_sum_missing_description, 0)
 })
 

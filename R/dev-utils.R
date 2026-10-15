@@ -18,24 +18,31 @@ copy_app_data_for_deploy <- function(dest_dir) {
 
   datasets <- names(load_tidy_sources_config())
 
-  paths <- vapply(datasets, function(dataset) {
-    cfg <- get_tidy_source_config(dataset)
-    version <- cfg$version
+  paths <- vapply(
+    datasets,
+    function(dataset) {
+      cfg <- get_tidy_source_config(dataset)
+      version <- cfg$version
 
-    if (!tidy_source_cache_is_current(dataset, version)) {
-      download_tidy_source(dataset, cfg$url, version)
-    }
+      if (!tidy_source_cache_is_current(dataset, version)) {
+        download_tidy_source(dataset, cfg$url, version)
+      }
 
-    dest_path <- file.path(dest_dir, paste0(dataset, "_", version, ".parquet"))
-    file.copy(
-      get_tidy_source_cache_path(dataset, version),
-      dest_path,
-      overwrite = TRUE
-    )
-    cli::cli_inform("Copied {.val {dataset}} (v{version})")
+      dest_path <- file.path(
+        dest_dir,
+        paste0(dataset, "_", version, ".parquet")
+      )
+      file.copy(
+        get_tidy_source_cache_path(dataset, version),
+        dest_path,
+        overwrite = TRUE
+      )
+      cli::cli_inform("Copied {.val {dataset}} (v{version})")
 
-    dest_path
-  }, character(1))
+      dest_path
+    },
+    character(1)
+  )
 
   invisible(paths)
 }

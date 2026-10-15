@@ -1,11 +1,11 @@
 test_that("get_raw_source_periods() returns all periods for gp_snomed", {
   periods <- get_raw_source_periods("gp_snomed")
 
-  expect_length(periods, 14)
+  expect_length(periods, 15)
   expect_true(all(vapply(periods, is.character, logical(1))))
   expect_equal(
-    periods[["2024to2025"]],
-    "https://files.digital.nhs.uk/9F/527A2C/SNOMED_code_usage_2024-25.txt"
+    periods[["2025to2026"]],
+    "https://files.digital.nhs.uk/A6/20567E/SNOMED_code_usage_2025-26.txt"
   )
 })
 
