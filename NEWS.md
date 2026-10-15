@@ -1,3 +1,9 @@
+# opencodecounts 0.9.0
+
+## New data
+
+`get_gp_snomed()` now includes 2025-26 (1 August 2025 to 31 July 2026). The dataset version is now 0.2.0. Use `get_gp_snomed(version = "0.1.0")` for the previous release.
+
 # opencodecounts 0.8.0
 
 ## Renamed dataset accessors
