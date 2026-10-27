@@ -59,20 +59,20 @@ content word instead: `qof_registers`.
 
 ## Checking codelists
 
-`check_codelists()` gets the SNOMED CT History Substitution Table from
-NHS TRUD (Technology Reference data Update Distribution) item 276. This
-is the only data source that needs an API key. To run
-`check_codelists()` outside the tests, add `TRUD_API_KEY=your-key` to
-`~/.Renviron` and restart R. The tests mock TRUD, so they run without a
-key.
+`check_codelists()` uses the SNOMED CT History Substitution Table from
+NHS TRUD (Technology Reference data Update Distribution) item 276.
+`data-raw/snomed_history.R` builds it as the `snomed_history` dataset,
+and it is published as a GitHub release like the usage data. The TRUD
+release is set in `inst/config/raw_snomed_history.yml`. Only rows with
+an active new code are kept, with the columns `old_code`, `old_term`,
+`new_code`, `new_term` and `is_ambiguous`. Only pairs whose old code has
+GP usage are kept, because the check only reports pairs where the old
+code has usage. Rebuild it after each new `gp_snomed` release, so new
+codes with usage are included.
 
-Only rows with an active new code are kept, with the columns `old_code`,
-`old_term`, `new_code`, `new_term` and `is_ambiguous`. The table is
-cached as `<history version>.parquet` in the `trud/` folder of the cache
-directory. `cache_clear()` removes it. Run `cache_clear()` after
-changing how the table is read, because cached files are not rebuilt.
-`get_snomed_history()` is the only function that reads the table, so
-moving it to a GitHub release later only changes that function.
+Building it is the only step that needs an API key. Add
+`TRUD_API_KEY=your-key` to `~/.Renviron` and restart R. Users of
+`check_codelists()` do not need a key.
 
 The `is_missing_with_usage` column in `R/check-codelists.R` sets which
 missing codes are reported. The report, `@summary` and the exit status

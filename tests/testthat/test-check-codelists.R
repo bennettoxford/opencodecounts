@@ -54,7 +54,7 @@ test_that("check_codelists() sums usage beyond the integer range", {
   check <- check_codelists(
     test_codelists_dir(),
     data_version = "0.2.0",
-    history_version = "uk_test_release"
+    history_version = "0.1.0"
   )
   missing_old <- check@results[check@results$old_code == "836541000000100", ]
 
@@ -71,7 +71,7 @@ test_that("missing_usage_found flags missing codes with usage", {
   check <- check_codelists(
     test_codelists_dir(),
     data_version = "0.2.0",
-    history_version = "uk_test_release"
+    history_version = "0.1.0"
   )
   expect_false(check@missing_usage_found)
   expect_snapshot(print(check))
@@ -98,7 +98,7 @@ test_that("is_missing_with_usage ignores ambiguous pairs and unused old codes", 
   results <- check_codelists(
     test_codelists_dir(),
     data_version = "0.2.0",
-    history_version = "uk_test_release"
+    history_version = "0.1.0"
   )@results
 
   expect_equal(
@@ -140,7 +140,7 @@ test_that("check_codelists() skips codelists not found on OpenCodelists", {
   check <- check_codelists(
     test_codelists_dir(),
     data_version = "0.2.0",
-    history_version = "uk_test_release"
+    history_version = "0.1.0"
   )
   expect_equal(check@summary$codelist, "user-test-phq-snomed")
   expect_equal(
@@ -160,7 +160,7 @@ test_that("check_codelists() errors without SNOMED CT codelists", {
     check_codelists(
       test_codelists_dir(),
       data_version = "0.2.0",
-      history_version = "uk_test_release"
+      history_version = "0.1.0"
     ),
     class = "opencodecounts_error_no_snomed_codelists"
   )
@@ -237,7 +237,7 @@ test_that("check_codelists() says how many codelists were not found", {
     check_codelists(
       test_codelists_dir(),
       data_version = "0.2.0",
-      history_version = "uk_test_release"
+      history_version = "0.1.0"
     ),
     class = "opencodecounts_error_no_snomed_codelists"
   )
@@ -252,7 +252,7 @@ test_that("check_codelists() handles codelists without history pairs", {
   check <- check_codelists(
     test_codelists_dir(),
     data_version = "0.2.0",
-    history_version = "uk_test_release"
+    history_version = "0.1.0"
   )
 
   expect_equal(nrow(check@results), 0)
@@ -269,4 +269,29 @@ test_that("filter_usage_periods() rejects more than one date", {
     ),
     class = "opencodecounts_error_invalid_date"
   )
+})
+
+test_that("check_codelists() checks codelists from their URLs", {
+  local_check_mocks()
+  local_mocked_bindings(
+    get_codelist = function(url) {
+      Codelist(
+        readr::read_csv(
+          file.path(test_codelists_dir(), "user-test-phq-snomed.csv"),
+          col_types = readr::cols(.default = readr::col_character())
+        ),
+        coding_system = "snomedct",
+        full_slug = "user/test/phq-snomed/abc12345"
+      )
+    }
+  )
+
+  check <- check_codelists(
+    url = "https://www.opencodelists.org/codelist/user/test/phq-snomed/abc12345/",
+    data_version = "0.2.0",
+    history_version = "0.1.0"
+  )
+
+  expect_equal(check@summary, local_test_check()@summary)
+  expect_equal(check@results, local_test_check()@results)
 })

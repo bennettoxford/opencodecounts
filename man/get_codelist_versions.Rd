@@ -12,8 +12,8 @@ get_codelist_versions(codelist_org)
 \code{\link[=get_codelist_organisation]{get_codelist_organisation()}}}
 }
 \value{
-Tibble with columns \code{coding_system_id} and \code{full_slug}. Tagged
-versions are listed by tag and by hash.
+Tibble with columns \code{coding_system_id}, \code{full_slug} and \code{hash}.
+Tagged versions are listed by tag and by hash.
 }
 \description{
 Helper function to get the coding system and slug of every codelist

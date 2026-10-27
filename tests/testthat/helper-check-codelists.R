@@ -50,7 +50,7 @@ local_test_check <- function(..., env = parent.frame()) {
   check_codelists(
     test_codelists_dir(),
     data_version = "0.2.0",
-    history_version = "uk_test_release",
+    history_version = "0.1.0",
     ...
   )
 }

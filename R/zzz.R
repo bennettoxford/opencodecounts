@@ -37,11 +37,5 @@ utils::globalVariables(c(
   "share",
   "code",
   "n_missing_codes",
-  "missing_usage",
-  "OLDCONCEPTID",
-  "OLDCONCEPTFSN",
-  "NEWCONCEPTID",
-  "NEWCONCEPTFSN",
-  "NEWCONCEPTSTATUS",
-  "ISAMBIGUOUS"
+  "missing_usage"
 ))

@@ -29,7 +29,8 @@ build-data: && inst-data
         source("data-raw/hesapc_icd10.R"); \
         source("data-raw/hesapc_icd10_breakdowns.R"); \
         source("data-raw/hesapc_opcs4.R"); \
-        source("data-raw/hesapc_opcs4_breakdowns.R")'
+        source("data-raw/hesapc_opcs4_breakdowns.R"); \
+        source("data-raw/snomed_history.R")'
 
 # Copy the parquet files in data-raw/ into inst/app-data/, named with the
 # newest version in tidy_data_sources.yml, so `devtools::load_all(); run_app()`

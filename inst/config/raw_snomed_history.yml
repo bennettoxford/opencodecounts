@@ -1,0 +1,7 @@
+# NHS TRUD (Technology Reference data Update Distribution) item 276, the
+# SNOMED CT UK Clinical Edition Query Table and History Substitution Table.
+# The release is the TRUD file name without .zip.
+# https://isd.digital.nhs.uk/trud/users/guest/filters/0/categories/26/items/276/releases
+
+item: 276
+release: uk_sctqths_43.0.0_20260923000001

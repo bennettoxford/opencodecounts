@@ -70,7 +70,8 @@ test_that("get_coding_systems() looks up each organisation once", {
       orgs_requested <<- c(orgs_requested, codelist_org)
       tibble::tibble(
         coding_system_id = c("snomedct", "dmd"),
-        full_slug = c("user/test/a/1", "user/test/b/2")
+        full_slug = c("user/test/a/1", "user/test/b/2"),
+        hash = c("aaaaaaaa", "bbbbbbbb")
       )
     }
   )
@@ -81,6 +82,43 @@ test_that("get_coding_systems() looks up each organisation once", {
   )
   expect_equal(orgs_requested, "user/test")
   expect_equal(get_coding_systems("user/test/missing/1"), NA_character_)
+  expect_equal(orgs_requested, c("user/test", "user/test", ""))
+})
+
+test_that("get_coding_systems() finds moved or renamed codelists by hash", {
+  local_mocked_bindings(
+    get_codelist_versions = function(codelist_org) {
+      if (codelist_org != "") {
+        return(tibble::tibble(
+          coding_system_id = character(),
+          full_slug = character(),
+          hash = character()
+        ))
+      }
+      tibble::tibble(
+        coding_system_id = c("opcs4", "snomedct", "dmd", "dmd"),
+        full_slug = c(
+          "new-org/a/1a2b3c4d",
+          "user/old/renamed/5e6f7a8b",
+          "org/tagged/v1",
+          "org/tagged/9c0d1e2f"
+        ),
+        hash = c("1a2b3c4d", "5e6f7a8b", "9c0d1e2f", "9c0d1e2f")
+      )
+    }
+  )
+
+  expect_message(
+    coding_systems <- get_coding_systems(c(
+      "old-org/a/1a2b3c4d",
+      "user/old/original-name/5e6f7a8b",
+      "old-org/tagged/v1",
+      "old-org/missing/00000001"
+    )),
+    "old-org/a/1a2b3c4d is now new-org/a/1a2b3c4d"
+  )
+  # Versions referred to by tag are not matched
+  expect_equal(coding_systems, c("opcs4", "snomedct", NA, NA))
 })
 
 test_that("Get codelist stops for invalid slug format", {
@@ -171,7 +209,11 @@ test_that("get_codelist_versions() returns no versions for an unknown owner", {
 
   expect_equal(
     get_codelist_versions("user/unknown"),
-    tibble::tibble(coding_system_id = character(), full_slug = character())
+    tibble::tibble(
+      coding_system_id = character(),
+      full_slug = character(),
+      hash = character()
+    )
   )
   expect_true(is.na(get_coding_systems("user/unknown/x/1")))
 })

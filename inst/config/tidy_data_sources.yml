@@ -4,6 +4,8 @@
 #
 # `publication` points at the matching inst/config/raw_<publication>.yml file;
 # `variant` picks "usage" or "breakdowns" from a shared publication.
+# `snomed_history` is the SNOMED CT History Substitution Table used by
+# check_codelists(). It has no `variant` because it is not usage data.
 
 datasets:
   gp_snomed:
@@ -46,3 +48,8 @@ datasets:
         url: "https://github.com/bennettoxford/opencodecounts/releases/download/hesapc-opcs4-breakdowns-v0.2.0/hesapc_opcs4_breakdowns.parquet"
       - version: "0.1.0"
         url: "https://github.com/bennettoxford/opencodecounts/releases/download/opcs4-usage-breakdowns-v0.1.0/opcs4_usage_breakdowns.parquet"
+  snomed_history:
+    publication: snomed_history
+    versions:
+      - version: "0.1.0"
+        url: "https://github.com/bennettoxford/opencodecounts/releases/download/snomed-history-v0.1.0/snomed_history.parquet"

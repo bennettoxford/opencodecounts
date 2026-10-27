@@ -82,3 +82,7 @@ All code usage datasets are Copyright NHS England and licensed under the
 v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 Contains public sector information licensed under the Open Government
 Licence v3.0.
+
+### SNOMED CT History Substitution Table
+
+SNOMED Clinical Terms® content © International Health Terminology Standards Development Organisation.

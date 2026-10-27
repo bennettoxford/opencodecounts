@@ -49,15 +49,11 @@ library(opencodecounts)
 codelists <- read_codelists("codelists")
 ```
 
-## Set your TRUD API key
+## Where the code pairs come from
 
-The old and new code pairs come from the SNOMED CT History Substitution Table on NHS TRUD (item 276).
-
-1. Sign in at <https://isd.digital.nhs.uk/trud> and subscribe to item 276.
-2. Copy the API key from the **Your account** page.
-3. Open your `.Renviron` file with `usethis::edit_r_environ()`, add `TRUD_API_KEY=your-key` and restart R.
-
-The table is downloaded once and cached.
+The old and new code pairs come from the SNOMED CT History Substitution Table on NHS TRUD (Technology Reference data Update Distribution), item 276.
+The package downloads a copy that keeps only pairs whose old code has GP usage.
+It is downloaded once and cached.
 Clear it with `cache_clear()`.
 
 ## Run the check in R
@@ -71,7 +67,7 @@ The report counts the codelists with and without missing linked codes and lists 
 
 ```
 ── Codelist check ──────────────────────────────────────────────────────────────
-TRUD release: uk_sctqths_43.0.0_20260923000001
+SNOMED CT history version 0.1.0
 OpenCodeCounts SNOMED CT data version 0.2.0 from 01 Aug 2020 to 31 Jul 2026
 ✖ 2 codelists miss linked codes with usage:
 
@@ -101,6 +97,12 @@ Write all pairs to CSV:
 
 ```{r}
 readr::write_csv(check@results, "codelist-check.csv", na = "")
+```
+
+To check codelists on OpenCodelists without a codelists folder, use `check_codelists_url()`:
+
+```{r}
+check_codelists_url("https://www.opencodelists.org/codelist/user/example/phq-9/abc12345/")
 ```
 
 Set `data_version` and `history_version` to make the results reproducible.

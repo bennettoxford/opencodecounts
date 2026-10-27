@@ -23,9 +23,13 @@ switch(
       #| examples:
       #|   - opencodecounts codelists check
       #|   - opencodecounts codelists check --start-date 2020-08-01 --output codelist-check.csv
+      #|   - opencodecounts codelists check --url https://www.opencodelists.org/codelist/user/example/phq-9/abc12345/
       check = {
         #| description: Codelists directory with codelists.txt and CSV files.
         dir <- "codelists"
+
+        #| description: OpenCodelists URL of one codelist to check instead of the codelists directory.
+        url <- ""
 
         #| description: Start of the first reporting period to use (YYYY-MM-DD). Default all periods.
         start_date <- ""
@@ -36,7 +40,7 @@ switch(
         #| description: Version of the GP SNOMED CT usage data. Default latest.
         data_version <- ""
 
-        #| description: Version of the SNOMED CT History Substitution Table, the TRUD release file name without .zip. Default latest.
+        #| description: Version of the SNOMED CT History Substitution Table. Default latest.
         history_version <- ""
 
         #| description: Write every old and new code pair to this CSV file.
@@ -44,6 +48,7 @@ switch(
 
         check <- opencodecounts::check_codelists(
           dir = dir,
+          url = null_if_empty(url),
           start_date = null_if_empty(start_date),
           end_date = null_if_empty(end_date),
           data_version = null_if_empty(data_version),

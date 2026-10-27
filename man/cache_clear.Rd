@@ -11,8 +11,7 @@ Invisible \code{TRUE}
 }
 \description{
 Removes all cached dataset parquet files, e.g. to force a fresh download
-on the next call to a \verb{get_*()} function. Also removes cached SNOMED CT
-history tables used by \code{\link[=check_codelists]{check_codelists()}}.
+on the next call to a \verb{get_*()} function.
 }
 \examples{
 \dontrun{

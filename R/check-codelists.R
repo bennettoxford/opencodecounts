@@ -23,22 +23,43 @@ CodelistCheck <- S7::new_class(
 #' `r lifecycle::badge("experimental")`
 #'
 #' Finds old and new SNOMED CT codes with recorded GP usage that may be missing
-#' from the codelists in `codelists.txt`, for review. Needs a TRUD API key in
-#' `TRUD_API_KEY`.
+#' from codelists, for review.
+#'
+#' * `check_codelists_dir()` checks the codelists in `codelists.txt` in an
+#'   OpenSAFELY study, using the CSV files from `opensafely codelists update`.
+#' * `check_codelists_url()` checks codelists from their URLs on
+#'   [OpenCodelists](https://www.opencodelists.org).
+#' * `check_codelists()` calls `check_codelists_url()` when `url` is set and
+#'   `check_codelists_dir()` otherwise.
 #'
 #' @param dir String, path to the codelists directory. Default `"codelists"`.
+#'   Ignored when `url` is set.
+#' @param url Character vector of codelist URLs on OpenCodelists. Default
+#'   `NULL` uses `dir`.
+#' @param ... Arguments passed to `check_codelists_dir()` or
+#'   `check_codelists_url()`.
 #' @param start_date,end_date Dates or strings, first and last day of the
 #'   reporting periods to use. Default `NULL` uses all periods.
 #' @param data_version String, version of the [get_gp_snomed()] data. Default
 #'   `NULL` uses the latest.
-#' @param history_version String, TRUD release of the History Substitution
-#'   Table. Default `NULL` uses the latest.
+#' @param history_version String, version of the SNOMED CT History
+#'   Substitution Table. Default `NULL` uses the latest.
 #'
 #' @return A `CodelistCheck` object with `@summary`, one row per codelist, and
 #'   `@results`, one row per old and new code pair.
 #'
 #' @export
-check_codelists <- function(
+check_codelists <- function(dir = "codelists", url = NULL, ...) {
+  if (is.null(url)) {
+    check_codelists_dir(dir, ...)
+  } else {
+    check_codelists_url(url, ...)
+  }
+}
+
+#' @rdname check_codelists
+#' @export
+check_codelists_dir <- function(
   dir = "codelists",
   start_date = NULL,
   end_date = NULL,
@@ -49,14 +70,71 @@ check_codelists <- function(
   codelists_txt <- read_codelists_txt(dir)
   codelists <- read_codelists(dir)
 
-  coding_systems <- get_coding_systems(codelists_txt$codelist_id)
+  run_codelist_check(
+    codelists,
+    codelist_ids = codelists_txt$codelist_id,
+    coding_systems = get_coding_systems(codelists_txt$codelist_id),
+    start_date = start_date,
+    end_date = end_date,
+    data_version = data_version,
+    history_version = history_version
+  )
+}
+
+#' @rdname check_codelists
+#' @export
+check_codelists_url <- function(
+  url,
+  start_date = NULL,
+  end_date = NULL,
+  data_version = NULL,
+  history_version = NULL
+) {
+  codelists <- purrr::map(url, get_codelist)
+  codelist_ids <- purrr::map_chr(codelists, \(codelist) codelist@full_slug)
+
+  run_codelist_check(
+    purrr::set_names(
+      purrr::map(codelists, \(codelist) {
+        tibble::as_tibble(S7::S7_data(codelist))
+      }),
+      codelist_name(codelist_ids)
+    ),
+    codelist_ids = codelist_ids,
+    coding_systems = purrr::map_chr(
+      codelists,
+      \(codelist) codelist@coding_system
+    ),
+    start_date = start_date,
+    end_date = end_date,
+    data_version = data_version,
+    history_version = history_version
+  )
+}
+
+#' Run the codelist check on codelists that are already read
+#'
+#' @param codelists Named list of tibbles, one per codelist, each with a
+#'   `code` column
+#' @param codelist_ids,coding_systems Character vectors, one per codelist
+#'
+#' @noRd
+run_codelist_check <- function(
+  codelists,
+  codelist_ids,
+  coding_systems,
+  start_date,
+  end_date,
+  data_version,
+  history_version
+) {
   is_snomed <- coding_systems %in% "snomedct"
 
   if (!any(is_snomed)) {
     n_not_found <- sum(is.na(coding_systems))
     cli::cli_abort(
       c(
-        "No SNOMED CT codelists found in {.file {dir}}.",
+        "No SNOMED CT codelists found.",
         "i" = if (n_not_found > 0) {
           "{n_not_found} codelist{?s} not found on OpenCodelists."
         }
@@ -69,15 +147,16 @@ check_codelists <- function(
     purrr::list_rbind(names_to = "codelist")
   if (nrow(codelists) == 0) {
     cli::cli_abort(
-      "The SNOMED CT codelists in {.file {dir}} have no codes.",
+      "The SNOMED CT codelists have no codes.",
       class = "opencodecounts_error_no_snomed_codelists"
     )
   }
 
   data_version <- get_tidy_source_config("gp_snomed", data_version)$version
-  if (is.null(history_version)) {
-    history_version <- get_latest_trud_release()
-  }
+  history_version <- get_tidy_source_config(
+    "snomed_history",
+    history_version
+  )$version
 
   snomed_usage <- get_gp_snomed(version = data_version) |>
     filter_usage_periods(start_date, end_date)
@@ -128,7 +207,7 @@ check_codelists <- function(
     summary = summarise_codelists(codelists, usage_total, results),
     skipped_codelists = purrr::set_names(
       coding_systems[!is_snomed],
-      codelists_txt$codelist_id[!is_snomed]
+      codelist_ids[!is_snomed]
     ),
     history_version = history_version,
     data_version = data_version,
@@ -264,7 +343,7 @@ summarise_codelists <- function(codelists, usage_total, results) {
 
 S7::method(print, CodelistCheck) <- function(x, ...) {
   cli::cli_h1("Codelist check")
-  cli::cli_text("TRUD release: {x@history_version}")
+  cli::cli_text("SNOMED CT history version {x@history_version}")
   cli::cli_text(
     "OpenCodeCounts SNOMED CT data version {x@data_version} from {format(x@start_date, '%d %b %Y')} to {format(x@end_date, '%d %b %Y')}"
   )

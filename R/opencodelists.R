@@ -70,8 +70,8 @@ get_codelist_organisation <- function(codelist_slug) {
 #' version of an organisation or user on OpenCodelists
 #' @param codelist_org String, organisation from
 #'   [get_codelist_organisation()]
-#' @return Tibble with columns `coding_system_id` and `full_slug`. Tagged
-#'   versions are listed by tag and by hash.
+#' @return Tibble with columns `coding_system_id`, `full_slug` and `hash`.
+#'   Tagged versions are listed by tag and by hash.
 #' @keywords internal
 get_codelist_versions <- function(codelist_org) {
   url_api_base <- "https://www.opencodelists.org/api/v1/codelist/"
@@ -87,7 +87,8 @@ get_codelist_versions <- function(codelist_org) {
   response <- httr2::req_perform(request)
   no_versions <- tibble::tibble(
     coding_system_id = character(),
-    full_slug = character()
+    full_slug = character(),
+    hash = character()
   )
   if (httr2::resp_status(response) == 404) {
     return(no_versions)
@@ -106,7 +107,8 @@ get_codelist_versions <- function(codelist_org) {
             full_slug = unique(c(
               .x$full_slug,
               if (!is.null(.x$hash)) sub("[^/]+$", .x$hash, .x$full_slug)
-            ))
+            )),
+            hash = if (is.null(.x$hash)) NA_character_ else .x$hash
           )
         )
       }
@@ -133,9 +135,54 @@ get_coding_systems <- function(codelist_ids) {
     purrr::map(get_codelist_versions) |>
     purrr::list_rbind()
 
-  codelist_versions$coding_system_id[
+  coding_systems <- codelist_versions$coding_system_id[
     match(codelist_ids, codelist_versions$full_slug)
   ]
+
+  is_not_found <- is.na(coding_systems)
+  if (any(is_not_found)) {
+    coding_systems[is_not_found] <- get_moved_coding_systems(
+      codelist_ids[is_not_found]
+    )
+  }
+
+  coding_systems
+}
+
+#' Helper function to get the coding system of codelist versions that moved
+#' or were renamed on OpenCodelists
+#'
+#' Version hashes are unique across OpenCodelists and do not change when a
+#' codelist moves or is renamed, so versions are matched on their hash. Versions
+#' referred to by tag are not matched.
+#'
+#' @param codelist_ids Character vector of codelist slugs including the
+#'   version, not found under their owner
+#' @return Character vector of coding system IDs, `NA` for codelists not
+#'   found by hash
+#' @keywords internal
+get_moved_coding_systems <- function(codelist_ids) {
+  # Listing every codelist is slow, so it is only done when needed
+  all_versions <- get_codelist_versions("") |>
+    dplyr::filter(basename(full_slug) == hash)
+
+  match_index <- match(basename(codelist_ids), all_versions$hash)
+  is_moved <- !is.na(match_index)
+  if (any(is_moved)) {
+    cli::cli_inform(c(
+      "i" = "Found {sum(is_moved)} codelist{?s} under a new ID on OpenCodelists. Update {.file codelists.txt} to use the new ID{?s}:",
+      purrr::set_names(
+        paste(
+          codelist_ids[is_moved],
+          "is now",
+          all_versions$full_slug[match_index[is_moved]]
+        ),
+        " "
+      )
+    ))
+  }
+
+  all_versions$coding_system_id[match_index]
 }
 
 #' Helper function to name the code column of a codelist `code`
@@ -215,6 +262,19 @@ get_codelist <- function(url) {
   )
 }
 
+#' Name codelists the way `opensafely codelists update` names their CSV files
+#'
+#' @param codelist_ids Character vector of codelist slugs including the
+#'   version
+#'
+#' @return Character vector, the slug without the version and with `/`
+#'   replaced by `-`
+#'
+#' @noRd
+codelist_name <- function(codelist_ids) {
+  gsub("/", "-", sub("/[^/]+$", "", codelist_ids))
+}
+
 #' Parse a codelists.txt file
 #'
 #' Parses `codelists.txt` the same way as `opensafely codelists update`.
@@ -235,7 +295,7 @@ read_codelists_txt <- function(dir) {
 
   ids <- sub("/+$", "", trimws(readLines(path, warn = FALSE)))
   ids <- ids[nzchar(ids) & !startsWith(ids, "#")]
-  codelist <- gsub("/", "-", sub("/[^/]+$", "", ids))
+  codelist <- codelist_name(ids)
 
   tibble::tibble(
     codelist = codelist,
