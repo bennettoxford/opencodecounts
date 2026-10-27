@@ -1,0 +1,4 @@
+# Test codelists
+
+user/test/phq-snomed/abc12345/
+opensafely/test-dmd/def67890

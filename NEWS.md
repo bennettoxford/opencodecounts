@@ -1,3 +1,17 @@
+# opencodecounts (development version)
+
+## Codelist checks
+
+- New `check_codelists()` to find old or new SNOMED CT codes with GP usage that may be missing from the codelists in `codelists/codelists.txt`
+- New `read_codelists()` to read the CSV files from `opensafely codelists update`
+- New terminal command `opencodecounts codelists check`
+- `get_codelist()` errors when a codelist version is not found and accepts version hashes
+- `cache_info()` and `cache_clear()` include the cached TRUD table
+
+## Bug fixes
+
+- `get_codelist()` and `read_codelists()` read CSV files with an unnamed index column (#165)
+
 # opencodecounts 0.9.1
 
 ## New data

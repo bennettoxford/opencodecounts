@@ -57,6 +57,43 @@ HES Admitted Patient Care, ICD-10. `gp_snomed` means GP, SNOMED CT. If a
 dataset has no single coding system, like QOF registers, use a short
 content word instead: `qof_registers`.
 
+## Checking codelists
+
+`check_codelists()` gets the SNOMED CT History Substitution Table from
+NHS TRUD (Technology Reference data Update Distribution) item 276. This
+is the only data source that needs an API key. To run
+`check_codelists()` outside the tests, add `TRUD_API_KEY=your-key` to
+`~/.Renviron` and restart R. The tests mock TRUD, so they run without a
+key.
+
+Only rows with an active new code are kept, with the columns `old_code`,
+`old_term`, `new_code`, `new_term` and `is_ambiguous`. The table is
+cached as `<history version>.parquet` in the `trud/` folder of the cache
+directory. `cache_clear()` removes it. Run `cache_clear()` after
+changing how the table is read, because cached files are not rebuilt.
+`get_snomed_history()` is the only function that reads the table, so
+moving it to a GitHub release later only changes that function.
+
+The `is_missing_with_usage` column in `R/check-codelists.R` sets which
+missing codes are reported. The report, `@summary` and the exit status
+all use it.
+
+Coding systems come from the OpenCodelists API, with one request per
+organisation or user. Tagged versions are matched by tag and by hash. A
+codelist that moved to a new owner is not found, so it is skipped and
+listed in the report.
+
+Codelist CSV files do not all have the same layout.
+`rename_code_column()` in `R/opencodelists.R` drops unnamed columns,
+such as a saved pandas index, and then uses the `code` column, or the
+first column if there is none.
+
+The terminal command is in `exec/opencodecounts.R` and uses
+[Rapp](https://github.com/r-lib/Rapp). Install it once with
+`Rapp::install_pkg_cli_apps("opencodecounts")`. The command runs the
+installed package, so run `devtools::install()` to try your changes in
+the terminal.
+
 ## Running the app locally
 
 `run_app()` downloads and caches data like any other user. Run

@@ -67,6 +67,8 @@ reference:
 - title: Codelists
   contents:
   - get_codelist
+  - read_codelists
+  - check_codelists
 - title: Shiny App
   contents:
   - run_app
@@ -109,6 +111,8 @@ navbar:
           href: articles/how-to-use-breakdowns.html
         - text: "How to extract SNOMED CT semantic tag in R"
           href: articles/extract-snomedct-sem-tag.html
+        - text: "How to check codelists for inactive SNOMED CT codes with usage"
+          href: articles/check-codelists.html
         - text: "Learn about the available datasets"
           href: articles/available-datasets.html
 

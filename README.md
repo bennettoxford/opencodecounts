@@ -20,6 +20,12 @@ For work in R, all available functions are documented in the [Function
 reference](https://bennettoxford.github.io/opencodecounts/reference/index.html)
 section.
 
+You can also check the SNOMED CT codelists of an OpenSAFELY study for
+inactive codes and their replacements with recorded usage, in R or in
+the terminal. See [How to check codelists for inactive SNOMED CT codes
+with
+usage](https://bennettoxford.github.io/opencodecounts/articles/check-codelists.html).
+
 ## Installation
 
 You can install the `opencodecounts` package in R with:
@@ -39,6 +45,8 @@ pak::pak("bennettoxford/opencodecounts")
   breakdowns](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-breakdowns.html)
 - [How to extract semantic tags from SNOMED CT
   descriptions](https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html)
+- [How to check codelists for inactive SNOMED CT codes with
+  usage](https://bennettoxford.github.io/opencodecounts/articles/check-codelists.html)
 
 ## Available datasets
 

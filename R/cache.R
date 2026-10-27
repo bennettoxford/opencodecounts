@@ -35,6 +35,22 @@ get_data_cache_dir <- function() {
   data_dir
 }
 
+#' Get SNOMED CT history cache directory
+#'
+#' @return Character path to the directory holding cached SNOMED CT History
+#'   Substitution Tables
+#'
+#' @keywords internal
+get_history_cache_dir <- function() {
+  history_dir <- file.path(get_cache_dir(), "trud")
+
+  if (!dir.exists(history_dir)) {
+    dir.create(history_dir, recursive = TRUE)
+  }
+
+  history_dir
+}
+
 #' Display cache information
 #'
 #' Shows the cache directory location, the number and total size of cached
@@ -59,12 +75,25 @@ cache_info <- function(max_size_mb = 1000) {
   data_size <- sum(file.info(data_files)$size, na.rm = TRUE)
   data_count <- length(data_files)
 
+  history_files <- list.files(
+    get_history_cache_dir(),
+    full.names = TRUE,
+    pattern = "\\.parquet$"
+  )
+  history_size <- sum(file.info(history_files)$size, na.rm = TRUE)
+  history_count <- length(history_files)
+
   cli::cli_inform("Cache directory: {.path {cache_dir}}")
   cli::cli_inform(
     "Cached datasets: {format(structure(data_size, class = 'object_size'), units = 'auto')} ({data_count} dataset{?s})"
   )
+  if (history_count > 0) {
+    cli::cli_inform(
+      "Cached SNOMED CT history tables: {format(structure(history_size, class = 'object_size'), units = 'auto')} ({history_count} table{?s})"
+    )
+  }
 
-  size_mb <- data_size / (1024^2)
+  size_mb <- (data_size + history_size) / (1024^2)
   if (size_mb > max_size_mb) {
     cli::cli_warn(
       c(
@@ -78,14 +107,17 @@ cache_info <- function(max_size_mb = 1000) {
   invisible(list(
     cache_dir = cache_dir,
     data_size = data_size,
-    data_count = data_count
+    data_count = data_count,
+    history_size = history_size,
+    history_count = history_count
   ))
 }
 
 #' Clear the cache
 #'
 #' Removes all cached dataset parquet files, e.g. to force a fresh download
-#' on the next call to a `get_*()` function.
+#' on the next call to a `get_*()` function. Also removes cached SNOMED CT
+#' history tables used by [check_codelists()].
 #'
 #' @return Invisible `TRUE`
 #'
@@ -104,6 +136,12 @@ cache_clear <- function() {
   } else {
     cli::cli_inform("No cached datasets to clear")
   }
+
+  history_dir <- get_history_cache_dir()
+  if (length(list.files(history_dir)) > 0) {
+    cli::cli_inform("Cleared cached SNOMED CT history tables")
+  }
+  unlink(history_dir, recursive = TRUE)
 
   invisible(TRUE)
 }
