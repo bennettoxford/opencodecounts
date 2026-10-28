@@ -70,8 +70,8 @@ get_dataset <- function(dataset, version = NULL) {
 #'
 #' @param version String, dataset version, or `NULL` for the latest
 #'
-#' @return Tibble with columns `old_code`, `old_term`, `new_code`, `new_term`
-#'   and `is_ambiguous`
+#' @return Tibble with columns `old_code`, `old_term`, `new_code`, `new_term`,
+#'   `is_ambiguous` and `trud_release`, the TRUD release it was built from
 #'
 #' @noRd
 get_snomed_history <- function(version = NULL) {

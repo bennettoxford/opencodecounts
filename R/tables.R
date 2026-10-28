@@ -23,7 +23,7 @@ datatable_usage <- function(data) {
   ) |>
     formatPercentage(
       "total_pct",
-      digits = 3
+      digits = 1
     )
 }
 

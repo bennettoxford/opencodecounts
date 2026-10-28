@@ -37,5 +37,19 @@ utils::globalVariables(c(
   "share",
   "code",
   "n_missing_codes",
-  "missing_usage"
+  "missing_usage",
+  "side",
+  "linked_code",
+  "term",
+  "series",
+  "trud_release",
+  "active_at_start",
+  "active_at_end",
+  "new_description",
+  "panel",
+  "code_type",
+  "code_label",
+  "status",
+  "usage_label",
+  "share_label"
 ))

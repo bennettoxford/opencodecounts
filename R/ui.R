@@ -7,18 +7,25 @@
 app_ui <- function(request) {
   tagList(
     page_sidebar(
-      theme = bs_theme(version = 5, bootswatch = "lumen"),
-      title = NULL,
+      theme = bs_theme(
+        version = 5,
+        bootswatch = "lumen",
+        primary = "#002147",
+        "body-color" = "#002147",
+        "navbar-bg" = "#002147"
+      ),
+      title = app_title(),
       sidebar = mod_sidebar_ui("sidebar"),
       # Main page
       # Value boxes
       mod_value_boxes_ui("value_boxes"),
       # Plots and tables
-      navset_card_tab(
+      navset_card_underline(
         height = "80%",
         mod_trends_ui("trends"),
         mod_usage_table_ui("usage_table"),
-        mod_codes_table_ui("codes_table")
+        mod_codes_table_ui("codes_table"),
+        mod_linked_codes_ui("linked_codes")
       )
     ),
     footer_ui(),
@@ -32,6 +39,11 @@ app_ui <- function(request) {
       }
       .card-header {
         font-weight: bold;
+      }
+      /* Oxford blue for selected table rows */
+      table.dataTable {
+        --dt-row-selected: 0, 33, 71;
+        --dt-row-selected-link: 255, 255, 255;
       }
       .btn {
         text-transform: none !important;

@@ -7,10 +7,10 @@
 library(tidyverse)
 library(here)
 
-# TRUD item and release, defined in inst/config/raw_snomed_history.yml
+# TRUD item and release, defined in inst/config/raw_trud.yml
 trud <- yaml::read_yaml(
-  system.file("config", "raw_snomed_history.yml", package = "opencodecounts")
-)
+  system.file("config", "raw_trud.yml", package = "opencodecounts")
+)$snomed_history
 
 api_key <- Sys.getenv("TRUD_API_KEY")
 stopifnot(nzchar(api_key))
@@ -43,11 +43,13 @@ snomed_history <- read_tsv(
     old_term = OLDCONCEPTFSN,
     new_code = NEWCONCEPTID,
     new_term = NEWCONCEPTFSN,
-    is_ambiguous = ISAMBIGUOUS != "0"
+    is_ambiguous = ISAMBIGUOUS != "0",
+    # So the published file records which TRUD release it came from
+    trud_release = trud$release
   )
 
 nrow(snomed_history)
-# [1] 303594
+# [1] 303602
 
 # Keep only pairs whose old code has GP usage. check_codelists() only reports
 # a pair when the old code has usage, so the other pairs are never reported.
@@ -59,6 +61,6 @@ snomed_history <- snomed_history |>
   semi_join(gp_snomed_codes, by = c(old_code = "snomed_code"))
 
 nrow(snomed_history)
-# [1] 35976
+# [1] 35978
 
 arrow::write_parquet(snomed_history, here("data-raw", "snomed_history.parquet"))

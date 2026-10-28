@@ -11,7 +11,8 @@ test_snomed_history <- function() {
     old_term = c("PHQ-2 score (old)", "PHQ-4 score (old)", "PHQ-2 (old)"),
     new_code = c("1359723003", "1359726006", "1359723003"),
     new_term = c("PHQ-2 score", "PHQ-4 score", "PHQ-2 score"),
-    is_ambiguous = c(FALSE, TRUE, FALSE)
+    is_ambiguous = c(FALSE, TRUE, FALSE),
+    trud_release = "uk_sctqths_test_release"
   )
 }
 
@@ -53,4 +54,23 @@ local_test_check <- function(..., env = parent.frame()) {
     history_version = "0.1.0",
     ...
   )
+}
+
+# Usage data in the format the Shiny app uses
+test_app_usage <- function() {
+  test_snomed_usage() |>
+    dplyr::rename(code = snomed_code) |>
+    dplyr::mutate(description = paste("Term", code))
+}
+
+test_codelist <- function() {
+  readr::read_csv(
+    file.path(test_codelists_dir(), "user-test-phq-snomed.csv"),
+    col_types = readr::cols(.default = readr::col_character())
+  )
+}
+
+test_usage_total <- function() {
+  test_snomed_usage() |>
+    dplyr::summarise(usage = sum(as.numeric(usage)), .by = snomed_code)
 }

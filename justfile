@@ -95,7 +95,8 @@ deploy target='main':
     Rscript --quiet --vanilla -e '\
         devtools::load_all(); \
         unlink("inst/app-data", recursive = TRUE); \
-        copy_app_data_for_deploy("inst/app-data")'
+        copy_app_data_for_deploy("inst/app-data"); \
+        write_deploy_channel("inst/app-data", "{{target}}")'
     Rscript --quiet --vanilla -e '\
         app_name <- if ("{{target}}" == "beta") "opencodecounts-beta" else "opencodecounts"; \
         on.exit(unlink("inst/app-data", recursive = TRUE), add = TRUE); \

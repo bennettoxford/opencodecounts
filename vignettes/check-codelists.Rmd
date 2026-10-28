@@ -67,7 +67,7 @@ The report counts the codelists with and without missing linked codes and lists 
 
 ```
 ── Codelist check ──────────────────────────────────────────────────────────────
-SNOMED CT history version 0.1.0
+SNOMED CT history version 0.1.0 (TRUD release uk_sctqths_43.1.0_20261021000001)
 OpenCodeCounts SNOMED CT data version 0.2.0 from 01 Aug 2020 to 31 Jul 2026
 ✖ 2 codelists miss linked codes with usage:
 

@@ -1,0 +1,10 @@
+# Releases on NHS TRUD (Technology Reference data Update Distribution), one
+# entry per dataset built from TRUD. The release is the TRUD file name without
+# .zip. Earlier releases are recorded in the `trud_release` column of each
+# published version in tidy_data_sources.yml.
+
+# SNOMED CT UK Clinical Edition Query Table and History Substitution Table
+# https://isd.digital.nhs.uk/trud/users/guest/filters/0/categories/26/items/276/releases
+snomed_history:
+  item: 276
+  release: uk_sctqths_43.1.0_20261021000001

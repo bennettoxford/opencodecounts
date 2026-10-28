@@ -73,3 +73,25 @@ test_that("copy_app_data_for_deploy() creates dest_dir if it doesn't exist", {
   copy_app_data_for_deploy(dest_dir)
   expect_true(dir.exists(dest_dir))
 })
+
+test_that("write_deploy_channel() records the channel for get_app_channel()", {
+  dest_dir <- withr::local_tempdir()
+
+  write_deploy_channel(dest_dir, "beta")
+  expect_equal(
+    yaml::read_yaml(file.path(dest_dir, "deploy.yml"))$channel,
+    "beta"
+  )
+  expect_error(write_deploy_channel(dest_dir, "staging"))
+
+  expect_equal(get_app_channel(file.path(dest_dir, "deploy.yml")), "beta")
+})
+
+test_that("get_app_channel() is main without a deploy file", {
+  expect_equal(get_app_channel(""), "main")
+})
+
+test_that("app_title() only shows the beta badge on the beta app", {
+  expect_no_match(as.character(app_title("main")), "Beta")
+  expect_match(as.character(app_title("beta")), "badge text-bg-danger")
+})

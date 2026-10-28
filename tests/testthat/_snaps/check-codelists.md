@@ -5,7 +5,7 @@
     Message
       
       -- Codelist check --------------------------------------------------------------
-      SNOMED CT history version 0.1.0
+      SNOMED CT history version 0.1.0 (TRUD release uk_sctqths_test_release)
       OpenCodeCounts SNOMED CT data version 0.2.0 from 01 Aug 2011 to 31 Jul 2013
       ! Skipped 1 codelist not in SNOMED CT.
       v 1 codelist has no missing linked codes with usage.
@@ -17,7 +17,7 @@
     Message
       
       -- Codelist check --------------------------------------------------------------
-      SNOMED CT history version 0.1.0
+      SNOMED CT history version 0.1.0 (TRUD release uk_sctqths_test_release)
       OpenCodeCounts SNOMED CT data version 0.2.0 from 01 Aug 2011 to 31 Jul 2013
       ! Skipped 1 codelist not found on OpenCodelists:
       ! opensafely/test-dmd/def67890
@@ -48,7 +48,7 @@
     Message
       
       -- Codelist check --------------------------------------------------------------
-      SNOMED CT history version 0.1.0
+      SNOMED CT history version 0.1.0 (TRUD release uk_sctqths_test_release)
       OpenCodeCounts SNOMED CT data version 0.2.0 from 01 Aug 2011 to 31 Jul 2013
       ! Skipped 1 codelist not in SNOMED CT.
       x 1 codelist misses linked codes with usage:

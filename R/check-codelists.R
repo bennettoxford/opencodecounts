@@ -7,6 +7,7 @@ CodelistCheck <- S7::new_class(
     summary = S7::class_data.frame,
     skipped_codelists = S7::class_character,
     history_version = S7::class_character,
+    trud_release = S7::class_character,
     data_version = S7::class_character,
     start_date = S7::class_Date,
     end_date = S7::class_Date,
@@ -166,25 +167,11 @@ run_codelist_check <- function(
   usage_total <- snomed_usage |>
     dplyr::summarise(usage = sum(as.numeric(usage)), .by = snomed_code)
 
-  results <- get_snomed_history(history_version) |>
-    find_codelist_history(codelists) |>
-    dplyr::left_join(
-      dplyr::rename(usage_total, old_code = snomed_code, old_usage = usage),
-      by = "old_code"
-    ) |>
-    dplyr::left_join(
-      dplyr::rename(usage_total, new_code = snomed_code, new_usage = usage),
-      by = "new_code"
-    ) |>
+  snomed_history <- get_snomed_history(history_version)
+  trud_release <- unique(snomed_history$trud_release)
+
+  results <- find_linked_codes(codelists, usage_total, snomed_history) |>
     dplyr::mutate(
-      # Codes missing from the usage data have no recorded usage
-      old_usage = dplyr::coalesce(old_usage, 0),
-      new_usage = dplyr::coalesce(new_usage, 0),
-      # A missing new code only matters when records moved from the old code
-      # in the codelist. Ambiguous pairs often point to a broad parent code.
-      is_missing_with_usage = !is_ambiguous &
-        ((!is_old_in_codelist & old_usage > 0) |
-          (!is_new_in_codelist & new_usage > 0 & old_usage > 0)),
       usage_start_date = first_date,
       usage_end_date = last_date,
       opencodecounts_data_version = data_version,
@@ -193,14 +180,7 @@ run_codelist_check <- function(
       ),
       history_version = history_version
     ) |>
-    dplyr::relocate("is_old_in_codelist", "old_usage", .after = "old_term") |>
-    dplyr::relocate(
-      "is_new_in_codelist",
-      "new_usage",
-      "is_ambiguous",
-      .after = "new_term"
-    ) |>
-    dplyr::arrange(codelist, old_code)
+    dplyr::relocate("trud_release", .after = "history_version")
 
   CodelistCheck(
     results = results,
@@ -210,6 +190,7 @@ run_codelist_check <- function(
       codelist_ids[!is_snomed]
     ),
     history_version = history_version,
+    trud_release = trud_release,
     data_version = data_version,
     start_date = first_date,
     end_date = last_date
@@ -272,6 +253,74 @@ filter_usage_periods <- function(snomed_usage, start_date, end_date) {
 
   snomed_usage |>
     dplyr::filter(start_date >= period_start, end_date <= period_end)
+}
+
+#' Find the old and new code pairs of codelists, with their usage
+#'
+#' Used by [check_codelists()] and the Shiny app, which pass data that is
+#' already loaded.
+#'
+#' @param codelists Tibble with columns `codelist` and `code`
+#' @param usage_total Tibble with columns `snomed_code` and `usage`, the total
+#'   usage of each code in the reporting periods
+#' @param snomed_history Tibble from `get_snomed_history()`
+#'
+#' @return Tibble with one row per pair in each codelist
+#'
+#' @noRd
+find_linked_codes <- function(codelists, usage_total, snomed_history) {
+  snomed_history |>
+    find_codelist_history(codelists) |>
+    dplyr::left_join(
+      dplyr::rename(usage_total, old_code = snomed_code, old_usage = usage),
+      by = "old_code"
+    ) |>
+    dplyr::left_join(
+      dplyr::rename(usage_total, new_code = snomed_code, new_usage = usage),
+      by = "new_code"
+    ) |>
+    dplyr::mutate(
+      # Codes missing from the usage data have no recorded usage
+      old_usage = dplyr::coalesce(old_usage, 0),
+      new_usage = dplyr::coalesce(new_usage, 0),
+      # A missing new code only matters when records moved from the old code
+      # in the codelist. Ambiguous pairs often point to a broad parent code.
+      is_missing_with_usage = !is_ambiguous &
+        ((!is_old_in_codelist & old_usage > 0) |
+          (!is_new_in_codelist & new_usage > 0 & old_usage > 0))
+    ) |>
+    dplyr::relocate("is_old_in_codelist", "old_usage", .after = "old_term") |>
+    dplyr::relocate(
+      "is_new_in_codelist",
+      "new_usage",
+      "is_ambiguous",
+      .after = "new_term"
+    ) |>
+    dplyr::arrange(codelist, old_code)
+}
+
+#' Get the linked codes that are missing from codelists
+#'
+#' @param results Tibble from `find_linked_codes()`
+#'
+#' @return Tibble with one row per reported pair: the missing `code`, its
+#'   `term`, whether it is the old or new code (`side`), its `usage`, its
+#'   `share` of the usage of the pair and the `linked_code` in the codelist
+#'
+#' @noRd
+missing_linked_codes <- function(results) {
+  results |>
+    dplyr::filter(is_missing_with_usage) |>
+    dplyr::mutate(
+      is_old_missing = !is_old_in_codelist,
+      code = dplyr::if_else(is_old_missing, old_code, new_code),
+      term = dplyr::if_else(is_old_missing, old_term, new_term),
+      side = dplyr::if_else(is_old_missing, "old code", "new code"),
+      usage = dplyr::if_else(is_old_missing, old_usage, new_usage),
+      share = usage / (old_usage + new_usage),
+      linked_code = dplyr::if_else(is_old_missing, new_code, old_code)
+    ) |>
+    dplyr::select(codelist, code, term, side, usage, share, linked_code)
 }
 
 #' Find the old and new code pairs that involve each codelist
@@ -343,7 +392,9 @@ summarise_codelists <- function(codelists, usage_total, results) {
 
 S7::method(print, CodelistCheck) <- function(x, ...) {
   cli::cli_h1("Codelist check")
-  cli::cli_text("SNOMED CT history version {x@history_version}")
+  cli::cli_text(
+    "SNOMED CT history version {x@history_version} (TRUD release {x@trud_release})"
+  )
   cli::cli_text(
     "OpenCodeCounts SNOMED CT data version {x@data_version} from {format(x@start_date, '%d %b %Y')} to {format(x@end_date, '%d %b %Y')}"
   )
@@ -425,16 +476,7 @@ S7::method(print, CodelistCheck) <- function(x, ...) {
 #'
 #' @noRd
 print_missing_codes <- function(results, codelists) {
-  codes <- results |>
-    dplyr::filter(is_missing_with_usage) |>
-    dplyr::mutate(
-      is_old_missing = !is_old_in_codelist,
-      code = dplyr::if_else(is_old_missing, old_code, new_code),
-      term = dplyr::if_else(is_old_missing, old_term, new_term),
-      usage = dplyr::if_else(is_old_missing, old_usage, new_usage),
-      share = usage / (old_usage + new_usage),
-      side = dplyr::if_else(is_old_missing, "old code", "new code")
-    ) |>
+  codes <- missing_linked_codes(results) |>
     dplyr::arrange(match(codelist, codelists), dplyr::desc(usage))
 
   # Pad across all codelists so the columns line up

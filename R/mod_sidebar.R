@@ -12,9 +12,9 @@ mod_sidebar_ui <- function(id) {
 
   sidebar(
     width = "23%",
-    navset_card_tab(
+    navset_card_underline(
       nav_panel(
-        p("Analyse"),
+        "Analyse",
         card(
           card_header("Select data"),
           radioButtons(
@@ -80,7 +80,7 @@ mod_sidebar_ui <- function(id) {
         )
       ),
       nav_panel(
-        p("More"),
+        "More",
         about_card(),
         guides_card(),
         sources_card()
@@ -139,7 +139,9 @@ mod_sidebar_server <- function(id) {
           end_date,
           code = all_of(dataset_cfg$code_column),
           description = all_of(dataset_cfg$description_column),
-          usage
+          usage,
+          # Only SNOMED CT usage data has these, for the linked codes timeline
+          any_of(c("active_at_start", "active_at_end"))
         )
     })
 

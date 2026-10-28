@@ -91,7 +91,8 @@ test_that("is_missing_with_usage ignores ambiguous pairs and unused old codes", 
         old_term = c("Used", "Used but ambiguous", "Not used"),
         new_code = "836541000000100",
         new_term = "Missing with usage",
-        is_ambiguous = c(FALSE, TRUE, FALSE)
+        is_ambiguous = c(FALSE, TRUE, FALSE),
+        trud_release = "uk_sctqths_test_release"
       )
     }
   )
@@ -294,4 +295,67 @@ test_that("check_codelists() checks codelists from their URLs", {
 
   expect_equal(check@summary, local_test_check()@summary)
   expect_equal(check@results, local_test_check()@results)
+})
+
+test_that("find_linked_codes() flags pairs from data that is already loaded", {
+  results <- find_linked_codes(
+    dplyr::mutate(test_codelist(), codelist = "phq"),
+    test_usage_total(),
+    test_snomed_history()
+  )
+
+  expect_equal(nrow(results), 3)
+  expect_equal(
+    results$old_code[results$is_missing_with_usage],
+    "836541000000100"
+  )
+})
+
+test_that("missing_linked_codes() returns one row per reported pair", {
+  missing <- find_linked_codes(
+    dplyr::mutate(test_codelist(), codelist = "phq"),
+    test_usage_total(),
+    test_snomed_history()
+  ) |>
+    missing_linked_codes()
+
+  expect_equal(
+    missing,
+    tibble::tibble(
+      codelist = "phq",
+      code = "836541000000100",
+      term = "PHQ-2 score (old)",
+      side = "old code",
+      usage = 150,
+      share = 0.75,
+      linked_code = "1359723003"
+    )
+  )
+})
+
+test_that("missing_linked_codes() reports a missing new code", {
+  codelist <- tibble::tibble(codelist = "phq", code = "836541000000100")
+
+  missing <- find_linked_codes(
+    codelist,
+    test_usage_total(),
+    test_snomed_history()
+  ) |>
+    missing_linked_codes()
+
+  expect_equal(missing$code, "1359723003")
+  expect_equal(missing$side, "new code")
+  expect_equal(missing$usage, 50)
+  expect_equal(missing$linked_code, "836541000000100")
+})
+
+test_that("check_codelists() records the TRUD release of the history table", {
+  check <- local_test_check()
+
+  expect_equal(check@trud_release, "uk_sctqths_test_release")
+  expect_equal(unique(check@results$trud_release), "uk_sctqths_test_release")
+  expect_equal(
+    utils::tail(names(check@results), 2),
+    c("history_version", "trud_release")
+  )
 })

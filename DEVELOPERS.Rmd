@@ -56,8 +56,8 @@ Dataset names follow `<source>_<coding system>`. `hesapc_icd10` means HES Admitt
 
 `check_codelists()` uses the SNOMED CT History Substitution Table from NHS TRUD (Technology Reference data Update Distribution) item 276.
 `data-raw/snomed_history.R` builds it as the `snomed_history` dataset, and it is published as a GitHub release like the usage data.
-The TRUD release is set in `inst/config/raw_snomed_history.yml`.
-Only rows with an active new code are kept, with the columns `old_code`, `old_term`, `new_code`, `new_term` and `is_ambiguous`.
+The TRUD item and release are set under `snomed_history` in `inst/config/raw_trud.yml`, which has one entry per dataset built from TRUD.
+Only rows with an active new code are kept, with the columns `old_code`, `old_term`, `new_code`, `new_term` and `is_ambiguous`, plus `trud_release` so the published file records the TRUD release it came from.
 Only pairs whose old code has GP usage are kept, because the check only reports pairs where the old code has usage.
 Rebuild it after each new `gp_snomed` release, so new codes with usage are included.
 
