@@ -74,7 +74,7 @@
 
     <a class="navbar-brand me-2" href="index.html">opencodecounts</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,7 @@
     <li><a class="dropdown-item" href="articles/how-to-use-R-pkg.html">How to use the R package</a></li>
     <li><a class="dropdown-item" href="articles/how-to-use-breakdowns.html">How to use ICD-10 and OPCS-4 breakdowns</a></li>
     <li><a class="dropdown-item" href="articles/extract-snomedct-sem-tag.html">How to extract SNOMED CT semantic tag in R</a></li>
+    <li><a class="dropdown-item" href="articles/check-codelists.html">How to check codelists for inactive SNOMED CT codes with usage</a></li>
     <li><a class="dropdown-item" href="articles/available-datasets.html">Learn about the available datasets</a></li>
   </ul>
 </li>
@@ -118,6 +119,7 @@
 
 <p>The <code>opencodecounts</code> R package provides easy access to yearly summaries of clinical code usage in England. The package makes NHS England’s published datasets available in R and an interactive online tool, covering SNOMED CT codes in primary care and ICD-10/OPCS-4 codes in secondary care.</p>
 <p>You can launch the interactive Shiny app by clicking on <a href="https://bennettoxford.github.io/opencodecounts/articles/app.html">Launch Shiny App</a>. For work in R, all available functions are documented in the <a href="https://bennettoxford.github.io/opencodecounts/reference/index.html">Function reference</a> section.</p>
+<p>You can also check the SNOMED CT codelists of an OpenSAFELY study for inactive codes and their replacements with recorded usage, in R or in the terminal. See <a href="https://bennettoxford.github.io/opencodecounts/articles/check-codelists.html">How to check codelists for inactive SNOMED CT codes with usage</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -134,6 +136,7 @@
 <li><a href="https://bennettoxford.github.io/opencodecounts/articles/how-to-use-R-pkg.html">How to use the R package</a></li>
 <li><a href="https://bennettoxford.github.io/opencodecounts/articles/how-to-use-breakdowns.html">How to use ICD-10 and OPCS-4 breakdowns</a></li>
 <li><a href="https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html">How to extract semantic tags from SNOMED CT descriptions</a></li>
+<li><a href="https://bennettoxford.github.io/opencodecounts/articles/check-codelists.html">How to check codelists for inactive SNOMED CT codes with usage</a></li>
 </ul>
 </div>
 <div class="section level2">
@@ -197,6 +200,11 @@
 <h3 id="code-usage-datasets">Code usage datasets<a class="anchor" aria-label="anchor" href="#code-usage-datasets"></a>
 </h3>
 <p>All code usage datasets are Copyright NHS England and licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" class="external-link">Open Government Licence v3.0</a>. Contains public sector information licensed under the Open Government Licence v3.0.</p>
+</div>
+<div class="section level3">
+<h3 id="snomed-ct-history-substitution-table">SNOMED CT History Substitution Table<a class="anchor" aria-label="anchor" href="#snomed-ct-history-substitution-table"></a>
+</h3>
+<p>SNOMED Clinical Terms® content © International Health Terminology Standards Development Organisation.</p>
 </div>
 </div>
 </div>

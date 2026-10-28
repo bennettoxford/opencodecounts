@@ -1,5 +1,42 @@
 # Changelog
 
+## opencodecounts (development version)
+
+### Codelist checks
+
+- New
+  [`check_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  to find old or new SNOMED CT codes with GP usage that may be missing
+  from the codelists in `codelists/codelists.txt`
+- New
+  [`read_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/read_codelists.md)
+  to read the CSV files from `opensafely codelists update`
+- New terminal command `opencodecounts codelists check`
+- The Shiny app has a new “Linked codes not included” tab and a switch
+  to show their usage over time when a SNOMED CT codelist is loaded
+- New
+  [`check_codelists_dir()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  and
+  [`check_codelists_url()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md),
+  called by
+  [`check_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md).
+  [`check_codelists_url()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  and `opencodecounts codelists check --url` check codelists from their
+  OpenCodelists URLs
+- [`get_codelist()`](https://bennettoxford.github.io/opencodecounts/reference/get_codelist.md)
+  errors when a codelist version is not found and accepts version hashes
+- [`check_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  downloads the SNOMED CT History Substitution Table from a GitHub
+  release, so it does not need a TRUD API key
+
+### Bug fixes
+
+- [`get_codelist()`](https://bennettoxford.github.io/opencodecounts/reference/get_codelist.md)
+  and
+  [`read_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/read_codelists.md)
+  read CSV files with an unnamed index column
+  ([\#165](https://github.com/bennettoxford/opencodecounts/issues/165))
+
 ## opencodecounts 0.9.1
 
 ### New data

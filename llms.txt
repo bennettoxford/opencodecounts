@@ -12,6 +12,12 @@ For work in R, all available functions are documented in the [Function
 reference](https://bennettoxford.github.io/opencodecounts/reference/index.html)
 section.
 
+You can also check the SNOMED CT codelists of an OpenSAFELY study for
+inactive codes and their replacements with recorded usage, in R or in
+the terminal. See [How to check codelists for inactive SNOMED CT codes
+with
+usage](https://bennettoxford.github.io/opencodecounts/articles/check-codelists.html).
+
 ## Installation
 
 You can install the `opencodecounts` package in R with:
@@ -32,6 +38,8 @@ pak::pak("bennettoxford/opencodecounts")
   breakdowns](https://bennettoxford.github.io/opencodecounts/articles/how-to-use-breakdowns.html)
 - [How to extract semantic tags from SNOMED CT
   descriptions](https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.html)
+- [How to check codelists for inactive SNOMED CT codes with
+  usage](https://bennettoxford.github.io/opencodecounts/articles/check-codelists.html)
 
 ## Available datasets
 
@@ -69,6 +77,11 @@ v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
 Contains public sector information licensed under the Open Government
 Licence v3.0.
 
+### SNOMED CT History Substitution Table
+
+SNOMED Clinical Terms® content © International Health Terminology
+Standards Development Organisation.
+
 # Package index
 
 ## Datasets with total counts
@@ -98,6 +111,15 @@ Licence v3.0.
   :
 
   Get codelist from [OpenCodelists](https://www.opencodelists.org)
+
+- [`read_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/read_codelists.md)
+  : Read codelists listed in codelists.txt
+
+- [`check_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  [`check_codelists_dir()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  [`check_codelists_url()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  **\[experimental\]** : Check codelists for inactive SNOMED CT codes
+  with usage
 
 ## Shiny App
 
@@ -152,6 +174,8 @@ Renamed; still work, but use the versions above instead.
   App](https://bennettoxford.github.io/opencodecounts/articles/app.md):
 - [Available datasets in
   opencodecounts](https://bennettoxford.github.io/opencodecounts/articles/available-datasets.md):
+- [How to check codelists for inactive SNOMED CT codes with
+  usage](https://bennettoxford.github.io/opencodecounts/articles/check-codelists.md):
 - [How to extract semantic tags from SNOMED CT
   descriptions](https://bennettoxford.github.io/opencodecounts/articles/extract-snomedct-sem-tag.md):
 - [How to use ICD-10 and OPCS-4

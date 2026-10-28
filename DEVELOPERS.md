@@ -55,6 +55,48 @@ HES Admitted Patient Care, ICD-10. `gp_snomed` means GP, SNOMED CT. If a
 dataset has no single coding system, like QOF registers, use a short
 content word instead: `qof_registers`.
 
+## Checking codelists
+
+[`check_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+uses the SNOMED CT History Substitution Table from NHS TRUD (Technology
+Reference data Update Distribution) item 276.
+`data-raw/snomed_history.R` builds it as the `snomed_history` dataset,
+and it is published as a GitHub release like the usage data. The TRUD
+item and release are set under `snomed_history` in
+`inst/config/raw_trud.yml`, which has one entry per dataset built from
+TRUD. Only rows with an active new code are kept, with the columns
+`old_code`, `old_term`, `new_code`, `new_term` and `is_ambiguous`, plus
+`trud_release` so the published file records the TRUD release it came
+from. Only pairs whose old code has GP usage are kept, because the check
+only reports pairs where the old code has usage. Rebuild it after each
+new `gp_snomed` release, so new codes with usage are included.
+
+Building it is the only step that needs an API key. Add
+`TRUD_API_KEY=your-key` to `~/.Renviron` and restart R. Users of
+[`check_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+do not need a key.
+
+The `is_missing_with_usage` column in `R/check-codelists.R` sets which
+missing codes are reported. The report, `@summary` and the exit status
+all use it.
+
+Coding systems come from the OpenCodelists API, with one request per
+organisation or user. Tagged versions are matched by tag and by hash. A
+codelist that moved to a new owner is not found, so it is skipped and
+listed in the report.
+
+Codelist CSV files do not all have the same layout.
+[`rename_code_column()`](https://bennettoxford.github.io/opencodecounts/reference/rename_code_column.md)
+in `R/opencodelists.R` drops unnamed columns, such as a saved pandas
+index, and then uses the `code` column, or the first column if there is
+none.
+
+The terminal command is in `exec/opencodecounts.R` and uses
+[Rapp](https://github.com/r-lib/Rapp). Install it once with
+`Rapp::install_pkg_cli_apps("opencodecounts")`. The command runs the
+installed package, so run `devtools::install()` to try your changes in
+the terminal.
+
 ## Running the app locally
 
 [`run_app()`](https://bennettoxford.github.io/opencodecounts/reference/run_app.md)

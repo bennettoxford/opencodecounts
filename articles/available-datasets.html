@@ -71,7 +71,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">opencodecounts</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +88,7 @@
     <li><a class="dropdown-item" href="../articles/how-to-use-R-pkg.html">How to use the R package</a></li>
     <li><a class="dropdown-item" href="../articles/how-to-use-breakdowns.html">How to use ICD-10 and OPCS-4 breakdowns</a></li>
     <li><a class="dropdown-item" href="../articles/extract-snomedct-sem-tag.html">How to extract SNOMED CT semantic tag in R</a></li>
+    <li><a class="dropdown-item" href="../articles/check-codelists.html">How to check codelists for inactive SNOMED CT codes with usage</a></li>
     <li><a class="dropdown-item" href="../articles/available-datasets.html">Learn about the available datasets</a></li>
   </ul>
 </li>
@@ -113,7 +114,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Available datasets in opencodecounts</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/main/vignettes/available-datasets.Rmd" class="external-link"><code>vignettes/available-datasets.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/snomed-history-v0.1.0/vignettes/available-datasets.Rmd" class="external-link"><code>vignettes/available-datasets.Rmd</code></a></small>
       <div class="d-none name"><code>available-datasets.Rmd</code></div>
     </div>
 
@@ -176,7 +177,7 @@ Digital, for data pre-processing see
 <code class="sourceCode R"><span><span class="co"># Return SNOMED code usage data</span></span>
 <span><span class="fu"><a href="../reference/get_gp_snomed.html">get_gp_snomed</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.2.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.2.0) <span style="color: #B2B2B2;">[1.3s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"gp_snomed"</span> (v0.2.0) <span style="color: #B2B2B2;">[1.8s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,857,443 × 7</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   snomed_code      description      usage active_at_start</span></span>
@@ -224,7 +225,7 @@ Digital, for data pre-processing see
 <code class="sourceCode R"><span><span class="co"># Return ICD-10 code usage data</span></span>
 <span><span class="fu"><a href="../reference/get_hesapc_icd10.html">get_hesapc_icd10</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"hesapc_icd10"</span> (v0.2.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_icd10"</span> (v0.2.0) <span style="color: #B2B2B2;">[194ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_icd10"</span> (v0.2.0) <span style="color: #B2B2B2;">[369ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 158,849 × 5</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   icd10_code description                            usage</span></span>
@@ -266,7 +267,7 @@ Digital, for the data pre-processing see
 <code class="sourceCode R"><span><span class="co"># Return OPCS-4 code usage data</span></span>
 <span><span class="fu"><a href="../reference/get_hesapc_opcs4.html">get_hesapc_opcs4</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Downloading <span style="color: #0000BB;">"hesapc_opcs4"</span> (v0.2.0)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_opcs4"</span> (v0.2.0) <span style="color: #B2B2B2;">[195ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Downloading <span style="color: #0000BB;">"hesapc_opcs4"</span> (v0.2.0) <span style="color: #B2B2B2;">[331ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 125,925 × 5</span></span></span>
 <span><span class="co">#&gt;    start_date end_date   opcs4_code description                            usage</span></span>

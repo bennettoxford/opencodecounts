@@ -52,7 +52,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">opencodecounts</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@
     <li><a class="dropdown-item" href="../articles/how-to-use-R-pkg.html">How to use the R package</a></li>
     <li><a class="dropdown-item" href="../articles/how-to-use-breakdowns.html">How to use ICD-10 and OPCS-4 breakdowns</a></li>
     <li><a class="dropdown-item" href="../articles/extract-snomedct-sem-tag.html">How to extract SNOMED CT semantic tag in R</a></li>
+    <li><a class="dropdown-item" href="../articles/check-codelists.html">How to check codelists for inactive SNOMED CT codes with usage</a></li>
     <li><a class="dropdown-item" href="../articles/available-datasets.html">Learn about the available datasets</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../articles/app.html">Launch Shiny App</a></li>
@@ -81,9 +82,32 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/snomed-history-v0.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="opencodecounts-development-version">opencodecounts (development version)<a class="anchor" aria-label="anchor" href="#opencodecounts-development-version"></a></h2>
+<div class="section level3">
+<h3 id="codelist-checks-development-version">Codelist checks<a class="anchor" aria-label="anchor" href="#codelist-checks-development-version"></a></h3>
+<ul><li>New <code><a href="../reference/check_codelists.html">check_codelists()</a></code> to find old or new SNOMED CT codes with GP usage that may be missing from the codelists in <code>codelists/codelists.txt</code>
+</li>
+<li>New <code><a href="../reference/read_codelists.html">read_codelists()</a></code> to read the CSV files from <code>opensafely codelists update</code>
+</li>
+<li>New terminal command <code>opencodecounts codelists check</code>
+</li>
+<li>The Shiny app has a new “Linked codes not included” tab and a switch to show their usage over time when a SNOMED CT codelist is loaded</li>
+<li>New <code><a href="../reference/check_codelists.html">check_codelists_dir()</a></code> and <code><a href="../reference/check_codelists.html">check_codelists_url()</a></code>, called by <code><a href="../reference/check_codelists.html">check_codelists()</a></code>. <code><a href="../reference/check_codelists.html">check_codelists_url()</a></code> and <code>opencodecounts codelists check --url</code> check codelists from their OpenCodelists URLs</li>
+<li>
+<code><a href="../reference/get_codelist.html">get_codelist()</a></code> errors when a codelist version is not found and accepts version hashes</li>
+<li>
+<code><a href="../reference/check_codelists.html">check_codelists()</a></code> downloads the SNOMED CT History Substitution Table from a GitHub release, so it does not need a TRUD API key</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/get_codelist.html">get_codelist()</a></code> and <code><a href="../reference/read_codelists.html">read_codelists()</a></code> read CSV files with an unnamed index column (<a href="https://github.com/bennettoxford/opencodecounts/issues/165" class="external-link">#165</a>)</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.1" id="opencodecounts-091">opencodecounts 0.9.1<a class="anchor" aria-label="anchor" href="#opencodecounts-091"></a></h2>
 <div class="section level3">

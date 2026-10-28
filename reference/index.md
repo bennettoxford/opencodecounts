@@ -28,6 +28,15 @@
 
   Get codelist from [OpenCodelists](https://www.opencodelists.org)
 
+- [`read_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/read_codelists.md)
+  : Read codelists listed in codelists.txt
+
+- [`check_codelists()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  [`check_codelists_dir()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  [`check_codelists_url()`](https://bennettoxford.github.io/opencodecounts/reference/check_codelists.md)
+  **\[experimental\]** : Check codelists for inactive SNOMED CT codes
+  with usage
+
 ## Shiny App
 
 - [`run_app()`](https://bennettoxford.github.io/opencodecounts/reference/run_app.md)

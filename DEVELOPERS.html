@@ -52,7 +52,7 @@
 
     <a class="navbar-brand me-2" href="index.html">opencodecounts</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@
     <li><a class="dropdown-item" href="articles/how-to-use-R-pkg.html">How to use the R package</a></li>
     <li><a class="dropdown-item" href="articles/how-to-use-breakdowns.html">How to use ICD-10 and OPCS-4 breakdowns</a></li>
     <li><a class="dropdown-item" href="articles/extract-snomedct-sem-tag.html">How to extract SNOMED CT semantic tag in R</a></li>
+    <li><a class="dropdown-item" href="articles/check-codelists.html">How to check codelists for inactive SNOMED CT codes with usage</a></li>
     <li><a class="dropdown-item" href="articles/available-datasets.html">Learn about the available datasets</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="articles/app.html">Launch Shiny App</a></li>
@@ -81,7 +82,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="logo.png" class="logo" alt=""><h1>Notes for developers</h1>
-      <small class="dont-index">Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/main/DEVELOPERS.md" class="external-link"><code>DEVELOPERS.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/bennettoxford/opencodecounts/blob/snomed-history-v0.1.0/DEVELOPERS.md" class="external-link"><code>DEVELOPERS.md</code></a></small>
     </div>
 
 <div id="notes-for-developers" class="section level1">
@@ -130,6 +131,15 @@
 <code>just release</code> to publish it</li>
 <li>Add it to <code>shiny_app_datasets.yml</code> if it should appear in the app</li>
 </ol><p>Dataset names follow <code>&lt;source&gt;_&lt;coding system&gt;</code>. <code>hesapc_icd10</code> means HES Admitted Patient Care, ICD-10. <code>gp_snomed</code> means GP, SNOMED CT. If a dataset has no single coding system, like QOF registers, use a short content word instead: <code>qof_registers</code>.</p>
+</div>
+<div class="section level2">
+<h2 id="checking-codelists">Checking codelists<a class="anchor" aria-label="anchor" href="#checking-codelists"></a></h2>
+<p><code><a href="reference/check_codelists.html">check_codelists()</a></code> uses the SNOMED CT History Substitution Table from NHS TRUD (Technology Reference data Update Distribution) item 276. <code>data-raw/snomed_history.R</code> builds it as the <code>snomed_history</code> dataset, and it is published as a GitHub release like the usage data. The TRUD item and release are set under <code>snomed_history</code> in <code>inst/config/raw_trud.yml</code>, which has one entry per dataset built from TRUD. Only rows with an active new code are kept, with the columns <code>old_code</code>, <code>old_term</code>, <code>new_code</code>, <code>new_term</code> and <code>is_ambiguous</code>, plus <code>trud_release</code> so the published file records the TRUD release it came from. Only pairs whose old code has GP usage are kept, because the check only reports pairs where the old code has usage. Rebuild it after each new <code>gp_snomed</code> release, so new codes with usage are included.</p>
+<p>Building it is the only step that needs an API key. Add <code>TRUD_API_KEY=your-key</code> to <code>~/.Renviron</code> and restart R. Users of <code><a href="reference/check_codelists.html">check_codelists()</a></code> do not need a key.</p>
+<p>The <code>is_missing_with_usage</code> column in <code>R/check-codelists.R</code> sets which missing codes are reported. The report, <code>@summary</code> and the exit status all use it.</p>
+<p>Coding systems come from the OpenCodelists API, with one request per organisation or user. Tagged versions are matched by tag and by hash. A codelist that moved to a new owner is not found, so it is skipped and listed in the report.</p>
+<p>Codelist CSV files do not all have the same layout. <code><a href="reference/rename_code_column.html">rename_code_column()</a></code> in <code>R/opencodelists.R</code> drops unnamed columns, such as a saved pandas index, and then uses the <code>code</code> column, or the first column if there is none.</p>
+<p>The terminal command is in <code>exec/opencodecounts.R</code> and uses <a href="https://github.com/r-lib/Rapp" class="external-link">Rapp</a>. Install it once with <code>Rapp::install_pkg_cli_apps("opencodecounts")</code>. The command runs the installed package, so run <code>devtools::install()</code> to try your changes in the terminal.</p>
 </div>
 <div class="section level2">
 <h2 id="running-the-app-locally">Running the app locally<a class="anchor" aria-label="anchor" href="#running-the-app-locally"></a></h2>

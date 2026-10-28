@@ -66,7 +66,7 @@ for data pre-processing see `/data-raw/gp_snomed.R`.
 # Return SNOMED code usage data
 get_gp_snomed()
 #> ℹ Downloading "gp_snomed" (v0.2.0)
-#> ✔ Downloading "gp_snomed" (v0.2.0) [1.3s]
+#> ✔ Downloading "gp_snomed" (v0.2.0) [1.8s]
 #> 
 #> # A tibble: 1,857,443 × 7
 #>    start_date end_date   snomed_code      description      usage active_at_start
@@ -117,7 +117,7 @@ for data pre-processing see `/data-raw/hesapc_icd10.R`.
 # Return ICD-10 code usage data
 get_hesapc_icd10()
 #> ℹ Downloading "hesapc_icd10" (v0.2.0)
-#> ✔ Downloading "hesapc_icd10" (v0.2.0) [194ms]
+#> ✔ Downloading "hesapc_icd10" (v0.2.0) [369ms]
 #> 
 #> # A tibble: 158,849 × 5
 #>    start_date end_date   icd10_code description                            usage
@@ -163,7 +163,7 @@ for the data pre-processing see `/data-raw/hesapc_opcs4.R`.
 # Return OPCS-4 code usage data
 get_hesapc_opcs4()
 #> ℹ Downloading "hesapc_opcs4" (v0.2.0)
-#> ✔ Downloading "hesapc_opcs4" (v0.2.0) [195ms]
+#> ✔ Downloading "hesapc_opcs4" (v0.2.0) [331ms]
 #> 
 #> # A tibble: 125,925 × 5
 #>    start_date end_date   opcs4_code description                            usage
