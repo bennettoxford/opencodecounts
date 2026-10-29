@@ -6,7 +6,7 @@
 plot_summary <- function(data) {
   scale_x_date_breaks <- unique(data$end_date)
 
-  # A `series` column adds a line for the linked codes not included
+  # A `series` column adds a line for the linked codes not selected
   has_series <- "series" %in% names(data)
   if (!has_series) {
     data$series <- "Selected codes"
@@ -47,10 +47,13 @@ plot_summary <- function(data) {
     scale_colour_manual(
       values = c(
         "Selected codes" = "#239b89ff",
-        "Linked codes not included" = "#ED6925FF"
+        "Linked codes not selected" = "#ED6925FF"
       )
     ) +
-    scale_series_shape() +
+    # Linked codes not selected are triangles
+    scale_shape_manual(
+      values = c("Selected codes" = 16, "Linked codes not selected" = 17)
+    ) +
     labs(
       x = "End date of yearly time interval",
       y = "Recorded events",
@@ -73,35 +76,17 @@ plot_summary <- function(data) {
 plot_individual <- function(data) {
   scale_x_date_breaks <- unique(data$end_date)
 
-  # A `series` column adds the linked codes not included, as triangles
-  has_series <- "series" %in% names(data)
-  if (!has_series) {
-    data$series <- "Selected codes"
-  }
-
   data <- data |>
-    group_by(start_date, end_date, series) |>
+    group_by(start_date, end_date) |>
     mutate(annual_proportion = usage / sum(usage, na.rm = TRUE)) |>
     ungroup()
-
-  # Linked codes use the rocket palette so they stand out from the selected
-  # codes. Its darkest and lightest ends are left out to keep them visible.
-  code_colours <- c(
-    series_colours(data, "Selected codes", scales::viridis_pal()),
-    series_colours(
-      data,
-      "Linked codes not included",
-      scales::viridis_pal(begin = 0.35, end = 0.85, option = "rocket")
-    )
-  )
 
   ggplot(
     data,
     aes(
       x = end_date,
       y = usage,
-      colour = code,
-      shape = series
+      colour = code
     )
   ) +
     geom_line(alpha = .4) +
@@ -118,7 +103,6 @@ plot_individual <- function(data) {
           " ",
           lubridate::year(end_date),
           "<br>",
-          if (has_series) paste0("<b>Codes:</b> ", series, "<br>"),
           "<b>Code:</b> ",
           code,
           "<br>",
@@ -141,37 +125,13 @@ plot_individual <- function(data) {
       limits = c(0, NA),
       labels = scales::label_number(accuracy = 1)
     ) +
-    scale_colour_manual(values = code_colours) +
-    scale_series_shape() +
+    ggplot2::scale_colour_viridis_d() +
     labs(x = "End date of yearly time interval", y = "Recorded events") +
     theme_classic() +
     theme(
       text = element_text(size = 14),
       legend.position = "none"
     )
-}
-
-#' Colours for the codes of one plot series
-#'
-#' @param data Usage data with `code` and `series` columns
-#' @param series String, the series to colour
-#' @param palette Function returning `n` colours
-#'
-#' @return Named character vector of colours, one per code
-#' @noRd
-series_colours <- function(data, series, palette) {
-  codes <- sort(unique(data$code[data$series == series]))
-  stats::setNames(palette(length(codes)), codes)
-}
-
-#' Shapes for the selected codes and the linked codes not included
-#'
-#' Linked codes are always triangles, in the summary and individual plots.
-#' @noRd
-scale_series_shape <- function() {
-  ggplot2::scale_shape_manual(
-    values = c("Selected codes" = 16, "Linked codes not included" = 17)
-  )
 }
 
 #' Helper function to plot sparkline
@@ -205,12 +165,15 @@ plot_sparkline <- function(data) {
     layout(xaxis = list(fixedrange = TRUE), yaxis = list(fixedrange = TRUE))
 }
 
-#' Plot the yearly usage of linked code pairs as a timeline
+#' Plot the yearly usage of one linked code pair as a timeline
 #'
 #' One tile per code and reporting period, coloured by whether the code was
 #' active at the start and end of the period.
 #'
 #' @param data Output of `linked_timeline_data()`
+#' @importFrom ggplot2 ggplot aes geom_tile geom_text scale_x_date scale_fill_manual labs theme theme_classic element_text element_line
+#' @importFrom dplyr case_when if_else mutate
+#' @importFrom scales label_number label_date
 #' @keywords internal
 plot_linked_timeline <- function(data) {
   status_colours <- c(
@@ -220,19 +183,19 @@ plot_linked_timeline <- function(data) {
   )
 
   data |>
-    dplyr::mutate(
-      status = dplyr::case_when(
+    mutate(
+      status = case_when(
         active_at_start & active_at_end ~ "Active all year",
         !active_at_start & !active_at_end ~ "Inactive all year",
         .default = "Status changed during year"
       ),
-      usage_label = scales::label_number(
+      usage_label = label_number(
         accuracy = 1,
         scale_cut = c(0, K = 1e3),
         big.mark = ","
       )(usage),
       share = round(100 * share),
-      share_label = dplyr::if_else(share == 0, "<1%", paste0(share, "%"))
+      share_label = if_else(share == 0, "<1%", paste0(share, "%"))
     ) |>
     ggplot(aes(
       x = start_date + (end_date - start_date) / 2,
@@ -240,55 +203,44 @@ plot_linked_timeline <- function(data) {
       width = as.numeric(end_date - start_date),
       fill = status
     )) +
-    ggplot2::geom_tile(colour = "white", height = 0.8) +
+    # Codes without usage have missing dates and only show as a row
+    geom_tile(colour = "white", height = 0.8, na.rm = TRUE) +
     # Right align the labels with some space before the end of each period
-    ggplot2::geom_text(
+    geom_text(
       aes(x = end_date - 45, label = usage_label),
       size = 3.5,
       hjust = 1,
-      vjust = -0.2
+      vjust = -0.2,
+      na.rm = TRUE
     ) +
-    ggplot2::geom_text(
+    geom_text(
       aes(x = end_date - 45, label = share_label),
       size = 3.5,
       hjust = 1,
       vjust = 1.2,
-      colour = "gray30"
+      colour = "gray30",
+      na.rm = TRUE
     ) +
     scale_x_date(
-      breaks = unique(data$end_date),
-      labels = scales::label_date("%b\n%Y")
+      breaks = unique(stats::na.omit(data$end_date)),
+      labels = label_date("%b\n%Y")
     ) +
-    ggplot2::scale_fill_manual(
+    scale_fill_manual(
       values = status_colours,
       breaks = names(status_colours)
     ) +
-    ggplot2::facet_wrap(
-      ggplot2::vars(panel),
-      ncol = 1,
-      scales = "free_y",
-      axes = "all_x",
-      axis.labels = "margins",
-      labeller = ggplot2::label_bquote(
-        bold("SNOMED CT description:") ~ .(as.character(panel))
-      )
-    ) +
     labs(
+      title = bquote(bold("Old code:") ~ .(data$old_title[[1]])),
+      subtitle = bquote(bold("New code:") ~ .(data$new_title[[1]])),
       x = "End date of yearly reporting period",
       y = NULL,
       fill = NULL
     ) +
     theme_classic(base_size = 15) +
     theme(
-      panel.grid.major.x = ggplot2::element_line(
-        colour = "gray90",
-        linetype = "dotted"
-      ),
-      strip.background = ggplot2::element_blank(),
-      strip.text = element_text(
-        hjust = 0,
-        margin = ggplot2::margin(2, 0, 2, 0)
-      ),
+      panel.grid.major.x = element_line(colour = "gray90", linetype = "dotted"),
+      plot.title = element_text(size = 13),
+      plot.subtitle = element_text(size = 13),
       legend.position = "bottom"
     )
 }

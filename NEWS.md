@@ -2,10 +2,10 @@
 
 ## Codelist checks
 
-- New `check_codelists()` to find old or new SNOMED CT codes with GP usage that may be missing from the codelists in `codelists/codelists.txt`
+- New `check_codelists()` to find old or new SNOMED CT codes with GP usage that are linked to the codes in codelists but not selected
 - New `read_codelists()` to read the CSV files from `opensafely codelists update`
 - New terminal command `opencodecounts codelists check`
-- The Shiny app has a new "Linked codes not included" tab and a switch to show their usage over time when a SNOMED CT codelist is loaded
+- The Shiny app has a new "Linked codes not selected" tab and a switch to show their usage over time when a SNOMED CT codelist is loaded
 - New `check_codelists_dir()` and `check_codelists_url()`, called by `check_codelists()`. `check_codelists_url()` and `opencodecounts codelists check --url` check codelists from their OpenCodelists URLs
 - `get_codelist()` errors when a codelist version is not found and accepts version hashes
 - `check_codelists()` downloads the SNOMED CT History Substitution Table from a GitHub release, so it does not need a TRUD API key

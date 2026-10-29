@@ -11,9 +11,9 @@ CodelistCheck <- S7::new_class(
     data_version = S7::class_character,
     start_date = S7::class_Date,
     end_date = S7::class_Date,
-    missing_usage_found = S7::new_property(
+    not_selected_usage_found = S7::new_property(
       S7::class_logical,
-      getter = function(self) any(self@results$is_missing_with_usage)
+      getter = function(self) any(self@results$is_not_selected_with_usage)
     )
   )
 )
@@ -23,8 +23,8 @@ CodelistCheck <- S7::new_class(
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Finds old and new SNOMED CT codes with recorded GP usage that may be missing
-#' from codelists, for review.
+#' Finds old and new SNOMED CT codes with recorded GP usage that are linked to
+#' the codes in codelists but not selected, for review.
 #'
 #' * `check_codelists_dir()` checks the codelists in `codelists.txt` in an
 #'   OpenSAFELY study, using the CSV files from `opensafely codelists update`.
@@ -283,11 +283,11 @@ find_linked_codes <- function(codelists, usage_total, snomed_history) {
       # Codes missing from the usage data have no recorded usage
       old_usage = dplyr::coalesce(old_usage, 0),
       new_usage = dplyr::coalesce(new_usage, 0),
-      # A missing new code only matters when records moved from the old code
-      # in the codelist. Ambiguous pairs often point to a broad parent code.
-      is_missing_with_usage = !is_ambiguous &
+      # Any linked code with usage that the codelist does not select, old or
+      # new. Ambiguous pairs often point to a broad parent code.
+      is_not_selected_with_usage = !is_ambiguous &
         ((!is_old_in_codelist & old_usage > 0) |
-          (!is_new_in_codelist & new_usage > 0 & old_usage > 0))
+          (!is_new_in_codelist & new_usage > 0))
     ) |>
     dplyr::relocate("is_old_in_codelist", "old_usage", .after = "old_term") |>
     dplyr::relocate(
@@ -299,28 +299,44 @@ find_linked_codes <- function(codelists, usage_total, snomed_history) {
     dplyr::arrange(codelist, old_code)
 }
 
-#' Get the linked codes that are missing from codelists
+#' Get the linked codes that codelists do not select
 #'
 #' @param results Tibble from `find_linked_codes()`
 #'
-#' @return Tibble with one row per reported pair: the missing `code`, its
-#'   `term`, whether it is the old or new code (`side`), its `usage`, its
+#' @return Tibble with one row per reported pair: a `pair` key of the old and
+#'   new code, the `code` not selected,
+#'   its `term`, whether it is the old or new code (`side`), its `usage`, its
 #'   `share` of the usage of the pair and the `linked_code` in the codelist
+#'   with its `linked_term` and `linked_usage`
 #'
 #' @noRd
-missing_linked_codes <- function(results) {
+linked_codes_not_selected <- function(results) {
   results |>
-    dplyr::filter(is_missing_with_usage) |>
+    dplyr::filter(is_not_selected_with_usage) |>
     dplyr::mutate(
-      is_old_missing = !is_old_in_codelist,
-      code = dplyr::if_else(is_old_missing, old_code, new_code),
-      term = dplyr::if_else(is_old_missing, old_term, new_term),
-      side = dplyr::if_else(is_old_missing, "old code", "new code"),
-      usage = dplyr::if_else(is_old_missing, old_usage, new_usage),
+      is_old_not_selected = !is_old_in_codelist,
+      code = dplyr::if_else(is_old_not_selected, old_code, new_code),
+      term = dplyr::if_else(is_old_not_selected, old_term, new_term),
+      side = dplyr::if_else(is_old_not_selected, "old", "new"),
+      usage = dplyr::if_else(is_old_not_selected, old_usage, new_usage),
       share = usage / (old_usage + new_usage),
-      linked_code = dplyr::if_else(is_old_missing, new_code, old_code)
+      linked_code = dplyr::if_else(is_old_not_selected, new_code, old_code),
+      linked_term = dplyr::if_else(is_old_not_selected, new_term, old_term),
+      linked_usage = dplyr::if_else(is_old_not_selected, new_usage, old_usage),
+      pair = paste(old_code, new_code)
     ) |>
-    dplyr::select(codelist, code, term, side, usage, share, linked_code)
+    dplyr::select(
+      codelist,
+      pair,
+      code,
+      term,
+      side,
+      usage,
+      share,
+      linked_code,
+      linked_term,
+      linked_usage
+    )
 }
 
 #' Find the old and new code pairs that involve each codelist
@@ -343,9 +359,9 @@ find_codelist_history <- function(snomed_history, codelists) {
     purrr::list_rbind(names_to = "codelist")
 }
 
-#' Summarise each codelist and the reported missing codes
+#' Summarise each codelist and the reported linked codes not selected
 #'
-#' Each missing code is counted once per codelist, even when it is part of
+#' Each code not selected is counted once per codelist, even when it is part of
 #' several pairs.
 #'
 #' @noRd
@@ -359,8 +375,8 @@ summarise_codelists <- function(codelists, usage_total, results) {
       .by = codelist
     )
 
-  reported <- dplyr::filter(results, is_missing_with_usage)
-  missing_usage <- dplyr::bind_rows(
+  reported <- dplyr::filter(results, is_not_selected_with_usage)
+  not_selected_usage <- dplyr::bind_rows(
     reported |>
       dplyr::filter(!is_old_in_codelist) |>
       dplyr::select(codelist, code = old_code, usage = old_usage),
@@ -370,19 +386,19 @@ summarise_codelists <- function(codelists, usage_total, results) {
   ) |>
     dplyr::distinct() |>
     dplyr::summarise(
-      n_missing_codes = dplyr::n(),
-      missing_usage = sum(usage),
+      n_not_selected_codes = dplyr::n(),
+      not_selected_usage = sum(usage),
       .by = codelist
     )
 
   codelist_usage |>
-    dplyr::left_join(missing_usage, by = "codelist") |>
+    dplyr::left_join(not_selected_usage, by = "codelist") |>
     dplyr::mutate(
-      n_missing_codes = dplyr::coalesce(n_missing_codes, 0L),
-      missing_usage = dplyr::coalesce(missing_usage, 0),
-      missing_share = dplyr::if_else(
-        missing_usage > 0,
-        missing_usage / (usage + missing_usage),
+      n_not_selected_codes = dplyr::coalesce(n_not_selected_codes, 0L),
+      not_selected_usage = dplyr::coalesce(not_selected_usage, 0),
+      not_selected_share = dplyr::if_else(
+        not_selected_usage > 0,
+        not_selected_usage / (usage + not_selected_usage),
         0
       )
     ) |>
@@ -410,73 +426,73 @@ S7::method(print, CodelistCheck) <- function(x, ...) {
     cli::cli_bullets(purrr::set_names(not_found, rep("!", length(not_found))))
   }
 
-  missing <- x@summary[x@summary$n_missing_codes > 0, ]
-  n_complete <- nrow(x@summary) - nrow(missing)
+  flagged <- x@summary[x@summary$n_not_selected_codes > 0, ]
+  n_complete <- nrow(x@summary) - nrow(flagged)
   if (n_complete > 0) {
     cli::cli_alert_success(
-      "{n_complete} codelist{?s} {?has/have} no missing linked codes with usage."
+      "{n_complete} codelist{?s} {?selects/select} all linked codes with usage."
     )
   }
-  if (nrow(missing) == 0) {
+  if (nrow(flagged) == 0) {
     return(invisible(x))
   }
-  cli::cli_alert_danger(
-    "{nrow(missing)} codelist{?s} {?misses/miss} linked codes with usage:"
+  cli::cli_alert_info(
+    "{nrow(flagged)} codelist{?s} {?does/do} not select some linked codes with usage:"
   )
 
-  codelist <- c("Codelist", missing$codelist)
+  codelist <- c("Codelist", flagged$codelist)
   # Right-align the numbers so they line up across rows
   included <- c(
-    "Included codes",
+    "Selected codes",
     paste0(
-      pad(missing$n_codes),
+      pad(flagged$n_codes),
       " ",
-      pad(code_word(missing$n_codes), "left"),
+      pad(code_word(flagged$n_codes), "left"),
       " ",
-      pad(scales::comma(missing$usage)),
+      pad(scales::comma(flagged$usage)),
       " uses"
     )
   )
-  not_included <- c(
-    "Linked codes not included",
+  not_selected <- c(
+    "Linked codes not selected",
     paste0(
-      pad(missing$n_missing_codes),
+      pad(flagged$n_not_selected_codes),
       " ",
-      pad(code_word(missing$n_missing_codes), "left"),
+      pad(code_word(flagged$n_not_selected_codes), "left"),
       " ",
-      pad(scales::comma(missing$missing_usage)),
+      pad(scales::comma(flagged$not_selected_usage)),
       " uses, ",
-      pad(format_share(missing$missing_share))
+      pad(format_share(flagged$not_selected_share))
     )
   )
   included[-1] <- cli::col_green(included[-1])
-  not_included[-1] <- cli::col_red(not_included[-1])
+  not_selected[-1] <- cli::col_yellow(not_selected[-1])
   table <- paste0(
     "  ",
     pad(codelist, "left"),
     "  ",
     pad(included, "left"),
     "  ",
-    not_included
+    not_selected
   )
   table[1] <- cli::style_bold(table[1])
   cli::cli_text("")
   cli::cli_verbatim(table)
   cli::cli_text("")
 
-  print_missing_codes(x@results, missing$codelist)
+  print_not_selected_codes(x@results, flagged$codelist)
 
   invisible(x)
 }
 
-#' Print each missing code with its share of the usage of its pair
+#' Print each linked code not selected with its share of the usage of its pair
 #'
-#' The share is the missing code's usage divided by the usage of the old and
-#' new code together, so it shows how much of the pair the codelist misses.
+#' The share is the code's usage divided by the usage of the old and new code
+#' together, so it shows how much of the pair the codelist does not select.
 #'
 #' @noRd
-print_missing_codes <- function(results, codelists) {
-  codes <- missing_linked_codes(results) |>
+print_not_selected_codes <- function(results, codelists) {
+  codes <- linked_codes_not_selected(results) |>
     dplyr::arrange(match(codelist, codelists), dplyr::desc(usage))
 
   # Pad across all codelists so the columns line up
@@ -494,13 +510,13 @@ print_missing_codes <- function(results, codelists) {
   )
 
   cli::cli_text(cli::style_bold(
-    "Missing codes and their share of each old and new code pair:"
+    "Linked codes not selected and their share of each old and new pair:"
   ))
   for (codelist in codelists) {
     cli::cli_text("")
     cli::cli_verbatim(c(
       paste0("  ", codelist),
-      cli::col_red(rows[codes$codelist == codelist])
+      cli::col_yellow(rows[codes$codelist == codelist])
     ))
   }
   cli::cli_text("")

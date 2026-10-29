@@ -51,16 +51,18 @@ snomed_history <- read_tsv(
 nrow(snomed_history)
 # [1] 303602
 
-# Keep only pairs whose old code has GP usage. check_codelists() only reports
-# a pair when the old code has usage, so the other pairs are never reported.
+# Keep only pairs where the old or new code has GP usage. check_codelists()
+# only reports a code that has usage, so the other pairs are never reported.
 gp_snomed_codes <- opencodecounts::get_gp_snomed() |>
   filter(usage > 0) |>
   distinct(snomed_code)
 
 snomed_history <- snomed_history |>
-  semi_join(gp_snomed_codes, by = c(old_code = "snomed_code"))
+  filter(
+    old_code %in% gp_snomed_codes$snomed_code |
+      new_code %in% gp_snomed_codes$snomed_code
+  )
 
 nrow(snomed_history)
-# [1] 35978
 
 arrow::write_parquet(snomed_history, here("data-raw", "snomed_history.parquet"))

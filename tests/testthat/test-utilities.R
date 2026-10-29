@@ -395,7 +395,7 @@ test_that("add_linked_summary() fills zeros in periods of either series", {
   expect_equal(
     result,
     tibble::tibble(
-      series = rep(c("Linked codes not included", "Selected codes"), each = 3),
+      series = rep(c("Linked codes not selected", "Selected codes"), each = 3),
       start_date = rep(as.Date(c("2011-08-01", "2012-08-01", "2013-08-01")), 2),
       end_date = rep(as.Date(c("2012-07-31", "2013-07-31", "2014-07-31")), 2),
       total_usage = c(100, 55, 0, 0, 10, 20)
@@ -425,7 +425,7 @@ test_that("plot_summary() adds a coloured series for linked codes", {
   expect_equal(local_plot(linked)$theme$legend.position, "top")
 })
 
-test_that("plots always show linked codes as triangles", {
+test_that("plot_summary() shows linked codes as triangles", {
   usage <- tibble::tibble(
     start_date = as.Date("2012-08-01"),
     end_date = as.Date("2013-07-31"),
@@ -438,11 +438,6 @@ test_that("plots always show linked codes as triangles", {
     total_usage = sum(usage),
     .by = c(start_date, end_date)
   )
-  individual <- dplyr::mutate(
-    usage,
-    series = c("Selected codes", "Linked codes not included")
-  )
-
   # The text aesthetic is only used by plotly for tooltips
   point_shapes <- function(plot) {
     suppressWarnings(ggplot2::ggplot_build(plot))$data[[2]]$shape
@@ -452,85 +447,5 @@ test_that("plots always show linked codes as triangles", {
   expect_setequal(
     point_shapes(plot_summary(add_linked_summary(summary_data, usage))),
     c(16, 17)
-  )
-  expect_equal(point_shapes(plot_individual(usage)), c(16, 16))
-  expect_equal(point_shapes(plot_individual(individual)), c(16, 17))
-})
-
-test_that("plot_individual() colours linked codes with the rocket palette", {
-  usage <- tibble::tibble(
-    start_date = as.Date("2012-08-01"),
-    end_date = as.Date("2013-07-31"),
-    code = c("b", "a", "c", "d"),
-    description = "Term",
-    usage = c(10, 5, 3, 2)
-  )
-  linked <- dplyr::mutate(
-    usage,
-    series = rep(c("Selected codes", "Linked codes not included"), each = 2)
-  )
-
-  # The text aesthetic is only used by plotly for tooltips
-  point_colours <- function(data) {
-    built <- suppressWarnings(ggplot2::ggplot_build(plot_individual(data)))
-    points <- built$data[[2]]
-    # Each code has a different usage, so points are matched to codes on it
-    stats::setNames(points$colour, data$code[match(points$y, data$usage)])
-  }
-
-  # Selected codes keep the colours of scale_colour_viridis_d()
-  expect_equal(
-    unname(point_colours(usage)[c("a", "b", "c", "d")]),
-    scales::viridis_pal()(4)
-  )
-  expect_equal(
-    unname(point_colours(linked)[c("a", "b")]),
-    scales::viridis_pal()(2)
-  )
-  expect_equal(
-    unname(point_colours(linked)[c("c", "d")]),
-    scales::viridis_pal(begin = 0.35, end = 0.85, option = "rocket")(2)
-  )
-})
-
-test_that("add_linked_individual() fills zeros for each code in every period", {
-  data <- tibble::tibble(
-    start_date = as.Date("2013-08-01"),
-    end_date = as.Date("2014-07-31"),
-    code = "new",
-    description = "New code",
-    usage = 20
-  )
-  # The old code stopped being used after the second period
-  linked_data <- tibble::tibble(
-    start_date = as.Date(c("2011-08-01", "2012-08-01")),
-    end_date = as.Date(c("2012-07-31", "2013-07-31")),
-    code = "old",
-    description = c("Old code", "Old code (renamed)"),
-    usage = c(100, 50)
-  )
-
-  result <- add_linked_individual(data, linked_data)
-
-  expect_equal(
-    result,
-    tibble::tibble(
-      series = rep(c("Linked codes not included", "Selected codes"), each = 3),
-      code = rep(c("old", "new"), each = 3),
-      start_date = rep(
-        as.Date(c("2011-08-01", "2012-08-01", "2013-08-01")),
-        2
-      ),
-      end_date = rep(as.Date(c("2012-07-31", "2013-07-31", "2014-07-31")), 2),
-      description = c(
-        "Old code",
-        "Old code (renamed)",
-        "Old code (renamed)",
-        "New code",
-        "New code",
-        "New code"
-      ),
-      usage = c(100, 50, 0, 0, 0, 20)
-    )
   )
 })

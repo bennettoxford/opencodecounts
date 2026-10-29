@@ -29,16 +29,16 @@ test_that("check_codelists() adds usage for both codes of each pair", {
     )
   )
 
-  missing_old <- results[results$old_code == "836541000000100", ]
-  expect_false(missing_old$is_old_in_codelist)
-  expect_equal(missing_old$old_usage, 150L)
-  expect_equal(missing_old$new_usage, 50L)
+  not_selected_old <- results[results$old_code == "836541000000100", ]
+  expect_false(not_selected_old$is_old_in_codelist)
+  expect_equal(not_selected_old$old_usage, 150L)
+  expect_equal(not_selected_old$new_usage, 50L)
 
-  expect_true(missing_old$is_missing_with_usage)
+  expect_true(not_selected_old$is_not_selected_with_usage)
 
   no_usage <- results[results$old_code == "111111111", ]
   expect_equal(no_usage$old_usage, 0)
-  expect_false(no_usage$is_missing_with_usage)
+  expect_false(no_usage$is_not_selected_with_usage)
 })
 
 test_that("check_codelists() sums usage beyond the integer range", {
@@ -56,13 +56,15 @@ test_that("check_codelists() sums usage beyond the integer range", {
     data_version = "0.2.0",
     history_version = "0.1.0"
   )
-  missing_old <- check@results[check@results$old_code == "836541000000100", ]
+  not_selected_old <- check@results[
+    check@results$old_code == "836541000000100",
+  ]
 
-  expect_equal(missing_old$old_usage, 4e9)
+  expect_equal(not_selected_old$old_usage, 4e9)
 })
 
-test_that("missing_usage_found flags missing codes with usage", {
-  expect_true(local_test_check()@missing_usage_found)
+test_that("not_selected_usage_found flags linked codes not selected with usage", {
+  expect_true(local_test_check()@not_selected_usage_found)
 
   local_check_mocks()
   local_mocked_bindings(
@@ -73,24 +75,24 @@ test_that("missing_usage_found flags missing codes with usage", {
     data_version = "0.2.0",
     history_version = "0.1.0"
   )
-  expect_false(check@missing_usage_found)
+  expect_false(check@not_selected_usage_found)
   expect_snapshot(print(check))
 })
 
-test_that("is_missing_with_usage ignores ambiguous pairs and unused old codes", {
+test_that("is_not_selected_with_usage reports linked codes with usage, except ambiguous pairs", {
   local_check_mocks()
   local_mocked_bindings(
     # 1359726006 is in the codelist but has no usage
     get_gp_snomed = function(version = NULL) {
       dplyr::filter(test_snomed_usage(), snomed_code != "1359726006")
     },
-    # Each old code is in the codelist and the new code is missing with usage
+    # Each old code is in the codelist and the new code is not selected with usage
     get_snomed_history = function(version) {
       tibble::tibble(
         old_code = c("1104961000000104", "1359723003", "1359726006"),
         old_term = c("Used", "Used but ambiguous", "Not used"),
         new_code = "836541000000100",
-        new_term = "Missing with usage",
+        new_term = "Not selected with usage",
         is_ambiguous = c(FALSE, TRUE, FALSE),
         trud_release = "uk_sctqths_test_release"
       )
@@ -103,11 +105,12 @@ test_that("is_missing_with_usage ignores ambiguous pairs and unused old codes", 
   )@results
 
   expect_equal(
-    results$is_missing_with_usage[match(
+    results$is_not_selected_with_usage[match(
       c("1104961000000104", "1359723003", "1359726006"),
       results$old_code
     )],
-    c(TRUE, FALSE, FALSE)
+    # The selected old code needs no usage of its own
+    c(TRUE, FALSE, TRUE)
   )
 })
 
@@ -116,18 +119,20 @@ test_that("check_codelists() summarises each codelist", {
 
   expect_equal(summary$n_codes, 3L)
   expect_equal(summary$usage, 85)
-  # 836541000000100 has usage and is missing. 111111111 has no usage.
-  expect_equal(summary$n_missing_codes, 1L)
-  expect_equal(summary$missing_usage, 150)
-  expect_equal(summary$missing_share, 150 / 235)
+  # 836541000000100 has usage and is not selected. 111111111 has no usage.
+  expect_equal(summary$n_not_selected_codes, 1L)
+  expect_equal(summary$not_selected_usage, 150)
+  expect_equal(summary$not_selected_share, 150 / 235)
 })
 
 test_that("check_codelists() only uses the selected reporting periods", {
   check <- local_test_check(start_date = "2012-08-01")
-  missing_old <- check@results[check@results$old_code == "836541000000100", ]
+  not_selected_old <- check@results[
+    check@results$old_code == "836541000000100",
+  ]
 
   expect_equal(check@start_date, as.Date("2012-08-01"))
-  expect_equal(missing_old$old_usage, 50L)
+  expect_equal(not_selected_old$old_usage, 50L)
 })
 
 test_that("check_codelists() skips codelists not found on OpenCodelists", {
@@ -205,7 +210,7 @@ test_that("summarise_codelists() lists organisations before users", {
     new_code = character(),
     new_usage = numeric(),
     is_new_in_codelist = logical(),
-    is_missing_with_usage = logical()
+    is_not_selected_with_usage = logical()
   )
 
   expect_equal(
@@ -257,7 +262,7 @@ test_that("check_codelists() handles codelists without history pairs", {
   )
 
   expect_equal(nrow(check@results), 0)
-  expect_false(check@missing_usage_found)
+  expect_false(check@not_selected_usage_found)
   expect_no_error(capture.output(print(check), type = "message"))
 })
 
@@ -306,47 +311,52 @@ test_that("find_linked_codes() flags pairs from data that is already loaded", {
 
   expect_equal(nrow(results), 3)
   expect_equal(
-    results$old_code[results$is_missing_with_usage],
+    results$old_code[results$is_not_selected_with_usage],
     "836541000000100"
   )
 })
 
-test_that("missing_linked_codes() returns one row per reported pair", {
-  missing <- find_linked_codes(
+test_that("linked_codes_not_selected() returns one row per reported pair", {
+  not_selected <- find_linked_codes(
     dplyr::mutate(test_codelist(), codelist = "phq"),
     test_usage_total(),
     test_snomed_history()
   ) |>
-    missing_linked_codes()
+    linked_codes_not_selected()
 
   expect_equal(
-    missing,
+    not_selected,
     tibble::tibble(
       codelist = "phq",
+      pair = "836541000000100 1359723003",
       code = "836541000000100",
       term = "PHQ-2 score (old)",
-      side = "old code",
+      side = "old",
       usage = 150,
       share = 0.75,
-      linked_code = "1359723003"
+      linked_code = "1359723003",
+      linked_term = "PHQ-2 score",
+      linked_usage = 50
     )
   )
 })
 
-test_that("missing_linked_codes() reports a missing new code", {
+test_that("linked_codes_not_selected() reports a new code not selected", {
   codelist <- tibble::tibble(codelist = "phq", code = "836541000000100")
 
-  missing <- find_linked_codes(
+  not_selected <- find_linked_codes(
     codelist,
     test_usage_total(),
     test_snomed_history()
   ) |>
-    missing_linked_codes()
+    linked_codes_not_selected()
 
-  expect_equal(missing$code, "1359723003")
-  expect_equal(missing$side, "new code")
-  expect_equal(missing$usage, 50)
-  expect_equal(missing$linked_code, "836541000000100")
+  expect_equal(not_selected$code, "1359723003")
+  expect_equal(not_selected$side, "new")
+  expect_equal(not_selected$usage, 50)
+  expect_equal(not_selected$linked_code, "836541000000100")
+  expect_equal(not_selected$linked_term, "PHQ-2 score (old)")
+  expect_equal(not_selected$linked_usage, 150)
 })
 
 test_that("check_codelists() records the TRUD release of the history table", {

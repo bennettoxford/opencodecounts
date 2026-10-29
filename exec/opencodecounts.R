@@ -19,7 +19,7 @@ switch(
       subcommand <- "",
 
       #| title: Check codelists for inactive SNOMED CT codes with usage
-      #| description: Show codelists that may miss linked old or new codes with recorded usage. Exits with status 1 when any codelist does.
+      #| description: Show codelists that do not select some linked old or new codes with recorded usage. Exits with status 1 when any codelist does.
       #| examples:
       #|   - opencodecounts codelists check
       #|   - opencodecounts codelists check --start-date 2020-08-01 --output codelist-check.csv
@@ -65,7 +65,7 @@ switch(
           )
         }
 
-        if (check@missing_usage_found) {
+        if (check@not_selected_usage_found) {
           quit(status = 1)
         }
       }

@@ -57,12 +57,13 @@ mod_trends_server <- function(
 ) {
   moduleServer(id, function(input, output, session) {
     output$linked_codes_switch <- renderUI({
-      req(has_linked_codes())
+      # Linked codes not selected are only shown with the total usage
+      req(has_linked_codes(), !isTRUE(input$show_individual_codes))
       input_switch(
         session$ns("show_linked_codes"),
         tooltip_label(
-          "Show linked codes not included",
-          "Total usage of old and new SNOMED CT codes linked to the selected codes but not selected.",
+          "Show linked codes not selected",
+          "Total usage of old and new codes linked to the selected codes.",
           placement = "right"
         ),
         value = FALSE
@@ -126,10 +127,12 @@ mod_trends_server <- function(
           df_plot <- filtered_data()
         }
 
-        show_linked <- isTRUE(input$show_linked_codes) && has_linked_codes()
+        show_linked <- isTRUE(input$show_linked_codes) &&
+          has_linked_codes() &&
+          !isTRUE(input$show_individual_codes)
         if (show_linked && nrow(linked_data()) == 0) {
           showNotification(
-            "The selected codes include all linked codes with usage.",
+            all_linked_selected_message,
             type = "message"
           )
           show_linked <- FALSE
@@ -137,10 +140,6 @@ mod_trends_server <- function(
 
         # Handle individual code display based on number of unique codes
         if (input$show_individual_codes & unique_codes <= 500) {
-          if (show_linked) {
-            df_plot <- add_linked_individual(df_plot, linked_data())
-          }
-
           p <- df_plot |>
             plot_individual()
         } else {

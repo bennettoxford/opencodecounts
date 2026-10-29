@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{plot_linked_timeline}
 \alias{plot_linked_timeline}
-\title{Plot the yearly usage of linked code pairs as a timeline}
+\title{Plot the yearly usage of one linked code pair as a timeline}
 \usage{
 plot_linked_timeline(data)
 }

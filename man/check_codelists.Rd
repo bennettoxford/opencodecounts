@@ -50,8 +50,8 @@ A \code{CodelistCheck} object with \verb{@summary}, one row per codelist, and
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-Finds old and new SNOMED CT codes with recorded GP usage that may be missing
-from codelists, for review.
+Finds old and new SNOMED CT codes with recorded GP usage that are linked to
+the codes in codelists but not selected, for review.
 \itemize{
 \item \code{check_codelists_dir()} checks the codelists in \code{codelists.txt} in an
 OpenSAFELY study, using the CSV files from \verb{opensafely codelists update}.

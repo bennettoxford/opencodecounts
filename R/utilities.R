@@ -192,145 +192,89 @@ add_period_dates <- function(data, period_col, start_month_day, end_month_day) {
     )
 }
 
-#' Add the usage of linked codes not included as a second plot series
+#' Add the usage of linked codes not selected as a second plot series
 #'
 #' Old codes have no rows after they stop being used, so both series get zero
 #' usage in every period of either series.
 #'
 #' @param summary_data Tibble with columns `start_date`, `end_date` and
 #'   `total_usage` for the selected codes
-#' @param linked_data Usage data of the linked codes not included
+#' @param linked_data Usage data of the linked codes not selected
 #'
 #' @return Tibble with a `series` column added
 #'
+#' @importFrom dplyr arrange bind_rows summarise
+#' @importFrom tidyr complete nesting
 #' @noRd
 add_linked_summary <- function(summary_data, linked_data) {
   linked_summary <- linked_data |>
-    dplyr::summarise(
+    summarise(
       total_usage = sum(usage, na.rm = TRUE),
       .by = c(start_date, end_date)
     )
 
-  dplyr::bind_rows(
+  bind_rows(
     "Selected codes" = summary_data,
-    "Linked codes not included" = linked_summary,
+    "Linked codes not selected" = linked_summary,
     .id = "series"
   ) |>
-    tidyr::complete(
+    complete(
       series,
-      tidyr::nesting(start_date, end_date),
+      nesting(start_date, end_date),
       fill = list(total_usage = 0)
     ) |>
-    dplyr::arrange(series, end_date)
+    arrange(series, end_date)
 }
 
-#' Add the usage of linked codes not included to the individual codes
+#' Usage of one linked code pair for the timeline
 #'
-#' Like `add_linked_summary()`, every code gets zero usage in every period of
-#' either series, so the individual and total plots show the same periods.
+#' Both codes of the pair get a row, also when a code has no usage in the
+#' date range.
 #'
-#' @param data Usage data of the selected codes
-#' @param linked_data Usage data of the linked codes not included
-#'
-#' @return Usage data with a `series` column added
-#'
-#' @noRd
-add_linked_individual <- function(data, linked_data) {
-  dplyr::bind_rows(
-    "Selected codes" = data,
-    "Linked codes not included" = linked_data,
-    .id = "series"
-  ) |>
-    tidyr::complete(
-      tidyr::nesting(series, code),
-      tidyr::nesting(start_date, end_date),
-      fill = list(usage = 0)
-    ) |>
-    # Codes can have different descriptions in different periods
-    dplyr::group_by(code) |>
-    tidyr::fill(description, .direction = "downup") |>
-    dplyr::ungroup() |>
-    dplyr::arrange(series, code, end_date)
-}
-
-#' Usage of linked code pairs for the timeline
-#'
-#' Each pair has the missing code and its linked selected code. Pairs with
-#' the same new code description share a panel.
-#'
-#' @param pairs Rows of `missing_linked_codes()`
+#' @param pair One row of `linked_codes_not_selected()`
 #' @param usage_data Usage data with `active_at_start` and `active_at_end`
 #'
-#' @return Tibble with one row per code and period, with the panel title, a
-#'   code label and the code's share of the panel's usage in each period
+#' @return Tibble with one row per code and period, with the old and new code
+#'   titles, a code label and the code's share of the pair's usage in each
+#'   period. Codes without usage have one row with missing dates.
 #'
+#' @importFrom dplyr filter if_else left_join mutate select tibble
 #' @noRd
-linked_timeline_data <- function(pairs, usage_data) {
-  usage_data <- usage_data |>
-    dplyr::filter(code %in% c(pairs$code, pairs$linked_code))
+linked_timeline_data <- function(pair, usage_data) {
+  is_old_not_selected <- pair$side == "old"
+  old <- if_else(is_old_not_selected, pair$code, pair$linked_code)
+  new <- if_else(is_old_not_selected, pair$linked_code, pair$code)
+  old_term <- if_else(is_old_not_selected, pair$term, pair$linked_term)
+  new_term <- if_else(is_old_not_selected, pair$linked_term, pair$term)
 
-  descriptions <- usage_data |>
-    dplyr::slice_max(end_date, n = 1, by = code, with_ties = FALSE) |>
-    dplyr::select(new = code, new_description = description)
+  code_label <- paste0(
+    c(old, new),
+    "\n(",
+    c("old", "new"),
+    if_else(c(old, new) == pair$code, ", not selected)", ", selected)")
+  )
+  codes <- tibble(
+    snomed_code = c(old, new),
+    code_type = c("old", "new"),
+    # The y axis starts at the bottom, so the new code comes first to put the
+    # old code on top
+    code_label = factor(code_label, levels = rev(code_label)),
+    old_title = paste0(old_term, " (", old, ")"),
+    new_title = paste0(new_term, " (", new, ")")
+  )
 
-  codes <- pairs |>
-    dplyr::mutate(
-      missing = code,
-      old = dplyr::if_else(side == "old code", code, linked_code),
-      new = dplyr::if_else(side == "old code", linked_code, code)
-    ) |>
-    dplyr::left_join(descriptions, by = "new") |>
-    # The new code may have no usage, so fall back to the missing code's term
-    dplyr::mutate(panel = dplyr::coalesce(new_description, term)) |>
-    tidyr::pivot_longer(
-      c(old, new),
-      names_to = "code_type",
-      values_to = "snomed_code"
-    ) |>
-    dplyr::mutate(
-      code_label = paste0(
-        snomed_code,
-        "\n(",
-        code_type,
-        dplyr::if_else(snomed_code == missing, ", missing)", ", selected)")
-      )
-    ) |>
-    dplyr::distinct(panel, snomed_code, code_type, code_label) |>
-    dplyr::mutate(panel = factor(panel, levels = unique(panel))) |>
-    # The y axis starts at the bottom, so new codes come first to put old
-    # codes on top
-    dplyr::arrange(code_type == "old") |>
-    dplyr::mutate(code_label = factor(code_label, levels = unique(code_label)))
-
-  usage_data |>
-    dplyr::select(
+  usage <- usage_data |>
+    filter(code %in% codes$snomed_code) |>
+    select(
       snomed_code = code,
       start_date,
       end_date,
       usage,
       active_at_start,
       active_at_end
-    ) |>
-    dplyr::inner_join(
-      codes,
-      by = "snomed_code",
-      relationship = "many-to-many"
-    ) |>
-    dplyr::mutate(share = usage / sum(usage), .by = c(panel, end_date))
-}
+    )
 
-#' Height of the linked codes timeline in pixels
-#'
-#' Every code row gets the same height, so plots with more codes grow
-#' instead of squashing the rows.
-#'
-#' @param data Output of `linked_timeline_data()`, or `NULL`
-#'
-#' @noRd
-linked_timeline_height <- function(data) {
-  if (is.null(data) || nrow(data) == 0) {
-    return(300)
-  }
-  n_rows <- nrow(dplyr::distinct(data, panel, code_label))
-  90 + 45 * dplyr::n_distinct(data$panel) + 60 * n_rows
+  codes |>
+    left_join(usage, by = "snomed_code") |>
+    mutate(share = usage / sum(usage), .by = end_date)
 }

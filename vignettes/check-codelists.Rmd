@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 SNOMED CT codes can become inactive and be replaced by new codes.
-GP records may still use the old codes, so a codelist that includes only one code of a pair may miss some usage.
+GP records may still use the old codes, so a codelist that selects only one code of a pair may not count some usage.
 `check_codelists()` finds these pairs for review and shows their usage in English general practice.
 
 ## Set up your codelists
@@ -52,7 +52,7 @@ codelists <- read_codelists("codelists")
 ## Where the code pairs come from
 
 The old and new code pairs come from the SNOMED CT History Substitution Table on NHS TRUD (Technology Reference data Update Distribution), item 276.
-The package downloads a copy that keeps only pairs whose old code has GP usage.
+The package downloads a copy that keeps only pairs where the old or new code has GP usage.
 It is downloaded once and cached.
 Clear it with `cache_clear()`.
 
@@ -63,33 +63,33 @@ check <- check_codelists("codelists", start_date = "2020-08-01")
 check
 ```
 
-The report counts the codelists with and without missing linked codes and lists those with missing codes:
+The report counts the codelists that select all linked codes with usage and lists those that do not:
 
 ```
 ── Codelist check ──────────────────────────────────────────────────────────────
 SNOMED CT history version 0.1.0 (TRUD release uk_sctqths_43.1.0_20261021000001)
 OpenCodeCounts SNOMED CT data version 0.2.0 from 01 Aug 2020 to 31 Jul 2026
-✖ 2 codelists miss linked codes with usage:
+ℹ 2 codelists do not select some linked codes with usage:
 
-  Codelist               Included codes             Linked codes not included
+  Codelist               Selected codes             Linked codes not selected
   user-Lola_O-proms-anx  68 codes,  9,217,600 uses  2 codes,    13,220 uses,  0.1%
   user-Lola_O-proms-dep  50 codes, 16,400,990 uses  5 codes, 2,584,100 uses, 13.6%
 
-Missing codes and their share of each old and new code pair:
+Linked codes not selected and their share of each old and new pair:
 
   user-Lola_O-proms-anx
-    836551000000102   old code      7,180 uses   99.4% of pair  Generalised anxiety disorder 2 scale (assessment scale)
-    836561000000104   old code      6,040 uses   85.8% of pair  Assessment using generalised anxiety disorder 2 scale (procedure)
+    836551000000102   old      7,180 uses   99.4% of pair  Generalised anxiety disorder 2 scale (assessment scale)
+    836561000000104   old      6,040 uses   85.8% of pair  Assessment using generalised anxiety disorder 2 scale (procedure)
 
   user-Lola_O-proms-dep
-    836541000000100   old code  2,444,600 uses   87.0% of pair  Patient health questionnaire 2 score (observable entity)
-    1104961000000104  old code    114,220 uses  100.0% of pair  Patient Health Questionnaire-4 score (observable entity)
-    1104941000000100  old code     21,160 uses   99.6% of pair  Patient Health Questionnaire-4 (assessment scale)
-    836521000000107   old code      2,190 uses   99.5% of pair  Patient health questionnaire 2 (assessment scale)
-    836531000000109   old code      1,930 uses   82.8% of pair  Assessment using patient health questionnaire 2 (procedure)
+    836541000000100   old  2,444,600 uses   87.0% of pair  Patient health questionnaire 2 score (observable entity)
+    1104961000000104  old    114,220 uses  100.0% of pair  Patient Health Questionnaire-4 score (observable entity)
+    1104941000000100  old     21,160 uses   99.6% of pair  Patient Health Questionnaire-4 (assessment scale)
+    836521000000107   old      2,190 uses   99.5% of pair  Patient health questionnaire 2 (assessment scale)
+    836531000000109   old      1,930 uses   82.8% of pair  Assessment using patient health questionnaire 2 (procedure)
 ```
 
-The percentages show the share of usage that the missing codes may account for, per codelist and per old and new code pair.
+The percentages show the share of usage that the linked codes not selected may account for, per codelist and per old and new pair.
 Pairs that TRUD flags as ambiguous, often a broad parent code such as "Ethnic group", are left out of the report but kept in `check@results`.
 Review each code before adding it to a codelist.
 
@@ -125,6 +125,6 @@ opencodecounts codelists check --start-date 2020-08-01 --output codelist-check.c
 ```
 
 Use `--output` to save all old and new code pairs to a CSV file.
-It exits with status 1 when a codelist misses a linked code with recorded usage, so you can use it in continuous integration.
+It exits with status 1 when a codelist does not select a linked code with recorded usage, so you can use it in continuous integration.
 The command uses your installed package, so reinstall the package to update it.
 Run `opencodecounts codelists check --help` for all options.

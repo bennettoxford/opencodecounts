@@ -34,7 +34,7 @@ mod_value_boxes_ui <- function(id) {
 #' @param id Module id.
 #' @param filtered_data Reactive returning the filtered usage data.
 #' @param linked_codes Reactive returning the tibble from
-#'   `missing_linked_codes()`, or `NULL` when the selected codes are not
+#'   `linked_codes_not_selected()`, or `NULL` when the selected codes are not
 #'   checked for linked codes.
 #' @noRd
 #' @import shiny

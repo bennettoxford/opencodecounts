@@ -140,6 +140,8 @@ test_that("the linked codes switch only shows when the codes can be checked", {
       {
         if (has_linked) {
           expect_match(output$linked_codes_switch$html, "show_linked_codes")
+          session$setInputs(show_individual_codes = TRUE)
+          expect_error(output$linked_codes_switch, class = "shiny.silent.error")
         } else {
           expect_error(output$linked_codes_switch, class = "shiny.silent.error")
         }
@@ -169,8 +171,7 @@ test_that("the linked codes switch is not reset when the linked data changes", {
   )
 })
 
-test_that("the trends plot shows linked codes with the total and individual codes", {
-  # More than 500 codes cannot be shown individually, so the total is shown
+test_that("the trends plot shows linked codes only with the total usage", {
   many_codes <- tibble::tibble(
     start_date = as.Date("2012-08-01"),
     end_date = as.Date("2013-07-31"),
@@ -200,13 +201,17 @@ test_that("the trends plot shows linked codes with the total and individual code
             show_individual_codes = FALSE,
             show_linked_codes = TRUE
           )
-          expect_match(output$usage_plot, "Linked codes not included")
+          expect_match(output$usage_plot, "Linked codes not selected")
 
+          # The switch is hidden with individual codes, also when more than
+          # 500 codes fall back to the total
           session$setInputs(show_individual_codes = TRUE)
-          expect_match(output$usage_plot, "Linked codes not included")
+          expect_no_match(output$usage_plot, "Linked codes not selected")
+
+          session$setInputs(show_individual_codes = FALSE)
 
           session$setInputs(show_linked_codes = FALSE)
-          expect_no_match(output$usage_plot, "Linked codes not included")
+          expect_no_match(output$usage_plot, "Linked codes not selected")
         })
       }
     )
@@ -223,9 +228,9 @@ test_that("the linked codes table explains why it is empty", {
       ),
       {
         message <- if (is.null(linked)) {
-          "Load a SNOMED CT codelist or select SNOMED CT codes"
+          "Load a codelist or select codes by code"
         } else {
-          "The selected codes include all linked codes with usage"
+          "All linked codes with usage are selected"
         }
         expect_match(output$linked_codes_table, message)
       }
@@ -239,7 +244,7 @@ test_that("the linked codes download writes the table", {
     test_usage_total(),
     test_snomed_history()
   ) |>
-    missing_linked_codes()
+    linked_codes_not_selected()
 
   testServer(
     mod_linked_codes_server,
@@ -271,7 +276,7 @@ test_that("the value box counts linked codes only when the codes are checked", {
     codelist = "selected codes",
     code = c("a", "a", "b"),
     term = "Term",
-    side = "old code",
+    side = "old",
     usage = 10,
     share = 0.5,
     linked_code = c("x", "y", "x")
@@ -304,12 +309,20 @@ test_that("the value box counts linked codes only when the codes are checked", {
 test_linked_pairs <- function() {
   tibble::tibble(
     codelist = "selected codes",
+    pair = c(
+      "836541000000100 1359723003",
+      "1104961000000104 1359726006",
+      "111111111 1359723003",
+      "222222222 333"
+    ),
     code = c("836541000000100", "1359726006", "111111111", "222222222"),
     term = paste("Term", c("A", "B", "C", "D")),
-    side = c("old code", "new code", "old code", "old code"),
+    side = c("old", "new", "old", "old"),
     usage = c(150, 5, 1, 1),
     share = c(0.75, 0.1, 0.01, 0.01),
-    linked_code = c("1359723003", "1104961000000104", "1359723003", "333")
+    linked_code = c("1359723003", "1104961000000104", "1359723003", "333"),
+    linked_term = paste("Linked term", c("A", "B", "C", "D")),
+    linked_usage = c(50, 45, 99, 0)
   )
 }
 
@@ -321,60 +334,56 @@ test_timeline_usage <- function() {
     )
 }
 
-test_that("linked_timeline_data() puts each old code above its new code", {
-  data <- linked_timeline_data(
-    test_linked_pairs()[1:2, ],
-    test_timeline_usage()
-  )
+test_that("linked_timeline_data() puts the old code above the new code", {
+  data <- linked_timeline_data(test_linked_pairs()[1, ], test_timeline_usage())
 
-  expect_equal(
-    levels(data$panel),
-    c("Term 1359723003", "Term 1359726006")
-  )
-  # The y axis starts at the bottom, so new codes come first
+  expect_equal(unique(data$old_title), "Term A (836541000000100)")
+  expect_equal(unique(data$new_title), "Linked term A (1359723003)")
+  # The y axis starts at the bottom, so the new code comes first
   expect_equal(
     levels(data$code_label),
-    c(
-      "1359723003\n(new, selected)",
-      "1359726006\n(new, missing)",
-      "836541000000100\n(old, missing)",
-      "1104961000000104\n(old, selected)"
-    )
+    c("1359723003\n(new, selected)", "836541000000100\n(old, not selected)")
   )
-  shares <- dplyr::summarise(data, share = sum(share), .by = c(panel, end_date))
+  shares <- dplyr::summarise(data, share = sum(share), .by = end_date)
   expect_equal(shares$share, rep(1, nrow(shares)))
 })
 
-test_that("linked_timeline_data() shows a new code once when pairs share it", {
-  data <- linked_timeline_data(
-    test_linked_pairs()[c(1, 3), ],
-    test_timeline_usage()
-  )
+test_that("linked_timeline_data() labels a new code that is not selected", {
+  data <- linked_timeline_data(test_linked_pairs()[2, ], test_timeline_usage())
 
-  expect_equal(levels(data$panel), "Term 1359723003")
-  expect_equal(sum(data$code == "1359723003"), 0)
-  expect_equal(sum(data$snomed_code == "1359723003"), 2)
-})
-
-test_that("linked_timeline_data() uses the missing code's term without new code usage", {
-  data <- linked_timeline_data(test_linked_pairs()[4, ], test_timeline_usage())
-  expect_equal(nrow(data), 0)
-
-  pairs <- test_linked_pairs()[4, ] |>
-    dplyr::mutate(code = "836541000000100")
-  data <- linked_timeline_data(pairs, test_timeline_usage())
-  expect_equal(levels(data$panel), "Term D")
-})
-
-test_that("linked_timeline_height() gives every code row the same height", {
-  expect_equal(linked_timeline_height(NULL), 300)
-
-  one <- linked_timeline_data(test_linked_pairs()[1, ], test_timeline_usage())
-  two <- linked_timeline_data(test_linked_pairs()[1:2, ], test_timeline_usage())
+  expect_equal(unique(data$old_title), "Linked term B (1104961000000104)")
   expect_equal(
-    linked_timeline_height(two) - linked_timeline_height(one),
-    45 + 2 * 60
+    levels(data$code_label),
+    c("1359726006\n(new, not selected)", "1104961000000104\n(old, selected)")
   )
+})
+
+test_that("linked_timeline_data() keeps both codes of a pair without usage", {
+  data <- linked_timeline_data(test_linked_pairs()[4, ], test_timeline_usage())
+
+  expect_equal(nrow(data), 2)
+  expect_true(all(is.na(data$end_date)))
+  expect_equal(unique(data$new_title), "Linked term D (333)")
+})
+
+test_that("plot_linked_timeline() titles the plot with the old and new code", {
+  pair <- test_linked_pairs()[1, ]
+  pair$linked_term <- 'Term with "quotes" and \\ backslash'
+  plot <- linked_timeline_data(pair, test_timeline_usage()) |>
+    plot_linked_timeline()
+
+  expect_match(
+    paste(deparse(plot$labels$title), collapse = ""),
+    "Term A (836541000000100)",
+    fixed = TRUE
+  )
+  expect_match(
+    paste(deparse(plot$labels$subtitle), collapse = ""),
+    "1359723003",
+    fixed = TRUE
+  )
+  png <- withr::local_tempfile(fileext = ".png")
+  expect_no_error(ggplot2::ggsave(png, plot, width = 8, height = 4))
 })
 
 test_that("plot_linked_timeline() colours tiles by code status", {
@@ -388,8 +397,8 @@ test_that("plot_linked_timeline() colours tiles by code status", {
   expect_setequal(unique(built$fill), c("#5DC863", "#FDE725"))
 })
 
-test_that("the timeline plots all linked codes", {
-  linked <- reactiveVal(test_linked_pairs()[1:2, ])
+test_that("the timeline shows one linked code at a time", {
+  linked <- reactiveVal(test_linked_pairs())
 
   testServer(
     mod_linked_codes_server,
@@ -399,16 +408,76 @@ test_that("the timeline plots all linked codes", {
       usage_data = reactive(test_timeline_usage())
     ),
     {
-      expect_equal(nrow(dplyr::distinct(timeline_data(), code_label)), 4)
+      # Ordered by code
+      # Ordered by the selected code
+      expect_equal(
+        unname(pair_choices()),
+        c(
+          "1104961000000104 1359726006",
+          "111111111 1359723003",
+          "836541000000100 1359723003",
+          "222222222 333"
+        )
+      )
+      expect_equal(
+        names(pair_choices()),
+        c(
+          "Linked term B (1104961000000104)",
+          "Linked term C (1359723003)",
+          "Linked term A (1359723003)",
+          "Linked term D (333)"
+        )
+      )
+
+      session$setInputs(timeline_pair = "836541000000100 1359723003")
+      expect_setequal(
+        unique(timeline_data()$snomed_code),
+        c("1359723003", "836541000000100")
+      )
       expect_true(is.list(output$timeline_plot))
 
       linked(test_linked_pairs()[0, ])
       session$flushReact()
-      expect_error(output$timeline_plot, "include all linked codes")
+      expect_equal(pair_choices(), character(0))
+      expect_error(
+        output$timeline_plot,
+        "All linked codes with usage are selected"
+      )
 
       linked(NULL)
       session$flushReact()
-      expect_error(output$timeline_plot, "Load a SNOMED CT codelist")
+      expect_error(output$timeline_plot, "Load a codelist")
     }
   )
+})
+
+test_that("linked_codes_table_data() gives each pair a not selected and a selected row", {
+  table <- linked_codes_table_data(test_linked_pairs()[1:2, ])
+
+  expect_equal(
+    table$pair,
+    rep(
+      c("836541000000100 1359723003", "1104961000000104 1359726006"),
+      each = 2
+    )
+  )
+  expect_equal(table$group, rep(c("Linked term A", "Linked term B"), each = 2))
+  # The old code comes first in each pair
+  expect_equal(
+    table$code,
+    c("836541000000100", "1359723003", "1104961000000104", "1359726006")
+  )
+  expect_equal(
+    table$code_type,
+    c(
+      "old, not selected",
+      "new, selected",
+      "old, selected",
+      "new, not selected"
+    )
+  )
+  expect_equal(table$usage, c(150, 50, 45, 5))
+  expect_equal(table$share, c(0.75, 0.25, 0.9, 0.1))
+
+  expect_equal(nrow(linked_codes_table_data(empty_linked_codes())), 0)
 })

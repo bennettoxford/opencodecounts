@@ -118,7 +118,7 @@ app_server <- function(input, output, session) {
 
     history <- tryCatch(snomed_history(), error = function(e) {
       showNotification(
-        "Linked codes are not available because the SNOMED CT history table could not be loaded.",
+        "Linked codes are not available because the history table could not be loaded.",
         type = "error"
       )
       NULL
@@ -134,10 +134,10 @@ app_server <- function(input, output, session) {
       usage_total,
       history
     ) |>
-      missing_linked_codes()
+      linked_codes_not_selected()
   })
 
-  # Usage data of the linked codes not included
+  # Usage data of the linked codes not selected
   linked_data <- reactive({
     req(linked_codes())
     date_filtered_data() |>

@@ -65,21 +65,20 @@ NHS TRUD (Technology Reference data Update Distribution) item 276.
 and it is published as a GitHub release like the usage data. The TRUD
 item and release are set under `snomed_history` in
 `inst/config/raw_trud.yml`, which has one entry per dataset built from
-TRUD. Only rows with
-an active new code are kept, with the columns `old_code`, `old_term`,
-`new_code`, `new_term` and `is_ambiguous`, plus `trud_release` so the
-published file records the TRUD release it came from. Only pairs whose old code has
-GP usage are kept, because the check only reports pairs where the old
-code has usage. Rebuild it after each new `gp_snomed` release, so new
-codes with usage are included.
+TRUD. Only rows with an active new code are kept, with the columns
+`old_code`, `old_term`, `new_code`, `new_term` and `is_ambiguous`, plus
+`trud_release` so the published file records the TRUD release it came
+from. Only pairs where the old or new code has GP usage are kept,
+because the check only reports codes with usage. Rebuild it after each
+new `gp_snomed` release, so new codes with usage are included.
 
 Building it is the only step that needs an API key. Add
 `TRUD_API_KEY=your-key` to `~/.Renviron` and restart R. Users of
 `check_codelists()` do not need a key.
 
-The `is_missing_with_usage` column in `R/check-codelists.R` sets which
-missing codes are reported. The report, `@summary` and the exit status
-all use it.
+The `is_not_selected_with_usage` column in `R/check-codelists.R` sets
+which linked codes not selected are reported. The report, `@summary` and
+the exit status all use it.
 
 Coding systems come from the OpenCodelists API, with one request per
 organisation or user. Tagged versions are matched by tag and by hash. A

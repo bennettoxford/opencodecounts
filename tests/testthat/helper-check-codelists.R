@@ -2,9 +2,9 @@ test_codelists_dir <- function() {
   test_path("fixtures", "codelists")
 }
 
-# Old 836541000000100 is missing from the test codelist and has usage.
+# Old 836541000000100 is not in the test codelist and has usage.
 # Old 1104961000000104 and new 1359726006 are both in the codelist.
-# Old 111111111 is missing from the test codelist and has no usage.
+# Old 111111111 is not in the test codelist and has no usage.
 test_snomed_history <- function() {
   tibble::tibble(
     old_code = c("836541000000100", "1104961000000104", "111111111"),
