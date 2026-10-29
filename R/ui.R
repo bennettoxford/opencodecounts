@@ -15,7 +15,10 @@ app_ui <- function(request) {
         "navbar-bg" = "#002147"
       ),
       title = app_title(),
-      sidebar = mod_sidebar_ui("sidebar"),
+      sidebar = mod_sidebar_ui(
+        "sidebar",
+        params = parse_url_params(request$QUERY_STRING)
+      ),
       # Main page
       # Value boxes
       mod_value_boxes_ui("value_boxes"),

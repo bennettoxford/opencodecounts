@@ -13,7 +13,7 @@ local_sidebar <- function(
   }
 
   local_mocked_bindings(
-    mod_sidebar_server = function(id) {
+    mod_sidebar_server = function(id, params = list()) {
       list(
         dataset = reactive(dataset),
         selected_data = reactive(test_app_usage()),

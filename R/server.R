@@ -8,7 +8,10 @@
 #' @import shiny
 #' @import dplyr
 app_server <- function(input, output, session) {
-  sidebar <- mod_sidebar_server("sidebar")
+  sidebar <- mod_sidebar_server(
+    "sidebar",
+    params = parse_url_params(isolate(session$clientData$url_search))
+  )
 
   # Usage data in the selected date range, for all codes
   date_filtered_data <- reactive({

@@ -10,6 +10,10 @@
 - `get_codelist()` errors when a codelist version is not found and accepts version hashes
 - `check_codelists()` downloads the SNOMED CT History Substitution Table from a GitHub release, so it does not need a TRUD API key
 
+## Shiny app
+
+- Link to a selection in the app with URL parameters, e.g. `?dataset=snomedct&codelist=opensafely/anxiety-disorders/6aef605a`. The URL updates as the selection changes, so it can be shared (#115)
+
 ## Bug fixes
 
 - `get_codelist()` and `read_codelists()` read CSV files with an unnamed index column (#165)
