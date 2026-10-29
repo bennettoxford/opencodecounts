@@ -110,8 +110,7 @@ footer_ui <- function() {
         footer_logo(
           href = "https://bennettoxford.github.io/opencodecounts/",
           src = "www/logo-wordmark.png",
-          alt = "opencodecounts website",
-          height = "45px"
+          alt = "opencodecounts website"
         ),
         footer_logo(
           href = "https://www.bennett.ox.ac.uk/",

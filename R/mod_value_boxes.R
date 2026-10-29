@@ -22,7 +22,7 @@ mod_value_boxes_ui <- function(id) {
       showcase = bs_icon("link-45deg")
     ),
     value_box(
-      title = "Total number of recorded events in England",
+      title = "Total recorded events in England",
       value = textOutput(ns("total_activity")),
       showcase = plotlyOutput(ns("sparkline"))
     )
