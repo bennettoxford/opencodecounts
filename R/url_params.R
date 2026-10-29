@@ -92,6 +92,19 @@ format_url_params <- function(params) {
   paste0("?", paste0(names(values), "=", values, collapse = "&"))
 }
 
+#' Send the URL query to the page that embeds the app
+#'
+#' When the app is in an iframe, e.g. on the pkgdown site, the browser shows
+#' the URL of the page around it. The script in `app_ui()` passes the query on
+#' to that page, which can then show it.
+#'
+#' @param session Shiny session
+#' @param query String, as returned by [format_url_params()]
+#' @keywords internal
+send_query_to_parent <- function(session, query) {
+  session$sendCustomMessage("parent-url-query", query)
+}
+
 #' Percent-encode a URL query value
 #'
 #' Slashes and commas are valid in a query string and keep links readable.

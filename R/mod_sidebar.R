@@ -373,13 +373,12 @@ mod_sidebar_server <- function(id, params = list()) {
         }
       }
 
+      query <- format_url_params(params)
       updateQueryString(
-        paste0(
-          isolate(session$clientData$url_pathname),
-          format_url_params(params)
-        ),
+        paste0(isolate(session$clientData$url_pathname), query),
         mode = "replace"
       )
+      send_query_to_parent(session, query)
     })
 
     list(

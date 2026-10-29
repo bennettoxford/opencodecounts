@@ -90,6 +90,24 @@ reference:
   - get_opcs4_usage
   - get_opcs4_usage_breakdowns
 
+articles:
+- title: Articles
+  contents:
+  - how-to-use-shiny-app
+  - how-to-use-R-pkg
+  - how-to-use-breakdowns
+  - extract-snomedct-sem-tag
+  - check-codelists
+  - available-datasets
+  - app
+# Built but not listed. Only people with the link find these pages.
+- title: internal
+  contents:
+  - articles/beta-app
+
+search:
+  exclude: [articles/beta-app.html]
+
 navbar:
   structure:
     left: [home, reference, articles, launch_shiny]

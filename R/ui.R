@@ -33,6 +33,19 @@ app_ui <- function(request) {
     ),
     footer_ui(),
 
+    # Passes the URL query to the page around the app when it is embedded.
+    # The query only holds the public selection, so any page may receive it.
+    tags$script(HTML(
+      "Shiny.addCustomMessageHandler('parent-url-query', function(query) {
+        if (window.parent !== window) {
+          window.parent.postMessage(
+            {type: 'opencodecounts-url-query', query: query},
+            '*'
+          );
+        }
+      });"
+    )),
+
     # CSS styles
     tags$style(HTML(
       "

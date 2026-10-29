@@ -18,6 +18,9 @@ local_sidebar_mocks <- function(env = parent.frame()) {
     updateQueryString = function(queryString, ...) {
       calls$urls <- c(calls$urls, queryString)
     },
+    send_query_to_parent = function(session, query) {
+      calls$parent_queries <- c(calls$parent_queries, query)
+    },
     .env = env
   )
   calls
