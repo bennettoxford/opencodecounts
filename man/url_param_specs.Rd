@@ -13,6 +13,6 @@ A named list of parameter specs, in the order they appear in URLs
 Each entry parses one query string parameter into a clean value, or \code{NULL}
 to drop a value that is not valid, and formats a value back into the URL.
 To add a parameter, add an entry here and use its value where the input is
-created in \code{\link[=mod_sidebar_ui]{mod_sidebar_ui()}} or \code{\link[=mod_sidebar_server]{mod_sidebar_server()}}.
+created in \code{mod_sidebar_ui()} or \code{mod_sidebar_server()}.
 }
 \keyword{internal}

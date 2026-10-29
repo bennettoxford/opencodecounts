@@ -46,7 +46,7 @@ plot_summary <- function(data) {
     ) +
     scale_colour_manual(
       values = c(
-        "Selected codes" = "#239b89ff",
+        "Selected codes" = "#002147",
         "Linked codes not selected" = "#ED6925FF"
       )
     ) +

@@ -419,8 +419,8 @@ test_that("plot_summary() adds a coloured series for linked codes", {
   single <- suppressWarnings(ggplot2::ggplot_build(local_plot(summary_data)))
   both <- suppressWarnings(ggplot2::ggplot_build(local_plot(linked)))
 
-  expect_equal(unique(single$data[[1]]$colour), "#239b89ff")
-  expect_setequal(unique(both$data[[1]]$colour), c("#239b89ff", "#ED6925FF"))
+  expect_equal(unique(single$data[[1]]$colour), "#002147")
+  expect_setequal(unique(both$data[[1]]$colour), c("#002147", "#ED6925FF"))
   expect_equal(local_plot(summary_data)$theme$legend.position, "none")
   expect_equal(local_plot(linked)$theme$legend.position, "top")
 })

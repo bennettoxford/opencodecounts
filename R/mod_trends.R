@@ -15,16 +15,21 @@ mod_trends_ui <- function(id) {
   nav_panel(
     "Trends over time",
     icon = bs_icon("graph-up"),
-    input_switch(
-      ns("show_individual_codes"),
-      tooltip_label(
-        "Show individual codes",
-        "This is only supported for up to 500 selected codes.",
-        placement = "right"
+    # Switches side by side, so showing the linked codes switch does not
+    # change the plot height
+    div(
+      class = "d-flex flex-wrap gap-4",
+      input_switch(
+        ns("show_individual_codes"),
+        tooltip_label(
+          "Show individual codes",
+          "This is only supported for up to 500 selected codes.",
+          placement = "right"
+        ),
+        value = FALSE
       ),
-      value = FALSE
+      uiOutput(ns("linked_codes_switch"))
     ),
-    uiOutput(ns("linked_codes_switch")),
     plotlyOutput(ns("usage_plot"))
   )
 }

@@ -54,5 +54,8 @@ utils::globalVariables(c(
   "new_title",
   "linked_term",
   "linked_usage",
-  "group"
+  "group",
+  "hash",
+  "is_old",
+  "pair"
 ))
