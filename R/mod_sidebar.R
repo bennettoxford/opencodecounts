@@ -4,17 +4,19 @@
 #' code search and codelist loading) and the static "More" panel.
 #'
 #' @param id Module id.
+#' @param params Named list of URL parameters from [parse_url_params()], used
+#'   as starting values.
 #' @noRd
 #' @import shiny
 #' @import bslib
-mod_sidebar_ui <- function(id) {
+mod_sidebar_ui <- function(id, params = list()) {
   ns <- NS(id)
 
   sidebar(
     width = "23%",
-    navset_card_tab(
+    navset_card_underline(
       nav_panel(
-        p("Analyse"),
+        "Analyse",
         card(
           card_header("Select data"),
           radioButtons(
@@ -23,7 +25,8 @@ mod_sidebar_ui <- function(id) {
               "Dataset",
               "SNOMED CT (Systematized Nomenclature of Medicine Clinical Terms); ICD-10 (International Classification of Diseases); OPCS-4 Classification of Interventions and Procedures"
             ),
-            choices = dataset_choices()
+            choices = dataset_choices(),
+            selected = params$dataset
           ),
           uiOutput(ns("dynamic_date_slider"))
         ),
@@ -48,7 +51,8 @@ mod_sidebar_ui <- function(id) {
                 tooltip_label(
                   "Description",
                   "Enter search term(s). Multiple terms can be combined by using '|'."
-                )
+                ),
+                value = params$description
               ),
               uiOutput(ns("dynamic_code_pattern_input"))
             ),
@@ -61,8 +65,8 @@ mod_sidebar_ui <- function(id) {
                   "Codelist URL",
                   "Enter codelist URL, e.g., 'https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/'"
                 ),
-                placeholder = "https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/",
-                NULL
+                value = codelist_url(params$codelist),
+                placeholder = "https://www.opencodelists.org/codelist/opensafely/anxiety-disorders/6aef605a/"
               ),
               actionButton(
                 ns("load_codelist"),
@@ -80,7 +84,7 @@ mod_sidebar_ui <- function(id) {
         )
       ),
       nav_panel(
-        p("More"),
+        "More",
         about_card(),
         guides_card(),
         sources_card()
@@ -94,6 +98,8 @@ mod_sidebar_ui <- function(id) {
 #' Returns the reactives the rest of the app needs to filter and label data.
 #'
 #' @param id Module id.
+#' @param params Named list of URL parameters from [parse_url_params()], used
+#'   as starting values.
 #' @return A list of reactives: `dataset`, `selected_data`, `date_range`,
 #'   `search_method`, `codelist`, `code_specific_search`,
 #'   `code_pattern_search`, `description_search` (debounced), and `reset`
@@ -103,13 +109,23 @@ mod_sidebar_ui <- function(id) {
 #' @import bslib
 #' @import bsicons
 #' @import dplyr
-mod_sidebar_server <- function(id) {
+mod_sidebar_server <- function(id, params = list()) {
   moduleServer(id, function(input, output, session) {
     # Reactive values for search method (1) none, (2) code/desc or (3) codelist) and codelist data
     rv_search_method <- reactiveVal("none")
     rv_codelist <- reactiveVal(NULL)
+    rv_codelist_slug <- reactiveVal(NULL)
 
-    # Reset search inputs when dataset changes
+    # Starting values for the inputs the server creates or fills. Each is
+    # cleared once used, so later dataset changes start from defaults.
+    initial_codes <- reactiveVal(params$codes)
+    initial_years <- reactiveVal(params[c("from", "to")])
+    initial_pattern <- reactiveVal(params$pattern)
+    # Keeps the URL unchanged until a codelist from the URL is loaded
+    url_ready <- reactiveVal(is.null(params$codelist))
+
+    # Reset search inputs when dataset changes. Not on start-up, so the
+    # inputs keep the values from the URL.
     observe({
       # Stops the old date_range briefly pairing with the new dataset
       # (wrong total flashes) while the slider rebuilds for the new range.
@@ -127,7 +143,7 @@ mod_sidebar_server <- function(id) {
       )
       updateTextInput(session, "description_search", value = "")
     }) |>
-      bindEvent(input$dataset)
+      bindEvent(input$dataset, ignoreInit = TRUE)
 
     # Selected code usage dataset
     selected_data <- reactive({
@@ -139,7 +155,9 @@ mod_sidebar_server <- function(id) {
           end_date,
           code = all_of(dataset_cfg$code_column),
           description = all_of(dataset_cfg$description_column),
-          usage
+          usage,
+          # Only SNOMED CT usage data has these, for the linked codes timeline
+          any_of(c("active_at_start", "active_at_end"))
         )
     })
 
@@ -147,6 +165,8 @@ mod_sidebar_server <- function(id) {
       req(selected_data())
 
       available_end_dates <- sort(unique(selected_data()$end_date))
+      years <- isolate(initial_years())
+      value <- select_end_dates(available_end_dates, years$from, years$to)
 
       sliderInput(
         session$ns("date_range"),
@@ -156,7 +176,7 @@ mod_sidebar_server <- function(id) {
         ),
         min = min(available_end_dates),
         max = max(available_end_dates),
-        value = range(available_end_dates, available_end_dates),
+        value = value,
         step = 365,
         timeFormat = "%Y",
         ticks = FALSE
@@ -173,28 +193,37 @@ mod_sidebar_server <- function(id) {
         tooltip_label(
           dataset_cfg$code_pattern_label,
           "Enter the beginning of a code to search by chapter or subchapter. Multiple chapters can be combined using '|'."
-        )
+        ),
+        value = isolate(initial_pattern())
       )
     })
 
-    # Update code search choices depending on selected dataset
+    # Clear the starting values once the rendered inputs report them
+    observe(initial_years(NULL)) |>
+      bindEvent(input$date_range, once = TRUE)
+    observe(initial_pattern(NULL)) |>
+      bindEvent(input$code_pattern_search, once = TRUE)
+
+    # Update code search choices depending on selected dataset. Codes from
+    # the URL are selected here, because the choices only exist on the server.
     observe({
+      codes <- unique(selected_data()$code)
       updateSelectizeInput(
         session,
         "code_specific_search",
-        choices = unique(selected_data()$code),
+        choices = codes,
+        selected = intersect(isolate(initial_codes()), codes),
         server = TRUE
       )
+      initial_codes(NULL)
     })
 
     # Load codelist
-    observe({
-      req(input$codelist_url, input$load_codelist)
-
+    load_codelist <- function(url) {
       withProgress(message = "Loading codelist ...", {
         tryCatch(
           {
-            codelist_s7 <- get_codelist(input$codelist_url)
+            codelist_s7 <- get_codelist(url)
 
             if (codelist_s7@coding_system == input$dataset) {
               showNotification(
@@ -212,6 +241,7 @@ mod_sidebar_server <- function(id) {
                   tibble::as_tibble() |>
                   dplyr::select(1:2)
               )
+              rv_codelist_slug(codelist_s7@full_slug)
 
               # Set filtering method to codelist
               rv_search_method("codelist")
@@ -245,13 +275,28 @@ mod_sidebar_server <- function(id) {
           }
         )
       })
+    }
+
+    observe({
+      req(input$codelist_url)
+      load_codelist(input$codelist_url)
     }) |>
       bindEvent(input$load_codelist)
+
+    # Load a codelist from the URL once the dataset input exists
+    if (!is.null(params$codelist)) {
+      observe({
+        load_codelist(codelist_url(params$codelist))
+        url_ready(TRUE)
+      }) |>
+        bindEvent(input$dataset, once = TRUE)
+    }
 
     # Reset all search methods when reset button is clicked
     observe({
       req(input$reset_search_methods)
       rv_codelist(NULL)
+      rv_codelist_slug(NULL)
       rv_search_method("none")
       updateSelectizeInput(
         session,
@@ -304,6 +349,37 @@ mod_sidebar_server <- function(id) {
         input$code_pattern_search,
         description_search_debounced()
       )
+
+    # Keep the browser URL in sync with the selection, so it can be shared
+    observe({
+      req(url_ready(), input$dataset)
+
+      params <- list(dataset = input$dataset)
+      if (rv_search_method() == "codelist") {
+        params$codelist <- rv_codelist_slug()
+      } else if (rv_search_method() == "search") {
+        params$codes <- input$code_specific_search
+        params$description <- description_search_debounced()
+        params$pattern <- input$code_pattern_search
+      }
+
+      # Years are only added when the range is not the full range
+      if (!is.null(input$date_range)) {
+        available_years <- range(lubridate::year(selected_data()$end_date))
+        selected_years <- lubridate::year(input$date_range)
+        if (!identical(selected_years, available_years)) {
+          params$from <- selected_years[1]
+          params$to <- selected_years[2]
+        }
+      }
+
+      query <- format_url_params(params)
+      updateQueryString(
+        paste0(isolate(session$clientData$url_pathname), query),
+        mode = "replace"
+      )
+      send_query_to_parent(session, query)
+    })
 
     list(
       dataset = reactive(input$dataset),

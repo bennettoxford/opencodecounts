@@ -63,6 +63,21 @@ get_dataset <- function(dataset, version = NULL) {
   load_tidy_source(dataset, resolved_version)
 }
 
+#' Get the SNOMED CT History Substitution Table used by check_codelists()
+#'
+#' Built from NHS TRUD by `data-raw/snomed_history.R`, keeping only pairs
+#' whose old code has GP usage.
+#'
+#' @param version String, dataset version, or `NULL` for the latest
+#'
+#' @return Tibble with columns `old_code`, `old_term`, `new_code`, `new_term`,
+#'   `is_ambiguous` and `trud_release`, the TRUD release it was built from
+#'
+#' @noRd
+get_snomed_history <- function(version = NULL) {
+  tibble::as_tibble(get_dataset("snomed_history", version))
+}
+
 #' Get a dataset for the Shiny app, preferring the bundled local copy
 #'
 #' Used only by the app's own dataset dispatch (`mod_sidebar.R`), never

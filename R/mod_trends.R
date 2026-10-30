@@ -1,4 +1,5 @@
-#' Trends module: usage over time plot with individual codes switch
+#' Trends module: usage over time plot with individual and linked codes
+#' switches
 #'
 #' Returns a [bslib::nav_panel()] for use inside the main navset.
 #'
@@ -12,15 +13,22 @@ mod_trends_ui <- function(id) {
   ns <- NS(id)
 
   nav_panel(
-    p(bs_icon("graph-up"), "Trends over time"),
-    input_switch(
-      ns("show_individual_codes"),
-      tooltip_label(
-        "Show individual codes",
-        "This is only supported for up to 500 selected codes.",
-        placement = "right"
+    "Trends over time",
+    icon = bs_icon("graph-up"),
+    # Switches side by side, so showing the linked codes switch does not
+    # change the plot height
+    div(
+      class = "d-flex flex-wrap gap-4",
+      input_switch(
+        ns("show_individual_codes"),
+        tooltip_label(
+          "Show individual codes",
+          "This is only supported for up to 500 selected codes.",
+          placement = "right"
+        ),
+        value = FALSE
       ),
-      value = FALSE
+      uiOutput(ns("linked_codes_switch"))
     ),
     plotlyOutput(ns("usage_plot"))
   )
@@ -30,6 +38,10 @@ mod_trends_ui <- function(id) {
 #'
 #' @param id Module id.
 #' @param filtered_data Reactive returning the filtered usage data.
+#' @param linked_data Reactive returning the usage data of the linked codes
+#'   not selected.
+#' @param has_linked_codes Reactive returning `TRUE` when the selected
+#'   SNOMED CT codes are checked for linked codes, so they can be shown.
 #' @param dataset Reactive returning the selected dataset id; the individual
 #'   codes switch is reset when it changes.
 #' @param reset Reactive returning the reset button value; the switch is also
@@ -40,8 +52,29 @@ mod_trends_ui <- function(id) {
 #' @import dplyr
 #' @import ggplot2
 #' @importFrom plotly renderPlotly ggplotly
-mod_trends_server <- function(id, filtered_data, dataset, reset) {
+mod_trends_server <- function(
+  id,
+  filtered_data,
+  linked_data,
+  has_linked_codes,
+  dataset,
+  reset
+) {
   moduleServer(id, function(input, output, session) {
+    output$linked_codes_switch <- renderUI({
+      # Linked codes not selected are only shown with the total usage
+      req(has_linked_codes(), !isTRUE(input$show_individual_codes))
+      input_switch(
+        session$ns("show_linked_codes"),
+        tooltip_label(
+          "Show linked codes not selected",
+          "Total usage of old and new codes linked to the selected codes.",
+          placement = "right"
+        ),
+        value = FALSE
+      )
+    })
+
     # Reset the switch when the dataset changes or the code selection is reset
     observe({
       update_switch("show_individual_codes", value = FALSE, session = session)
@@ -99,6 +132,17 @@ mod_trends_server <- function(id, filtered_data, dataset, reset) {
           df_plot <- filtered_data()
         }
 
+        show_linked <- isTRUE(input$show_linked_codes) &&
+          has_linked_codes() &&
+          !isTRUE(input$show_individual_codes)
+        if (show_linked && nrow(linked_data()) == 0) {
+          showNotification(
+            all_linked_selected_message,
+            type = "message"
+          )
+          show_linked <- FALSE
+        }
+
         # Handle individual code display based on number of unique codes
         if (input$show_individual_codes & unique_codes <= 500) {
           p <- df_plot |>
@@ -111,10 +155,15 @@ mod_trends_server <- function(id, filtered_data, dataset, reset) {
             )
           }
 
-          p <- df_plot |>
+          summary_data <- df_plot |>
             group_by(start_date, end_date) |>
-            summarise(total_usage = sum(usage, na.rm = TRUE)) |>
-            plot_summary()
+            summarise(total_usage = sum(usage, na.rm = TRUE), .groups = "drop")
+
+          if (show_linked) {
+            summary_data <- add_linked_summary(summary_data, linked_data())
+          }
+
+          p <- plot_summary(summary_data)
         }
 
         ggplotly(p, tooltip = "text") |>

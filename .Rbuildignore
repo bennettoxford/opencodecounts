@@ -18,3 +18,4 @@ DEVELOPERS.md
 .claude
 .rscignore
 ^inst/app-data$
+^vignettes/articles$

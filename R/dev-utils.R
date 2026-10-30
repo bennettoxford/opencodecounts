@@ -46,3 +46,21 @@ copy_app_data_for_deploy <- function(dest_dir) {
 
   invisible(paths)
 }
+
+#' Record which app the deploy is for
+#'
+#' Used by `just deploy` to write `deploy.yml` into `inst/app-data/`, so the
+#' deployed app knows whether it is the beta app (see `get_app_channel()`).
+#'
+#' @param dest_dir String, directory with the deployed app data
+#' @param channel String, "main" or "beta"
+#'
+#' @return Invisible path of the written file
+#'
+#' @keywords internal
+write_deploy_channel <- function(dest_dir, channel = c("main", "beta")) {
+  channel <- match.arg(channel)
+  path <- file.path(dest_dir, "deploy.yml")
+  yaml::write_yaml(list(channel = channel), path)
+  invisible(path)
+}
