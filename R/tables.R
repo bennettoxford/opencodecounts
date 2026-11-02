@@ -1,5 +1,5 @@
 #' Helper function to create code usage table
-#' @importFrom DT datatable formatPercentage formatStyle styleEqual
+#' @importFrom DT datatable formatPercentage formatRound formatStyle styleEqual
 #' @keywords internal
 datatable_usage <- function(data) {
   datatable(
@@ -21,9 +21,10 @@ datatable_usage <- function(data) {
     width = "100%",
     fillContainer = TRUE
   ) |>
+    formatRound("total_usage", digits = 0) |>
     formatPercentage(
       "total_pct",
-      digits = 3
+      digits = 1
     )
 }
 

@@ -21,6 +21,59 @@ tooltip_label <- function(
   )
 }
 
+#' Download link with an info tooltip
+#'
+#' A small text link with a download icon, styled like the switch labels.
+#'
+#' @param id Output id of the matching [shiny::downloadHandler()].
+#' @param text Character, the tooltip body that explains the download.
+#' @keywords internal
+download_link <- function(id, text) {
+  shiny::div(
+    class = "mb-3",
+    shiny::downloadLink(
+      id,
+      tooltip_label(
+        shiny::span(bsicons::bs_icon("download"), "Download CSV"),
+        text,
+        placement = "right"
+      ),
+      class = "text-reset text-decoration-none"
+    )
+  )
+}
+
+#' Which app is running
+#'
+#' Reads the `deploy.yml` that `write_deploy_channel()` writes during
+#' `just deploy`. Local runs have no such file, so they count as main.
+#'
+#' @param path String, path of `deploy.yml`, or "" when there is none
+#'
+#' @return "main" or "beta"
+#' @keywords internal
+get_app_channel <- function(
+  path = system.file("app-data", "deploy.yml", package = "opencodecounts")
+) {
+  if (path == "") {
+    return("main")
+  }
+  yaml::read_yaml(path)$channel
+}
+
+#' App title for the top bar, with a red badge on the beta app
+#'
+#' @param channel String, "main" or "beta"
+#' @keywords internal
+app_title <- function(channel = get_app_channel()) {
+  shiny::span(
+    "OpenCodeCounts",
+    if (channel == "beta") {
+      shiny::span(class = "badge text-bg-danger ms-1", "Beta")
+    }
+  )
+}
+
 #' Link that opens in a new tab
 #' @keywords internal
 external_link <- function(text, href) {
@@ -57,8 +110,7 @@ footer_ui <- function() {
         footer_logo(
           href = "https://bennettoxford.github.io/opencodecounts/",
           src = "www/logo-wordmark.png",
-          alt = "opencodecounts website",
-          height = "45px"
+          alt = "opencodecounts website"
         ),
         footer_logo(
           href = "https://www.bennett.ox.ac.uk/",

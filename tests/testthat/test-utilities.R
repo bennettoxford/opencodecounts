@@ -375,3 +375,77 @@ test_that("Replace two gaps in two codes with zeros", {
 
   expect_equal(df_completed, df_expected)
 })
+
+test_that("add_linked_summary() fills zeros in periods of either series", {
+  summary_data <- tibble::tibble(
+    start_date = as.Date(c("2012-08-01", "2013-08-01")),
+    end_date = as.Date(c("2013-07-31", "2014-07-31")),
+    total_usage = c(10, 20)
+  )
+  # The old code stopped being used after the first period
+  linked_data <- tibble::tibble(
+    start_date = as.Date(c("2011-08-01", "2012-08-01", "2012-08-01")),
+    end_date = as.Date(c("2012-07-31", "2013-07-31", "2013-07-31")),
+    code = c("a", "a", "b"),
+    usage = c(100, 50, 5)
+  )
+
+  result <- add_linked_summary(summary_data, linked_data)
+
+  expect_equal(
+    result,
+    tibble::tibble(
+      series = rep(c("Linked codes not selected", "Selected codes"), each = 3),
+      start_date = rep(as.Date(c("2011-08-01", "2012-08-01", "2013-08-01")), 2),
+      end_date = rep(as.Date(c("2012-07-31", "2013-07-31", "2014-07-31")), 2),
+      total_usage = c(100, 55, 0, 0, 10, 20)
+    )
+  )
+})
+
+test_that("plot_summary() adds a coloured series for linked codes", {
+  summary_data <- tibble::tibble(
+    start_date = as.Date("2012-08-01"),
+    end_date = as.Date("2013-07-31"),
+    total_usage = 10
+  )
+  linked <- add_linked_summary(
+    summary_data,
+    dplyr::mutate(summary_data, usage = 5, code = "a")
+  )
+
+  # The text aesthetic is only used by plotly for tooltips
+  local_plot <- function(data) suppressWarnings(plot_summary(data))
+  single <- suppressWarnings(ggplot2::ggplot_build(local_plot(summary_data)))
+  both <- suppressWarnings(ggplot2::ggplot_build(local_plot(linked)))
+
+  expect_equal(unique(single$data[[1]]$colour), "#002147")
+  expect_setequal(unique(both$data[[1]]$colour), c("#002147", "#ED6925FF"))
+  expect_equal(local_plot(summary_data)$theme$legend.position, "none")
+  expect_equal(local_plot(linked)$theme$legend.position, "top")
+})
+
+test_that("plot_summary() shows linked codes as triangles", {
+  usage <- tibble::tibble(
+    start_date = as.Date("2012-08-01"),
+    end_date = as.Date("2013-07-31"),
+    code = c("a", "b"),
+    description = "Term",
+    usage = c(10, 5)
+  )
+  summary_data <- dplyr::summarise(
+    usage,
+    total_usage = sum(usage),
+    .by = c(start_date, end_date)
+  )
+  # The text aesthetic is only used by plotly for tooltips
+  point_shapes <- function(plot) {
+    suppressWarnings(ggplot2::ggplot_build(plot))$data[[2]]$shape
+  }
+
+  expect_equal(point_shapes(plot_summary(summary_data)), 16)
+  expect_setequal(
+    point_shapes(plot_summary(add_linked_summary(summary_data, usage))),
+    c(16, 17)
+  )
+})

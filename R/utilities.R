@@ -191,3 +191,90 @@ add_period_dates <- function(data, period_col, start_month_day, end_month_day) {
       end_date = as.Date(paste0(end_date, "-", end_month_day))
     )
 }
+
+#' Add the usage of linked codes not selected as a second plot series
+#'
+#' Old codes have no rows after they stop being used, so both series get zero
+#' usage in every period of either series.
+#'
+#' @param summary_data Tibble with columns `start_date`, `end_date` and
+#'   `total_usage` for the selected codes
+#' @param linked_data Usage data of the linked codes not selected
+#'
+#' @return Tibble with a `series` column added
+#'
+#' @importFrom dplyr arrange bind_rows summarise
+#' @importFrom tidyr complete nesting
+#' @noRd
+add_linked_summary <- function(summary_data, linked_data) {
+  linked_summary <- linked_data |>
+    summarise(
+      total_usage = sum(usage, na.rm = TRUE),
+      .by = c(start_date, end_date)
+    )
+
+  bind_rows(
+    "Selected codes" = summary_data,
+    "Linked codes not selected" = linked_summary,
+    .id = "series"
+  ) |>
+    complete(
+      series,
+      nesting(start_date, end_date),
+      fill = list(total_usage = 0)
+    ) |>
+    arrange(series, end_date)
+}
+
+#' Usage of one linked code pair for the timeline
+#'
+#' Both codes of the pair get a row, also when a code has no usage in the
+#' date range.
+#'
+#' @param pair One row of `linked_codes_not_selected()`
+#' @param usage_data Usage data with `active_at_start` and `active_at_end`
+#'
+#' @return Tibble with one row per code and period, with the old and new code
+#'   titles, a code label and the code's share of the pair's usage in each
+#'   period. Codes without usage have one row with missing dates.
+#'
+#' @importFrom dplyr filter if_else left_join mutate select tibble
+#' @noRd
+linked_timeline_data <- function(pair, usage_data) {
+  is_old_not_selected <- pair$side == "old"
+  old <- if_else(is_old_not_selected, pair$code, pair$linked_code)
+  new <- if_else(is_old_not_selected, pair$linked_code, pair$code)
+  old_term <- if_else(is_old_not_selected, pair$term, pair$linked_term)
+  new_term <- if_else(is_old_not_selected, pair$linked_term, pair$term)
+
+  code_label <- paste0(
+    c(old, new),
+    "\n(",
+    c("old", "new"),
+    if_else(c(old, new) == pair$code, ", not selected)", ", selected)")
+  )
+  codes <- tibble(
+    snomed_code = c(old, new),
+    code_type = c("old", "new"),
+    # The y axis starts at the bottom, so the new code comes first to put the
+    # old code on top
+    code_label = factor(code_label, levels = rev(code_label)),
+    old_title = paste0(old_term, " (", old, ")"),
+    new_title = paste0(new_term, " (", new, ")")
+  )
+
+  usage <- usage_data |>
+    filter(code %in% codes$snomed_code) |>
+    select(
+      snomed_code = code,
+      start_date,
+      end_date,
+      usage,
+      active_at_start,
+      active_at_end
+    )
+
+  codes |>
+    left_join(usage, by = "snomed_code") |>
+    mutate(share = usage / sum(usage), .by = end_date)
+}

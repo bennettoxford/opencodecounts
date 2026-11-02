@@ -69,6 +69,23 @@ knitr::include_graphics("img/shiny_app_usage_table.png")
 knitr::include_graphics("img/shiny_app_selected_codes.png")
 ```
 
+## Share a link to your selection
+
+The app URL holds your current selection. Copy it from the address bar to share the same view. You can also write a link yourself with these parameters.
+
+| Parameter | Example | Selects |
+|---|---|---|
+| `dataset` | `snomedct`, `icd10` or `opcs4` | The dataset |
+| `codelist` | `opensafely/anxiety-disorders/6aef605a` | A codelist from [OpenCodelists.org](http://opencodelists.org/), by its slug or full URL |
+| `codes` | `F411,F329` | Specific codes, separated by commas |
+| `description` | `anxiety%7Cpanic` | A description search. `%7C` is the URL code for `|` |
+| `pattern` | `F4` | An ICD-10 or OPCS-4 category |
+| `from`, `to` | `2014-15`, `2019-20` | The first and last reporting year of the date range |
+
+For example, `?dataset=snomedct&codelist=opensafely/anxiety-disorders/6aef605a` opens the app with this codelist loaded. Add `dataset` when you link to a codelist, because the app does not switch the dataset for you. A codelist replaces `codes`, `description` and `pattern`. The app ignores values it does not recognise.
+
+Reporting years are labelled as in the NHS Digital publications. For GP data (SNOMED CT), `2014-15` runs from 1 August 2014 to 31 July 2015. For hospital data (ICD-10 and OPCS-4), it runs from 1 April 2014 to 31 March 2015.
+
 ## Find more information
 
 We provide more detailed information as part of the R package documentation.

@@ -1,0 +1,39 @@
+---
+title: "Shiny App (beta)"
+---
+
+<!-- Not listed on the website. See the "internal" section in _pkgdown.yml. -->
+
+<style>
+.shiny-app-frame {
+  position: fixed;
+  left: 0;
+  top: 50px;
+  bottom: 0;
+  right: 0;
+}
+.shiny-app-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+</style>
+
+<div class="shiny-app-frame">
+<iframe id="shiny-app"></iframe>
+</div>
+
+<script>
+  const appOrigin = "https://milanwiedemann-opencodecounts-beta.share.connect.posit.cloud";
+
+  // Pass URL parameters on to the app, e.g. ?dataset=icd10&codes=F411
+  document.getElementById("shiny-app").src =
+    appOrigin + "/" + window.location.search;
+
+  // Show the app's selection in the address bar, so the link can be shared
+  window.addEventListener("message", function (event) {
+    if (event.origin !== appOrigin) return;
+    if (!event.data || event.data.type !== "opencodecounts-url-query") return;
+    history.replaceState(null, "", window.location.pathname + event.data.query);
+  });
+</script>

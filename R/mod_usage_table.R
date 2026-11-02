@@ -12,8 +12,12 @@ mod_usage_table_ui <- function(id) {
   ns <- NS(id)
 
   nav_panel(
-    p(bs_icon("file-earmark-spreadsheet"), "Usage table"),
-    downloadButton(ns("download_usage_table"), "Download CSV"),
+    "Usage table",
+    icon = bs_icon("file-earmark-spreadsheet"),
+    download_link(
+      ns("download_usage_table"),
+      "Total usage of each code in the selected date range."
+    ),
     DTOutput(ns("usage_table"))
   )
 }

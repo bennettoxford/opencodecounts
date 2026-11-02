@@ -12,8 +12,12 @@ mod_codes_table_ui <- function(id) {
   ns <- NS(id)
 
   nav_panel(
-    p(bs_icon("file-earmark-medical"), "Selected codes"),
-    downloadButton(ns("download_codes_table"), "Download CSV"),
+    "Selected codes",
+    icon = bs_icon("file-earmark-medical"),
+    download_link(
+      ns("download_codes_table"),
+      "Selected codes and whether they have usage data."
+    ),
     DTOutput(ns("codes_table"))
   )
 }
