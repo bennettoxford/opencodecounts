@@ -2,8 +2,8 @@
 
 **\[experimental\]**
 
-Finds old and new SNOMED CT codes with recorded GP usage that may be
-missing from codelists, for review.
+Finds old and new SNOMED CT codes with recorded GP usage that are linked
+to the codes in codelists but not selected, for review.
 
 - `check_codelists_dir()` checks the codelists in `codelists.txt` in an
   OpenSAFELY study, using the CSV files from
