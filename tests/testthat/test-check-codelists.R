@@ -302,6 +302,41 @@ test_that("check_codelists() checks codelists from their URLs", {
   expect_equal(check@results, local_test_check()@results)
 })
 
+test_that("check_codelists_url() keeps versions of a codelist apart", {
+  local_check_mocks()
+  local_mocked_bindings(
+    get_codelist = function(url) {
+      version <- basename(url)
+      Codelist(
+        tibble::tibble(
+          code = c(
+            "1359723003",
+            if (version == "def67890") "836541000000100"
+          )
+        ),
+        coding_system = "snomedct",
+        full_slug = paste0("user/test/phq-snomed/", version)
+      )
+    }
+  )
+
+  check <- check_codelists_url(
+    paste0(
+      "https://www.opencodelists.org/codelist/user/test/phq-snomed/",
+      c("abc12345", "def67890")
+    ),
+    data_version = "0.2.0",
+    history_version = "0.1.0"
+  )
+
+  expect_equal(
+    check@summary$codelist,
+    c("user-test-phq-snomed-abc12345", "user-test-phq-snomed-def67890")
+  )
+  expect_equal(check@summary$n_codes, c(1L, 2L))
+  expect_equal(check@summary$n_not_selected_codes, c(1L, 0L))
+})
+
 test_that("find_linked_codes() flags pairs from data that is already loaded", {
   results <- find_linked_codes(
     dplyr::mutate(test_codelist(), codelist = "phq"),

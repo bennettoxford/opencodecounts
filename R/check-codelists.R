@@ -99,7 +99,7 @@ check_codelists_url <- function(
       purrr::map(codelists, \(codelist) {
         tibble::as_tibble(S7::S7_data(codelist))
       }),
-      codelist_name(codelist_ids)
+      codelist_version_name(codelist_ids)
     ),
     codelist_ids = codelist_ids,
     coding_systems = purrr::map_chr(
@@ -111,6 +111,21 @@ check_codelists_url <- function(
     data_version = data_version,
     history_version = history_version
   )
+}
+
+#' Name codelists, adding the version when a codelist has several versions
+#'
+#' Without the version, several versions of a codelist share one name and the
+#' check merges their codes.
+#'
+#' @param codelist_ids Character vector of codelist slugs with their versions
+#'
+#' @noRd
+codelist_version_name <- function(codelist_ids) {
+  names <- codelist_name(codelist_ids)
+  is_repeated <- names %in% names[duplicated(names)]
+  names[is_repeated] <- gsub("/", "-", codelist_ids[is_repeated])
+  names
 }
 
 #' Run the codelist check on codelists that are already read

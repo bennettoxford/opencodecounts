@@ -51,5 +51,7 @@ datasets:
   snomed_history:
     publication: trud
     versions:
+      - version: "0.2.0"
+        url: "https://github.com/bennettoxford/opencodecounts/releases/download/snomed-history-v0.2.0/snomed_history.parquet"
       - version: "0.1.0"
         url: "https://github.com/bennettoxford/opencodecounts/releases/download/snomed-history-v0.1.0/snomed_history.parquet"

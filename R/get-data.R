@@ -66,7 +66,7 @@ get_dataset <- function(dataset, version = NULL) {
 #' Get the SNOMED CT History Substitution Table used by check_codelists()
 #'
 #' Built from NHS TRUD by `data-raw/snomed_history.R`, keeping only pairs
-#' whose old code has GP usage.
+#' whose old or new code has GP usage.
 #'
 #' @param version String, dataset version, or `NULL` for the latest
 #'
